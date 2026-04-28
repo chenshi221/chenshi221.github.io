@@ -1,6 +1,14 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
+const githubRepository = process.env.GITHUB_REPOSITORY
+const githubPagesBaseUrl = githubRepository
+  ? (() => {
+      const [owner, repo] = githubRepository.split("/")
+      return repo === `${owner}.github.io` ? repo : `${owner}.github.io/${repo}`
+    })()
+  : undefined
+
 /**
  * Quartz 4 Configuration
  *
@@ -8,16 +16,14 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
+    pageTitle: "Blog1",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
-    analytics: {
-      provider: "plausible",
-    },
-    locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    analytics: null,
+    locale: "zh-CN",
+    baseUrl: githubPagesBaseUrl,
+    ignorePatterns: ["private", "templates", "模板", "AIMbench", "AIM-bench", "组会", ".obsidian"],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
@@ -57,7 +63,7 @@ const config: QuartzConfig = {
     transformers: [
       Plugin.FrontMatter(),
       Plugin.CreatedModifiedDate({
-        priority: ["frontmatter", "git", "filesystem"],
+        priority: ["frontmatter", "filesystem"],
       }),
       Plugin.SyntaxHighlighting({
         theme: {

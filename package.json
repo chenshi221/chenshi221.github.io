@@ -4,6 +4,7 @@
   "private": true,
   "version": "4.5.2",
   "type": "module",
+  "packageManager": "pnpm@10.33.2",
   "author": "jackyzha0 <j.zhao2k19@gmail.com>",
   "license": "MIT",
   "homepage": "https://quartz.jzhao.xyz",
@@ -13,6 +14,7 @@
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
+    "sync:notes": "node scripts/sync-notes.mjs",
     "docs": "npx quartz build --serve -d docs",
     "check": "tsc --noEmit && npx prettier . --check",
     "format": "npx prettier . --write",
