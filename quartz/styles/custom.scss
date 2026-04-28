@@ -1,3 +1,107 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+.home-hero {
+  margin: 1.5rem 0 2rem;
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--secondary) 12%, transparent), transparent 42%),
+    linear-gradient(180deg, var(--light), color-mix(in srgb, var(--lightgray) 35%, var(--light)));
+
+  h1 {
+    margin: 0.15rem 0 0.75rem;
+    font-size: clamp(2.35rem, 7vw, 4.4rem);
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+}
+
+.home-kicker {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-lead {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--darkgray);
+  font-size: 1.05rem;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.4rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.45rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--lightgray);
+    border-radius: 8px;
+    background: var(--light);
+    color: var(--dark);
+    font-weight: 700;
+    text-decoration: none;
+
+    &:first-child {
+      background: var(--secondary);
+      color: var(--light);
+      border-color: var(--secondary);
+    }
+  }
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.85rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.home-card {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background: var(--light);
+  color: var(--darkgray);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+
+  strong {
+    color: var(--dark);
+    font-size: 1.16rem;
+  }
+
+  &:hover {
+    border-color: var(--secondary);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--dark) 10%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
+.home-card-label {
+  width: fit-content;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--secondary) 12%, transparent);
+  color: var(--secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
