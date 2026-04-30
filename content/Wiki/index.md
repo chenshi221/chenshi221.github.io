@@ -142,6 +142,12 @@ tags:
 - [[Wiki/Concepts/测试时计算扩展]] — thinking budget、Lightning Attention、CISPO：推理阶段的效率 scaling。更新：2026-04-30
 - [[Wiki/Concepts/生成式推荐]] — 生成式推荐范式：用自回归生成替代传统检索排序，语义 ID tokenization + decoder-only 架构。更新：2026-04-30
 - [[Wiki/Concepts/CTR 预估]] — CTR 预估核心任务：特征交互 + 序列建模，从分离式 pipeline 到统一 Transformer 的演进。更新：2026-04-30
+- [[Wiki/Concepts/DiT 扩散 Transformer]] — Transformer 替代 UNet 成为扩散模型骨干，adaLN-Zero 条件注入，Scaling Law 跨架构迁移的胜利。更新：2026-04-30
+- [[Wiki/Concepts/GRPO 分组相对策略优化]] — DeepSeek 的去 Critic RL 算法，组内相对比较替代价值函数，降低 RL 训练门槛。更新：2026-04-30
+- [[Wiki/Concepts/DPO 直接偏好优化]] — 绕过 reward model 的直接偏好对齐，RLHF 的简化替代方案，对齐成本最优解。更新：2026-04-30
+- [[Wiki/Concepts/MLA 多头潜在注意力]] — DeepSeek 的低秩 KV cache 压缩，93.3% 推理内存减少，让 MoE 推理变为经济可行。更新：2026-04-30
+- [[Wiki/Concepts/CLIP 对比语言图像预训练]] — OpenAI 的双塔多模态基石，零样本分类 + 语言作为视觉通用监督信号的方法论革命。更新：2026-04-30
+- [[Wiki/Concepts/知识蒸馏]] — 从模型压缩到推理能力迁移，DeepSeek-R1 蒸馏到 Kimi long2short 的范式演变。更新：2026-04-30
 
 ## Entities
 
@@ -172,6 +178,8 @@ tags:
 - [[Wiki/Entities/Kimi 系列模型]] — k1.5 -> K2 -> K2.5 -> VL 演进，长上下文 RL/Agent/多模态 能力递进。更新：2026-04-30
 - [[Wiki/Entities/Qwen3]] — Dense+MoE 双架构，统一思考/非思考模式，thinking budget 机制。更新：2026-04-30
 - [[Wiki/Entities/OneRec 系列模型]] — 快手端到端生成式推荐模型系列：V0 统一召回排序 -> V1 技术报告 -> V2 Lazy Decoder-Only -> Think CoT 推理 -> OpenOneRec 开源。更新：2026-04-30
+- [[Wiki/Entities/FLUX]] — Black Forest Labs 的 Flow Matching + DiT 开源图像生成模型，SD 原团队"重做版"。更新：2026-04-30
+- [[Wiki/Entities/GPT-4o]] — OpenAI 首个端到端全模态 omni 模型，232ms 语音延迟，全模态统一的技术里程碑。更新：2026-04-30
 
 ## Topics
 
@@ -200,8 +208,13 @@ tags:
 - [[Wiki/Comparisons/Vision Transformer 架构比较]] — ViT→Swin→MLP-Mixer：归纳偏置剥离实验视角，通用 backbone 之争。更新：2026-04-30
 - [[Wiki/Comparisons/LLM 缩放定律比较]] — Kaplan vs Chinchilla：方法论偏置、过度训练策略、MoE 缩放定律扩展。更新：2026-04-30
 - [[Wiki/Comparisons/GPT 系列代际比较]] — GPT-1 到 GPT-4o：规模→方法→模态的驱动力转移，技术保密困境。更新：2026-04-30
+- [[Wiki/Comparisons/扩散模型架构比较 UNet vs DiT]] — UNet 与 DiT 的全维度对比，归纳偏置"资产到负债"的转换，规模化时代的架构选择。更新：2026-04-30
+- [[Wiki/Comparisons/推理模型训练方法比较 DeepSeek-R1 vs Kimi k1.5 vs Qwen3]] — 三家推理模型训练方案的全流程对比，对"推理从何而来"的不同回答。更新：2026-04-30
 
 ## Questions
 
 - [[Wiki/Questions/关于统一多模态模型的问题]] — 关于统一多模态模型的问题。更新：2026-04-30
 - [[Wiki/Questions/BAGEL 图文交错生成能力]] — BAGEL 是否支持图文交错生成？架构分析与模型对比。更新：2026-04-30
+- [[Wiki/Questions/为什么 MCTS 在 LLM 推理中失败了]] — 蒙特卡洛树搜索在围棋成功但在 LLM 推理中缺席的深层原因：问题结构不匹配、成本、隐式搜索。更新：2026-04-30
+- [[Wiki/Questions/知识蒸馏 vs RL 哪种方式更能有效获得推理能力]] — DeepSeek-R1 蒸馏 > 直接 RL 的反直觉发现分析，分层策略建议。更新：2026-04-30
+- [[Wiki/Questions/多模态模型的最终形态是原生统一还是模块化组装]] — 原生 vs 模块化路线之争的深层分析，短期/中期/长期预测。更新：2026-04-30

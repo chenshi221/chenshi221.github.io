@@ -332,3 +332,36 @@ tags:
   - 总页面: 140+
 - Open issues: 无。所有 Clippings 已完整摄入。
 - Suggested: 下一阶段可专注于 (1) 跨主题比较页创建（如 LoRA vs 其他微调方法、YOLO vs DETR 全版本对比）；(2) 已有页面的批判性分析深化
+
+## [2026-04-30] deepen | Wiki 条目深度沉淀
+
+- Type: 全目录补全
+- Created Concepts (6):
+  - [[Wiki/Concepts/DiT 扩散 Transformer]] — UNet→DiT 架构转换，adaLN-Zero 条件注入，归纳偏置"资产到负债"
+  - [[Wiki/Concepts/GRPO 分组相对策略优化]] — 去 Critic 的 RL 算法，组内相对比较，降低推理训练门槛
+  - [[Wiki/Concepts/DPO 直接偏好优化]] — 绕过 RM 的直接对齐，对齐成本最优解，DPO/GRPO 分工
+  - [[Wiki/Concepts/MLA 多头潜在注意力]] — 低秩 KV cache 压缩 93.3%，让 MoE 推理经济可行
+  - [[Wiki/Concepts/CLIP 对比语言图像预训练]] — 双塔多模态基石，语言作为通用视觉监督的方法论革命
+  - [[Wiki/Concepts/知识蒸馏]] — 压缩→能力迁移的角色转换，蒸馏 vs RL 的分层策略
+- Created Entities (2):
+  - [[Wiki/Entities/FLUX]] — BFL Flow Matching+DiT 模型，SD 原团队"重做版"
+  - [[Wiki/Entities/GPT-4o]] — OpenAI 首个端到端全模态 omni 模型，232ms 语音延迟
+- Created Questions (3):
+  - [[Wiki/Questions/为什么 MCTS 在 LLM 推理中失败了]] — 问题结构不匹配、成本、隐式搜索 5 原因
+  - [[Wiki/Questions/知识蒸馏 vs RL 哪种方式更能有效获得推理能力]] — 反直觉发现分析 + 规模分层策略
+  - [[Wiki/Questions/多模态模型的最终形态是原生统一还是模块化组装]] — 短期/中期/长期预测
+- Created Comparisons (2):
+  - [[Wiki/Comparisons/扩散模型架构比较 UNet vs DiT]] — 全维度对比 + DiT 规模优势分析
+  - [[Wiki/Comparisons/推理模型训练方法比较 DeepSeek-R1 vs Kimi k1.5 vs Qwen3]] — 三家方法论全流程对比
+- Updated: [[Wiki/Contradictions.md]] — 初始填充 6 条活跃矛盾（Kaplan/Chinchilla、原生/组装、蒸馏/RL、MCTS 缺席、离散/连续情感、Flow/Diffusion）
+- Updated: [[Wiki/index.md]], [[Wiki/overview.md]]
+- Notes: 本次重点补全"被频繁引用但缺少独立页面"的核心概念（DiT/GRPO/DPO/MLA/CLIP/知识蒸馏），以及从已沉淀知识中自然涌现的高价值问题和矛盾。Contradictions.md 从空壳变为有 6 条活跃矛盾的实用页面。
+- Wiki 当前规模:
+  - Sources: 97 个
+  - Concepts: 33 个（+6）
+  - Entities: 29 个（+2）
+  - Topics: 14 个
+  - Comparisons: 13 个（+2）
+  - Questions: 5 个（+3）
+  - Contradictions: 1 个（首次填充，6 条矛盾）
+  - 总页面: 160+
