@@ -1,5 +1,5 @@
 ---
-title: "\pipeline: Unlocking Trillions of Tokens in PDFs with Vision Language Models"
+title: "pipeline: Unlocking Trillions of Tokens in PDFs with Vision Language Models"
 source: "https://arxiv.org/html/2502.18443v3"
 author:
 published:
