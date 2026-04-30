@@ -121,12 +121,21 @@ button.desktop-explorer {
     list-style: none;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
 
     &.explorer-ul {
       overscroll-behavior: contain;
     }
 
-    & li > a {
+    & li {
+      box-sizing: border-box;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    & li > a:not(.file-node-link) {
       color: var(--dark);
       opacity: 0.75;
       pointer-events: all;
@@ -138,10 +147,56 @@ button.desktop-explorer {
     }
   }
 
+  .file-node {
+    width: 100%;
+    margin: 0.18rem 0;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .file-node-link {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    max-width: 16rem;
+    padding: 0.28rem 0.45rem 0.3rem 0.55rem;
+    border-left: 2px solid transparent;
+    border-radius: 5px;
+    color: var(--dark);
+    font-size: 0.88rem;
+    font-weight: $semiBoldWeight;
+    line-height: 1.42;
+    opacity: 0.72;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    pointer-events: all;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      opacity 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--tertiary) 9%, transparent);
+      border-left-color: color-mix(in srgb, var(--tertiary) 45%, transparent);
+      color: var(--dark);
+      opacity: 0.95;
+    }
+
+    &.active {
+      background-color: color-mix(in srgb, var(--tertiary) 13%, transparent);
+      border-left-color: var(--tertiary);
+      color: var(--tertiary);
+      opacity: 1;
+    }
+  }
+
   .folder-outer {
     visibility: collapse;
     display: grid;
     grid-template-rows: 0fr;
+    min-width: 0;
     transition-property: grid-template-rows, visibility;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
@@ -153,10 +208,13 @@ button.desktop-explorer {
   }
 
   .folder-outer > ul {
+    box-sizing: border-box;
     overflow: hidden;
     margin-left: 6px;
     padding-left: 0.8rem;
     border-left: 1px solid var(--lightgray);
+    max-width: calc(100% - 6px);
+    min-width: 0;
   }
 }
 
@@ -259,6 +317,7 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
       height: 100dvh;
       max-height: 100dvh;
       visibility: hidden;
+      overflow-x: hidden;
     }
 
     .mobile-explorer {
