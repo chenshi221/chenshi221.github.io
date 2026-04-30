@@ -36,7 +36,7 @@ status: Read
 ---
 **一句话总结**：本文提出了 BAGEL，一个基于 MoT（Mixture-of-Transformers）架构的开源统一多模态基础模型（7B 激活/14B 总参数），通过在万亿 token 级的多模态交错数据上大规模预训练，涌现出了复杂多模态推理、自由形式图像编辑、3D 操控和世界导航等超出传统 benchmark 范围的 emergent 能力。
 
-![[assets/BAGEL/fig01_showcase.png]]
+![](https://arxiv.org/html/2505.14683v3/x1.png)
 
 *Figure 1: BAGEL 的多样化能力展示——从 T2I 生成、图像编辑到 3D 操控和世界导航。*
 
@@ -79,7 +79,7 @@ BAGEL 采用 MoT 架构，包含**两个完整的 Transformer 专家**：
 - 两个专家在每一层通过**共享自注意力**操作同一个 token 序列
 - 硬路由：生成专家只看 VAE token，理解专家只看 Text/ViT token
 
-![[assets/BAGEL/fig02_architecture.png]]
+![](https://arxiv.org/html/2505.14683v3/x2.png)
 
 *Figure 2: BAGEL 的 MoT 架构。两个 Transformer 专家分别处理理解和生成信息，所有 token 在每层共享自注意力。两个独立的视觉编码器分别捕获语义内容（SigLIP2）和低级像素信息（FLUX VAE）。*
 
@@ -89,7 +89,7 @@ BAGEL 采用 MoT 架构，包含**两个完整的 Transformer 专家**：
 - **MoT（复制完整 Transformer 作为专家）> MoE > Dense**
 - 结论：理解和生成将模型参数**拉向不同的最优区域**，需要分离的参数容量
 
-![[assets/BAGEL/fig03_loss_curves.png]]
+![](https://arxiv.org/html/2505.14683v3/x3.png)
 
 *Figure 3: Dense vs MoE vs MoT 在 1.5B 规模的 loss 曲线。MoT 在 MSE loss（生成）和 CE loss（理解）上均优于其他架构，且差距在生成任务上最为显著。*
 
@@ -114,7 +114,7 @@ BAGEL 采用 MoT 架构，包含**两个完整的 Transformer 专家**：
 - 多图像生成采用 Diffusion Forcing：每张图独立加噪级别，条件化于前一张图的噪声表示
 - 用 PyTorch FlexAttention 实现，比原生 attention 快 2 倍
 
-![[assets/BAGEL/fig15_causal_attention.png]]
+![](https://arxiv.org/html/2505.14683v3/x20.png)
 
 *Figure 15: BAGEL 的广义因果注意力掩码示意。(a) 交错图文生成：每张图只能 attend 到前面图像的干净 VAE 和 ViT token。(b) 交错多图/视频生成：采用 Diffusion Forcing 策略，每张图条件化于前一张图的噪声表示。*
 
@@ -132,7 +132,7 @@ BAGEL 的数据配方是最核心的贡献之一。
 - 构建：视频分镜 → 质量过滤（分辨率、清晰度、运动稳定性）→ 帧间变化描述（用蒸馏的轻量 Qwen2.5-VL-7B 生成，限制 30 token 防幻觉）→ 采样平均 4 帧/片段
 - 核心价值：提供像素级、概念级、时序和物理连续性的监督信号——"视频是最大、最自然的模拟器"
 
-![[assets/BAGEL/fig04_data_pipeline.png]]
+![](https://arxiv.org/html/2505.14683v3/x4.png)
 
 *Figure 4: BAGEL 的数据构建流程。(a) 视频交错数据：视频分镜→质量过滤→帧间变化描述→交错序列。(b) 网页交错数据：原始网页→去噪清洗→Caption-first 策略插入描述→结构化交错文档。*
 
@@ -163,13 +163,13 @@ BAGEL 的数据配方是最核心的贡献之一。
 **关键调参发现**：
 - **数据采样比**：生成数据应远多于理解数据（4:1 ~ 8:1），MSE loss 显著下降而 CE loss 几乎不变
 
-![[assets/BAGEL/fig05_data_ratio.png]]
+![](https://arxiv.org/html/2505.14683v3/x6.png)
 
 *Figure 5: 不同数据采样比的 loss 曲线。"4g1u"（生成:理解=4:1）在 MSE 上有 0.4% 的绝对改善，而 CE loss 几乎不受影响。*
 
 - **学习率 trade-off**：大学习率有利于生成（MSE），小学习率有利于理解（CE）→ 分别加权
 
-![[assets/BAGEL/fig06_learning_rate.png]]
+![](https://arxiv.org/html/2505.14683v3/x7.png)
 
 *Figure 6: 不同学习率的 loss 曲线。MSE 和 CE 对学习率的需求相反——大学习率加速生成收敛，小学习率保护理解能力。*
 - **Constant LR** 全程恒定学习率，便于动态扩展训练数据
@@ -192,7 +192,7 @@ BAGEL 的数据配方是最核心的贡献之一。
 - **WISE**（世界知识推理生成）：BAGEL 52%，超越除 GPT-4o 外的所有模型；加 CoT 后达到 70%
 - 原生支持中英文 prompt、任意宽高比
 
-![[assets/BAGEL/fig10_t2i_comparison.png]]
+![](https://arxiv.org/html/2505.14683v3/x14.png)
 
 *Figure 10: T2I 生成质量定性对比。BAGEL 显著优于 Janus-Pro 7B 和 SD3-medium。注意 BAGEL 原生支持中英文 prompt，而 SD3-medium 不支持中文。*
 
@@ -203,11 +203,11 @@ BAGEL 的数据配方是最核心的贡献之一。
 - **RISEBench**：6.1（基础）/ 11.9（+CoT）
 - **KRIS-Bench**：56.21（基础）/ 60.18（+CoT）
 
-![[assets/BAGEL/fig11_editing_comparison.png]]
+![](https://arxiv.org/html/2505.14683v3/x15.png)
 
 *Figure 11: 图像编辑与操控定性对比。BAGEL 在多种编辑场景下展现了优于 Step1X-Edit、IC-Edit 和 Gemini 2.0 的一致性和指令遵循能力。*
 
-![[assets/BAGEL/fig12_intelligentbench.png]]
+![](https://arxiv.org/html/2505.14683v3/x16.png)
 
 *Figure 12: IntelligentBench 上的定性对比。BAGEL 能处理需要多步推理和世界知识的复杂编辑任务（如"将苹果logo变成毕加索风格"），而 Step1X-Edit 往往直接复制输入图像。*
 
@@ -218,7 +218,7 @@ BAGEL 的数据配方是最核心的贡献之一。
 2. 推理训练数据（500K 条）有效教会了模型"先想再做"
 3. 推理增强在需要世界知识的复杂任务上收益最大
 
-![[assets/BAGEL/fig13_thinking_helps.png]]
+![](https://arxiv.org/html/2505.14683v3/x17.png)
 
 *Figure 13: "先思考再生成"的有效性。(a) T2I 生成：仅给简短 prompt 时失败，加入 CoT 推理后成功生成正确图像。(b) 智能编辑：CoT 推理显著提升了需要世界知识和多步推理的编辑质量。*
 
@@ -237,15 +237,15 @@ BAGEL 的数据配方是最核心的贡献之一。
 
 定性观察也佐证了这点：3.5T 前，模型在复杂编辑任务上倾向"回退"到复制输入图；3.5T 后开始展现清晰的多步推理和语义编辑。
 
-![[assets/BAGEL/fig07_emerging_properties.png]]
+![](https://arxiv.org/html/2505.14683v3/x8.png)
 
 *Figure 7: 不同能力的收敛速度对比。理解和生成 benchmark 在早期（0.18T/0.68T）即达峰值 85%，经典编辑需要 2.64T，而智能编辑在 3.61T 后才出现涌现式突变。*
 
-![[assets/BAGEL/fig08_t2i_emergence.png]]
+![](https://arxiv.org/html/2505.14683v3/x12.png)
 
 *Figure 8: 不同训练 token 量的 T2I 和编辑效果对比。生成质量在 1.5T 前已较强，之后分辨率提升带来小幅改善。文字渲染能力（如正确拼写"hello"和"BAGEL"）在 1.5T~4.5T 之间涌现。*
 
-![[assets/BAGEL/fig09_intelligent_edit_emergence.png]]
+![](https://arxiv.org/html/2505.14683v3/x13.png)
 
 *Figure 9: 智能编辑任务的涌现行为。3.5T 前模型倾向"回退"到复制输入图（不理解任务时的 fallback 策略）；3.5T 后开始展现清晰推理和语义编辑——这是一种无法从 loss 曲线预测的质变。*
 
@@ -257,7 +257,7 @@ BAGEL 的数据配方是最核心的贡献之一。
 - **多帧生成**：给定 prompt 生成多张连续图像
 - **跨域泛化**：仅在真实街景导航数据上训练，能泛化到水墨画、卡通、游戏等完全不同的域
 
-![[assets/BAGEL/fig14_world_modeling.png]]
+![](https://arxiv.org/html/2505.14683v3/x19.png)
 
 *Figure 14: BAGEL 的世界建模能力展示。包括世界导航（沿相机轨迹前进）、旋转（改变视角）、多帧生成（给定 prompt 生成连续图像序列），以及跨域泛化（从真实街景泛化到水墨画、卡通等）。*
 
