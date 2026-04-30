@@ -24,12 +24,6 @@ tags:
   - 对比学习
   - 多语言
   - 密集预测
-tags:
-  - 论文
-  - 多模态
-  - 视觉编码器
-  - 对比学习
-  - 多语言
 url: 'https://arxiv.org/abs/2502.14786'
 code: 已开源（ViT-B/L/So400m/g 四个尺寸）
 rating: ⭐⭐⭐⭐⭐
