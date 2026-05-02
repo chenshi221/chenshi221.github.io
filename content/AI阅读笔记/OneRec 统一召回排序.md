@@ -48,7 +48,7 @@ status: Read
 
 用生成式 Transformer 统一 Recall + Rank，同时引入迭代偏好对齐（IPA）来提升生成列表的质量。
 
-![](https://arxiv.org/html/2502.18965/x1.png)
+![](https://arxiv.org/html/2502.18965v1/x1.png)
 
 *Figure 1: 统一架构 vs 传统级联架构——(a) OneRec 统一端到端生成架构直接输出排序列表；(b) 传统级联系统分召回、预排、精排三阶段，各阶段独立优化。*
 
@@ -65,7 +65,7 @@ status: Read
 
 ### 1. 统一生成式框架
 
-![](https://arxiv.org/html/2502.18965/x2.png)
+![](https://arxiv.org/html/2502.18965v1/x2.png)
 
 *Figure 2: OneRec 统一召回排序总框架——两阶段：(i) Session Training 阶段用 session-wise 数据训练 Encoder-Decoder 生成推荐列表；(ii) IPA 阶段用迭代 DPO + self-hard negatives 进行偏好对齐。*
 

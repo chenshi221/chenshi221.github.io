@@ -67,22 +67,17 @@ GPT-3 虽然通过 few-shot prompting 展现了强大能力，但它的训练目
 
 ### 整体流程
 
-RLHF 包含三个连续的步骤：
+RLHF 包含三个递进步骤，形成数据飞轮：
 
-```
-Step 1: SFT（Supervised Fine-Tuning）
-Labelers 撰写高质量回答 → 微调 GPT-3
+| 步骤 | 目标 | 数据 | 产出 |
+|------|------|------|------|
+| **SFT** | 让模型学会遵循指令格式 | ~13K (prompt, 人工回答) 对 | SFT 模型 |
+| **RM** | 学习人类偏好函数 | ~33K prompt × (K=4-9 回答的排序) | 标量 RM |
+| **PPO** | 最大化 RM 奖励+保持能力 | ~31K prompts（API 真实用户） | InstructGPT |
 
-Step 2: RM（Reward Model）训练
-Labelers 对模型生成的多个回答进行排序 → 训练标量奖励模型
+![](https://ar5iv.labs.arxiv.org/html/2203.02155/assets/x2.png)
 
-Step 3: PPO 强化学习
-使用 RM 作为奖励函数，用 PPO 优化策略（语言模型）
-```
-
-![](https://arxiv.org/html/2203.02155v2/x2.png)
-
-*Figure 2: InstructGPT 训练流程：(1) SFT – 收集标注者示范数据微调 GPT-3；(2) RM – 收集标注者对模型输出的排序数据，训练奖励模型；(3) PPO – 用奖励模型作为奖励函数，通过 PPO 算法优化策略。*
+*Figure 2: InstructGPT 三步骤：(1) SFT – 收集标注者示范数据微调 GPT-3；(2) RM – 标注者对模型输出排序训练奖励模型；(3) PPO – 用 RM 作为奖励函数通过 PPO 优化策略。*
 
 ### Step 1: Supervised Fine-Tuning (SFT)
 

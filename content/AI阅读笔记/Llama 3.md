@@ -15,7 +15,7 @@ tags:
   - 大语言模型
   - 开源
   - 多语言
-  - Tool Use
+  - Tool-Use
   - Llama
 url: 'https://arxiv.org/abs/2407.21783'
 code: 已开源（模型权重公开发布）

@@ -71,3 +71,271 @@ numpy.array(object, dtype=None, copy=True, order='K', subok=False, ndmin=0)
 - 维度比较从最后一维开始，如果维度相同或者其中一个维度为 1，则继续比较前一维，直到一个数组的维度全部比较完毕。此时可以进行广播。
 - **规则 1**：如果所有输入数组的维度数不同，会在较小数组的形状前添加“1”，直到所有数组具有相同的维度数。
 - **规则 2**：如果某个维度大小为 1，那么该维度的元素将被“广播”至与最大维度相同的大小，值假定在该维度上是相同的。
+
+---
+
+## 进阶索引
+
+### 花式索引（Fancy Indexing）
+
+使用整数数组作为索引，可以一次性选取多个不连续的元素。
+
+```python
+import numpy as np
+
+a = np.array([10, 20, 30, 40, 50])
+
+# 整数数组索引
+indices = [0, 2, 4]
+print(a[indices])       # [10 30 50]
+
+# 二维数组
+b = np.arange(12).reshape(3, 4)
+# [[ 0,  1,  2,  3],
+#  [ 4,  5,  6,  7],
+#  [ 8,  9, 10, 11]]
+
+print(b[[0, 2]])           # 取第 0、2 行
+print(b[[0, 2], [1, 3]])   # 取 (0,1) 和 (2,3) 两个元素 → [1, 11]
+```
+
+### 布尔索引进阶
+
+```python
+a = np.array([1, 2, 3, 4, 5])
+
+# 复合条件
+mask = (a > 2) & (a < 5)       # AND
+mask = (a < 2) | (a > 4)       # OR
+mask = ~(a == 3)                # NOT
+
+print(a[mask])  # [1 2 4 5]
+
+# np.where：条件选择
+result = np.where(a > 3, a, 0)   # 大于3保留，否则置0 → [0 0 0 4 5]
+
+# np.select：多条件
+conditions = [a < 2, a < 4, a >= 4]
+choices = [0, 1, 2]
+result = np.select(conditions, choices)  # → [0 1 1 2 2]
+```
+
+### ix_ 函数
+
+用于构造开放网格的索引，常用于同时对多个维度进行花式索引。
+
+```python
+a = np.arange(12).reshape(3, 4)
+
+# 选取第 0、2 行和第 1、3 列的交叉元素
+rows = [0, 2]
+cols = [1, 3]
+print(a[np.ix_(rows, cols)])
+# [[ 1,  3],
+#  [ 9, 11]]
+```
+
+---
+
+## 线性代数
+
+NumPy 的 `linalg` 模块提供了丰富的线性代数操作。
+
+### 基本矩阵运算
+
+```python
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+# 矩阵乘法
+C = A @ B                # 推荐写法
+C = np.dot(A, B)         # 等价
+C = np.matmul(A, B)      # 等价
+
+# 转置
+A.T                      # 转置
+np.transpose(A)          # 等价
+
+# 逐元素乘法（Hadamard 积）
+C = A * B
+```
+
+### linalg 模块
+
+```python
+# 行列式
+np.linalg.det(A)
+
+# 逆矩阵
+np.linalg.inv(A)
+
+# 伪逆（Moore-Penrose）
+np.linalg.pinv(A)
+
+# 特征值与特征向量
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+# 奇异值分解 (SVD)
+U, S, Vt = np.linalg.svd(A)
+
+# QR 分解
+Q, R = np.linalg.qr(A)
+
+# 解线性方程组 Ax = b
+x = np.linalg.solve(A, b)
+
+# 范数
+np.linalg.norm(A)              # Frobenius 范数
+np.linalg.norm(A, ord=2)       # 2-范数
+
+# 矩阵的秩
+np.linalg.matrix_rank(A)
+
+# 迹（对角线元素之和）
+np.trace(A)
+```
+
+### 常用矩阵构造
+
+```python
+np.eye(3)                      # 3x3 单位矩阵
+np.diag([1, 2, 3])             # 对角矩阵
+np.diag(A)                     # 提取对角线元素
+np.triu(A)                     # 上三角矩阵
+np.tril(A)                     # 下三角矩阵
+```
+
+---
+
+## 随机数模块
+
+### 基本随机数
+
+```python
+# 随机种子（可复现）
+np.random.seed(42)
+
+# 均匀分布
+np.random.rand(3, 4)           # [0, 1) 均匀分布
+np.random.uniform(0, 10, (3,)) # [0, 10)
+
+# 正态分布
+np.random.randn(3, 4)          # 标准正态 N(0,1)
+np.random.normal(5, 2, (3,))   # N(5, 4)
+
+# 整数随机
+np.random.randint(0, 10, (3,)) # [0, 10)
+
+# 随机选择
+a = np.array([10, 20, 30, 40, 50])
+np.random.choice(a, size=3, replace=False)  # 不放回抽样
+np.random.choice(a, size=3, replace=True)   # 有放回抽样
+```
+
+### 打乱与排列
+
+```python
+a = np.arange(10)
+np.random.shuffle(a)           # 原地打乱
+
+# 返回打乱后的索引（不修改原数组）
+perm = np.random.permutation(10)
+b = a[perm]
+```
+
+### 新版随机 API（NumPy 1.17+ 推荐）
+
+```python
+rng = np.random.default_rng(42)
+
+rng.random((3, 4))             # [0, 1) 均匀分布
+rng.normal(0, 1, (3, 4))      # 正态分布
+rng.integers(0, 10, (3,))     # 整数
+rng.choice(a, size=3)         # 随机选择
+rng.permutation(10)            # 随机排列
+```
+
+---
+
+## 常用实用函数
+
+### 聚合与统计
+
+```python
+a = np.array([[1, 2, 3], [4, 5, 6]])
+
+np.sum(a, axis=0)         # 按列求和 → [5, 7, 9]
+np.sum(a, axis=1)         # 按行求和 → [6, 15]
+np.cumsum(a, axis=0)      # 累积和
+np.diff(a, axis=1)        # 差分
+np.percentile(a, 50)      # 中位数
+np.quantile(a, 0.75)      # 75% 分位数
+```
+
+### 数组操作
+
+```python
+a = np.array([[3, 1, 2], [6, 4, 5]])
+
+# 排序
+np.sort(a, axis=1)             # 每行排序
+np.argsort(a, axis=1)          # 排序后的索引
+
+# 去重
+np.unique(a, return_counts=True)  # 返回唯一值和计数
+
+# 搜索
+np.where(a > 3)                # 满足条件的索引
+np.argmax(a, axis=1)           # 每行最大值索引
+
+# 集合运算
+np.intersect1d([1,2,3], [2,3,4])  # 交集 → [2,3]
+np.union1d([1,2,3], [2,3,4])      # 并集 → [1,2,3,4]
+np.setdiff1d([1,2,3], [2,3,4])    # 差集 → [1]
+```
+
+### 数组拼接与拆分
+
+```python
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+
+# 拼接
+np.concatenate([a, b], axis=0)   # 垂直拼接
+np.vstack([a, b])                # 等价
+np.concatenate([a, b], axis=1)   # 水平拼接
+np.hstack([a, b])                # 等价
+np.stack([a, b], axis=0)         # 新维度堆叠
+
+# 拆分
+np.split(a, 2, axis=0)          # 均分为 2 份
+np.array_split(a, 3, axis=0)    # 不均等拆分
+```
+
+---
+
+## 性能优化技巧
+
+```python
+# ✓ 向量化替代循环
+result = a ** 2                  # 远快于 for 循环
+
+# ✓ 原地操作节省内存
+a += 1                           # 不创建新数组
+np.sqrt(a, out=a)                # 将结果写入已有数组
+
+# ✓ 切片返回视图（共享内存，无复制）
+b = a[0:3, :]
+
+# ✓ 花式索引返回副本（独立内存）
+b = a[[0, 2]]
+```
+
+---
+
+## 常见陷阱
+
+1. **视图 vs 副本**：切片返回视图，花式索引和布尔索引返回副本
+2. **整数溢出**：`np.array([255], dtype=np.uint8) + 1` 溢出为 0
+3. **浮点精度**：`np.float32` 约 7 位有效数字，`np.float64` 约 15 位
+4. **axis 语义**：`axis=0` 沿行操作（跨行），`axis=1` 沿列操作（跨列）

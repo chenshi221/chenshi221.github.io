@@ -76,57 +76,78 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 模型架构
+GPT-3 的核心方法论不复杂——标准 decoder-only Transformer + 海量数据预训练——其真正贡献在于系统性地展示了**规模本身如何催生涌现能力**。
 
-GPT-3 使用与 GPT-2 相同的架构（decoder-only Transformer），主要修改是 Sparse Attention 的替代方案：
-- 层数：96
-- d_model：12,288
-- 注意力头数：96
-- 上下文窗口：2,048 tokens
-- 总参数：175B
+### 1. 模型架构与自回归公式
 
-8 种模型规模用于研究 scaling：
+GPT-3 使用与 GPT-2 相同的 decoder-only Transformer 架构。自回归语言建模目标：
 
-| 名称 | 参数量 | 层数 | d_model | 头数 |
-| --- | --- | --- | --- | --- |
-| GPT-3 Small | 125M | 12 | 768 | 12 |
-| GPT-3 Medium | 350M | 24 | 1,024 | 16 |
-| GPT-3 Large | 760M | 24 | 1,536 | 16 |
-| GPT-3 XL | 1.3B | 24 | 2,048 | 24 |
-| GPT-3 2.7B | 2.7B | 32 | 2,560 | 32 |
-| GPT-3 6.7B | 6.7B | 32 | 4,096 | 32 |
-| GPT-3 13B | 13B | 40 | 5,120 | 40 |
-| GPT-3 175B | 175B | 96 | 12,288 | 96 |
+$$\mathcal{L}(\theta) = -\sum_{t=1}^{T} \log P_\theta(x_t | x_{<t})$$
 
-### 2. 训练数据
+即最大化给定前文条件下每个 token 的预测概率。唯一的架构差异：GPT-3 在各层交替使用 dense attention 和 locally banded sparse attention（类似 Sparse Transformer）。
 
-总规模约 500B tokens（约 570GB 文本），来自 5 个来源：
+8 种模型规模用于系统性研究 scaling 行为：
 
-| 数据集 | 占比 | 说明 |
-| --- | --- | --- |
-| Common Crawl（过滤后） | 60% | 使用高质量参考语料训练分类器过滤低质量页面 |
-| WebText2 | 22% | 来自 Reddit 高赞链接的网页文本 |
-| Books1 + Books2 | 8% + 8% | 互联网书籍语料 |
-| Wikipedia | 3% | 英文维基百科 |
+| 模型 | 参数量 | 层数 | d_model | 头数 | Batch Size | LR |
+|------|--------|------|--------|------|-----------|-----|
+| GPT-3 Small | 125M | 12 | 768 | 12 | 0.5M | 6.0e-4 |
+| GPT-3 Medium | 350M | 24 | 1,024 | 16 | 0.5M | 3.0e-4 |
+| GPT-3 Large | 760M | 24 | 1,536 | 16 | 0.5M | 2.5e-4 |
+| GPT-3 XL | 1.3B | 24 | 2,048 | 24 | 1M | 2.0e-4 |
+| GPT-3 2.7B | 2.7B | 32 | 2,560 | 32 | 1M | 1.6e-4 |
+| GPT-3 6.7B | 6.7B | 32 | 4,096 | 32 | 2M | 1.2e-4 |
+| GPT-3 13B | 13B | 40 | 5,120 | 40 | 2M | 1.0e-4 |
+| GPT-3 175B | 175B | 96 | 12,288 | 96 | 3.2M | 0.6e-4 |
 
-关键创新：用 Common Crawl 与高质量语料（WebText/Wikipedia/Books）的重叠度训练分类器，保留高质量文档，得到过滤后的 Common Crawl 语料。
+*上下文窗口统一为 2048 tokens。学习率随模型增大而降低——大模型对梯度更新更敏感。*
 
-### 3. Training Setup
+### 2. 训练数据——Common Crawl 过滤是关键
 
-- 跨 GPU 的模型并行 + 数据并行
-- 使用与 GPT-2 类似的训练方法（Adam 优化器）
-- 上下文长度：2,048 tokens
-- 仅在预训练数据上训练，不做任何微调
+总规模约 500B tokens（~570GB）。5 个来源：
 
-### 4. 评估范式：In-context Learning
+| 数据集 | 占比 | Token 数 | 说明 |
+|--------|------|---------|------|
+| Common Crawl（过滤后） | 60% | ~300B | 用高质量语料训练分类器过滤，是最大创新 |
+| WebText2 | 22% | ~110B | Reddit 高赞链接的扩展版本 |
+| Books1 + Books2 | 16% | ~80B | 两大互联网书籍语料库 |
+| Wikipedia | 3% | ~15B | 英文维基百科 |
 
-不进行梯度更新，通过上下文中的示例引导模型行为：
+**数据质量的核心创新——Common Crawl 过滤 pipeline**：用 WebText（被视为正例）作为正样本，训练一个二分类器对 Common Crawl 页面打分。分类器特征包括：页面是否包含大量重复内容、是否为密码/垃圾页面、是否与高质量语料有词汇重叠。这一步骤将原始 45TB 的 Common Crawl 压缩到 ~570GB 的高质量版本。
 
-- **Zero-shot**：仅提供任务的自然语言描述，无示例
-- **One-shot**：提供任务描述 + 1 个示例
-- **Few-shot**：提供任务描述 + K 个示例（通常 K=10-100）
+**数据污染控制**：对所有下游 benchmark 进行了 n-gram 重叠检测，移除训练集中与测试集有显著重叠的文档（尽管后来发现某些污染仍存在）。
 
-所有示例以纯文本形式拼接在 prompt 中，模型基于条件概率自回归生成答案。
+### 3. 训练基础设施
+
+| 配置 | 值 |
+|------|-----|
+| 优化器 | Adam（β₁=0.9, β₂=0.95, ε=1e-8） |
+| 梯度裁剪 | 1.0（按全局 norm） |
+| 学习率调度 | cosine decay（经 260B tokens 衰减至 10%） |
+| 权重衰减 | 0.1 |
+| 并行策略 | 模型并行（跨层）+ 数据并行（跨 GPU） |
+| 硬件 | Microsoft Azure 超级计算机（V100 GPU 集群） |
+
+训练过程中未做任何微调——所有能力完全来自预训练（SPM：Standard Pre-training Model）。
+
+### 4. In-context Learning——GPT-3 的核心评估范式
+
+不进行梯度更新，仅通过在上下文中拼接示例来引导模型行为：
+
+| 范式 | 输入格式 | 示例数 |
+|------|---------|--------|
+| **Zero-shot** | 任务描述（自然语言） | 0 |
+| **One-shot** | 任务描述 + 1 个示例 | 1 |
+| **Few-shot** | 任务描述 + K 个示例 | 10-100 |
+
+![](https://ar5iv.labs.arxiv.org/html/2005.14165/assets/graphs/img/in_context_learning.png)
+
+*Figure 1.2: 不同规模模型的 in-context learning 能力——大模型的 "in-context learning curves" 斜率更陡，表明从上下文中学习任务的能力随模型规模增强。*
+
+**计算量与 Scaling Laws**：GPT-3 遵循 Kaplan et al. (2020) 的 scaling laws——模型大小增长比数据量增长更快（N ∝ C^0.73, D ∝ C^0.27）。175B 仅训练了 ~300B tokens（远少于 Chinchilla 建议的 "等比例缩放"）。
+
+![](https://ar5iv.labs.arxiv.org/html/2005.14165/assets/figures/training_flops.png)
+
+*Figure 2.2: GPT-3 各模型的训练计算量（petaflop/s-days）。虽然 GPT-3 3B 几乎比 RoBERTa-Large (355M) 大 10 倍，但两者预训练计算量接近——体现了 scaling laws 的 "模型增长快于数据增长" 策略。*
 
 ---
 

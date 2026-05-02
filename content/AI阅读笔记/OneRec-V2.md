@@ -22,8 +22,8 @@ tags:
   - 论文
   - 生成推荐
   - MoE
-  - Scaling Law
-  - Lazy Decoder
+  - Scaling-Law
+  - Lazy-Decoder
   - GRPO
   - 工业部署
 url: 'https://arxiv.org/abs/2508.20900'

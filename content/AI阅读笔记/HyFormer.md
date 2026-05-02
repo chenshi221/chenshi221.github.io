@@ -55,7 +55,14 @@ CTR 预估中存在两个核心子问题：
 
 ## Method 核心方法
 
-### 1. Query Decoding
+### 架构对比：分离式 vs 统一式序列建模
+
+| 维度 | DIN/DIEN + DCN | **HyFormer** |
+|------|---------------|-------------|
+| 序列建模 | 独立 target attention（embedding 层） | Query Decoding（多层交叉注意力） |
+| 特征交互 | 独立 cross network | Query Boosting（MLP-Mixer token mixing） |
+| 序列-特征关系 | 单向：序列→特征 | **双向**：Global Tokens 交换 |
+| 参数利用 | 两套独立参数 | 统一 Transformer 堆叠 |
 
 **目的**：从用户行为序列中提取与当前候选广告相关的兴趣信息。
 

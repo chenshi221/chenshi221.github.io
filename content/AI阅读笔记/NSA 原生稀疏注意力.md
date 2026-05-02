@@ -94,12 +94,23 @@ Block length $l=32$，stride $d=16$（重叠以减轻信息碎片化）。压缩
 
 ### 硬件对齐的内核设计
 
-不同于 FlashAttention 按时间连续 query 块加载，NSA 内核按 **GQA group** 组织：
+不同于 FlashAttention 按时间顺序连续 query 块加载，NSA 内核按 **GQA group** 组织：
 - 对序列每个位置，加载整个 GQA group 内所有 query head（共享相同稀疏 KV 块）
 - 在内循环中顺序加载连续 KV 块到 SRAM
 - 外循环使用 Triton grid scheduler 调度
 
-这实现了：(1) 通过 group 共享消除冗余 KV 传输；(2) 平衡 GPU SM 间的计算负载
+效果：(1) 通过 group 共享消除冗余 KV 传输；(2) 平衡 GPU SM 间计算负载。
+
+### 设计对比分析
+
+| 方法 | 压缩方式 | 选择方式 | 局部 | 硬件优化 |
+|------|---------|---------|------|---------|
+| H2O | - | 单 token（attention sink） | - | - |
+| InfLLM | - | 语义块 | ✓ | - |
+| Quest | 量化 | 量化感知选择 | - | - |
+| **NSA** | **MLP 块压缩** | **块级选择（复用压缩分数）** | **独立 KV 投影** | **GQA-group 内核** |
+
+NSA 的关键创新是将三个互补的注意力路径统一在一个可学习门控框架下——压缩提供全局语义、选择保留细粒度关键 token、滑动窗口保证局部一致性——三个分支使用**独立的 KV 投影权重**，防止任一分支 "shortcut" 掉其他分支的学习信号。
 
 ---
 

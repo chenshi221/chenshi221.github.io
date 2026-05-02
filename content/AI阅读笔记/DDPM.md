@@ -16,7 +16,7 @@ tags:
   - 扩散模型
   - 图像生成
   - 生成模型
-  - score matching
+  - score-matching
 url: 'https://arxiv.org/abs/2006.11239'
 code: 'https://github.com/hojonathanho/diffusion'
 rating: ⭐⭐⭐⭐⭐
@@ -53,65 +53,154 @@ status: Read
 
 ## Method 核心方法
 
+DDPM 的方法论由四个紧密关联的组件构成：扩散过程的数学定义 → 变分训练目标的推导 → 重参数化技巧 → 网络架构设计。以下按数学推导的自然顺序展开。
+
 ### 1. 扩散模型的数学框架
 
-扩散模型定义了一个潜变量模型 p_θ(x_0) = ∫ p_θ(x_0:T) dx_1:T。
+扩散模型定义了一个 T 步潜变量模型 p_θ(x_0) = ∫ p_θ(x_0:T) dx_1:T，其中 x_1, ..., x_T 是与数据 x_0 同维度的隐变量。
 
-**前向过程（扩散过程）**：固定的马尔可夫链，逐步向数据添加高斯噪声：
+#### 1.1 前向过程（扩散过程）
 
-q(x_t | x_{t-1}) = N(x_t; √(1-β_t) x_{t-1}, β_t I)
+前向过程是一个**固定的马尔可夫链**（无学习参数），逐步向数据添加高斯噪声，将数据分布 q(x_0) 逐渐转化为标准高斯分布：
 
-其中 β_t 是方差 schedule，从 β_1=10^{-4} 线性增加到 β_T=0.02。
+$$q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1-\beta_t} x_{t-1}, \beta_t I)$$
 
-**关键性质**：前向过程支持任意时间步 t 的闭式采样：
+其中 β_t ∈ (0,1) 是方差 schedule，控制每步添加的噪声量。论文使用从 β_1=10^{-4} 到 β_T=0.02 的线性 schedule，共 T=1000 步。
 
-q(x_t | x_0) = N(x_t; √ᾱ_t x_0, (1-ᾱ_t) I)
+**重参数化技巧**：令 α_t = 1-β_t，ᾱ_t = ∏_{s=1}^t α_s，利用高斯分布的可加性，可以**直接从 x_0 采样任意时间步 t 的 x_t**，无需迭代 T 步：
 
-其中 α_t = 1-β_t, ᾱ_t = ∏_{s=1}^t α_s。
+$$q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1-\bar{\alpha}_t) I)$$
 
-**反向过程（生成过程）**：学习的马尔可夫链，从标准高斯噪声开始逐步去噪：
+等价地：$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1-\bar{\alpha}_t} \varepsilon$，其中 $\varepsilon \sim \mathcal{N}(0, I)$。
 
-p_θ(x_{t-1} | x_t) = N(x_{t-1}; μ_θ(x_t, t), σ_t^2 I)
+这一性质是扩散模型高效训练的关键——训练时无需模拟完整的前向链，只需采样 t 和 ε 即可直接计算 x_t。
 
-训练目标是最小化负对数似然的变分下界。通过推导，可将变分下界重写为 KL 散度之和：
+**边界条件**：当 T→∞ 时 β_t 的累积使 ᾱ_T→0，因此 $q(x_T|x_0) \approx \mathcal{N}(0, I)$。
 
-L = E_q [D_KL(q(x_T|x_0) || p(x_T)) + Σ D_KL(q(x_{t-1}|x_t, x_0) || p_θ(x_{t-1}|x_t)) - log p_θ(x_0|x_1)]
+#### 1.2 反向过程（生成过程）
+
+反向过程是一个**学习的马尔可夫链**，从标准高斯噪声 x_T ~ N(0, I) 开始，逐步去噪重建数据：
+
+$$p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)$$
+
+其中 μ_θ 由神经网络预测，σ_t 设为固定值（β_t 或 (1-ᾱ_{t-1})/(1-ᾱ_t)·β_t，两者效果相近）。
+
+关键问题：**如何训练 μ_θ 以逆转扩散过程？** 这需要推导训练目标。
+
+### 2. 变分下界的推导与分解
+
+训练目标是最大化数据对数似然 log p_θ(x_0) 的变分下界（VLB）：
+
+$$\mathbb{E}_{q(x_0)}[-\log p_\theta(x_0)] \leq \mathbb{E}_q\left[-\log p(x_T) - \sum_{t \geq 1} \log \frac{p_\theta(x_{t-1}|x_t)}{q(x_t|x_{t-1})}\right] =: L$$
+
+经过代数变换，将 VLB 分解为三个可解释的 KL 散度项：
+
+$$L = \underbrace{D_{KL}(q(x_T|x_0) \| p(x_T))}_{L_T\text{: 先验匹配}} + \sum_{t=2}^T \underbrace{D_{KL}(q(x_{t-1}|x_t, x_0) \| p_\theta(x_{t-1}|x_t))}_{L_{t-1}\text{: 去噪匹配}} - \underbrace{\log p_\theta(x_0|x_1)}_{L_0\text{: 解码}}$$
+
+其中最关键的是 **L_{t-1} 项**——将学习问题从"预测前向过程的逆"转化为"匹配真实后验 q(x_{t-1}|x_t, x_0)"。
+
+**真实后验的闭式解**：利用贝叶斯规则和前向过程的性质，可得：
+
+$$q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1}; \tilde{\mu}_t(x_t, x_0), \tilde{\beta}_t I)$$
+
+其中：
+$$\tilde{\mu}_t(x_t, x_0) = \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}x_t$$
+
+$$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t}\beta_t$$
+
+于是每个 L_{t-1} 项变成两个高斯分布之间的 KL 散度，可闭式计算。
+
+### 3. 重参数化：预测噪声而非均值（核心创新）
+
+将 μ_θ 参数化为预测 **μ̃_t** 是一种自然选择，但 DDPM 发现了一个更好的方案。
+
+**三种可能的参数化方式**（按效果从劣到优排列）：
+
+| 参数化 | 预测目标 | 问题 |
+|--------|---------|------|
+| 直接预测 x_0 | $\hat{x}_0 = f_\theta(x_t, t)$ | 在 t 接近 T 时，x_t 几乎是纯噪声，预测 x_0 极不稳定 |
+| 预测 μ̃_t | $\mu_\theta = f_\theta(x_t, t)$ | 均值预测的损失面不平滑，收敛慢 |
+| **预测噪声 ε**（DDPM 选择） | $\varepsilon_\theta(x_t, t)$ | 目标 ε 始终来自 N(0,I)，尺度稳定，损失面平滑 |
+
+**噪声预测参数化**的数学形式。将 x_0 用 x_t 和 ε 表示：$x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(x_t - \sqrt{1-\bar{\alpha}_t}\varepsilon)$，代入 μ̃_t 公式得：
+
+$$\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\varepsilon_\theta(x_t, t)\right)$$
+
+此时 L_{t-1} 的 KL 散度简化为：
+
+$$L_{t-1} = \frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha}_t)}\|\varepsilon - \varepsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\varepsilon, t)\|^2$$
+
+### 4. 简化训练目标 L_simple——"魔鬼在权重里"
+
+DDPM 最关键的实验发现是：**去掉 VLB 中 t 相关的权重系数，使用不加权的 MSE 目标，样本质量反而大幅提升**。
+
+$$L_{\text{simple}}(\theta) = \mathbb{E}_{t, x_0, \varepsilon}\left[\|\varepsilon - \varepsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\varepsilon, t)\|^2\right]$$
+
+其中 t 在 {1, ..., T} 中均匀采样。
+
+**为什么 L_simple 更好？** VLB 中的权重 $\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha}_t)}$ 随 t 剧烈变化：小 t（噪声很少）时权重极大，大 t（噪声很大）时权重极小。L_simple 的均匀权重相当于：
+- **下调小 t 的权重**：小 t 时去噪任务过于简单（几乎只需复制输入），不应主导训练
+- **上调大 t 的权重**：大 t 时的去噪才是真正困难的生成任务
+
+这一发现深刻影响了后续所有扩散模型——**L_simple 成为训练扩散模型的事实标准**，包括 Stable Diffusion、FLUX、DALL-E 等。
+
+### 5. 训练与采样算法
+
+完整的训练与采样流程可以形式化地描述如下：
+
+**训练算法**（重复直到收敛）：
+1. 采样数据点 $x_0 \sim q(x_0)$
+2. 采样时间步 $t \sim \text{Uniform}(\{1, ..., T\})$
+3. 采样噪声 $\varepsilon \sim \mathcal{N}(0, I)$
+4. 前向加噪：$x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\varepsilon$
+5. 梯度下降：$\nabla_\theta \|\varepsilon - \varepsilon_\theta(x_t, t)\|^2$
+
+**采样算法**（生成图像）：
+1. $x_T \sim \mathcal{N}(0, I)$
+2. 对于 t = T, T-1, ..., 1：
+   - 采样 $z \sim \mathcal{N}(0, I)$（当 t > 1，否则 z = 0）
+   - $x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\varepsilon_\theta(x_t, t)\right) + \sigma_t z$
+3. 输出 $x_0$
 
 ![](https://ar5iv.labs.arxiv.org/html/2006.11239/assets/x2.png)
 
-*Figure 2: DDPM 的马尔可夫链结构——前向过程 q 从右向左逐步加噪（x_0 → x_T），反向过程 p 从左向右逐步去噪（x_T → x_0），每个步骤都是一个高斯变换。*
+*Figure 2: DDPM 的马尔可夫链结构。前向过程 q（右→左）逐步加噪 x_0 → x_T，反向过程 p（左→右）逐步去噪 x_T → x_0，每步是一个高斯变换。训练时只需采样 t 和 ε 直接计算 x_t；采样时需迭代 T 步。*
 
-### 2. 噪声预测参数化（核心创新）
+### 6. 网络架构：U-Net 的扩散适配
 
-将 μ_θ 参数化为预测噪声而非预测均值：
+DDPM 使用基于 U-Net 的主干网络，针对扩散任务做了若干关键适配：
 
-μ_θ(x_t, t) = (1/√α_t) (x_t - (β_t/√(1-ᾱ_t)) ε_θ(x_t, t))
+| 组件 | 设计选择 | 原因 |
+|------|---------|------|
+| **主干** | U-Net（类似 unmasked PixelCNN++） | 多尺度特征对去噪至关重要（大尺度结构 + 细粒度纹理） |
+| **归一化** | Group Normalization（32组） | 比 Batch Norm 更适合小 batch 训练 |
+| **注意力** | 在 16×16 分辨率处插入自注意力层 | 全局一致性对生成质量关键（如对称性、结构连贯性） |
+| **时间嵌入** | Transformer 式正弦位置编码 | 将离散时间步 t 映射为连续向量，注入每层的特征图 |
+| **参数共享** | 所有时间步共享同一网络 | 用时间嵌入区分不同 t，大幅减少参数量 |
+| **上采样/下采样** | 带残差连接的卷积 | 保持信息流动，避免梯度消失 |
+| **激活函数** | SiLU (Swish) | 比 ReLU 平滑，利于梯度传播 |
 
-这使得训练目标简化为：
+时间步 t 的嵌入通过与每层特征图相加（或 FiLM 调制）注入网络，这使得单个网络能够处理从几乎无噪声（t≈1）到纯噪声（t≈T）的全部去噪难度范围。
 
-||ε - ε_θ(√ᾱ_t x_0 + √(1-ᾱ_t) ε, t)||^2
+### 7. 与 Score Matching 和 Langevin Dynamics 的理论联系
 
-这一参数化直接建立了扩散模型与 denoising score matching 的联系，采样过程也类似于 Langevin 动力学。
+DDPM 建立了扩散模型与两个独立理论框架之间的深刻联系：
 
-### 3. 简化训练目标 L_simple
+**与 Denoising Score Matching 的联系**：
+Score Matching 学习数据分布的得分函数 $\nabla_x \log p(x)$。在扩散模型中，ε-预测与得分函数存在精确对应：
 
-作者发现，使用不加权的简化目标训练能获得更好的样本质量：
+$$\nabla_{x_t} \log q(x_t|x_0) = -\frac{\varepsilon}{\sqrt{1-\bar{\alpha}_t}}$$
 
-L_simple(θ) = E_{t, x_0, ε} [||ε - ε_θ(√ᾱ_t x_0 + √(1-ᾱ_t) ε, t)||^2]
+因此 $\varepsilon_\theta(x_t, t)$ 本质上是**在预测（缩放的）得分函数**。DDPM 的 L_simple 与 Denoising Score Matching 的损失函数等价（仅差一个常数因子）。
 
-其中 t 在 1 到 T 之间均匀采样。这个目标去掉了变分下界中的权重系数，相当于对不同的 t 给予等权重——实际上下调了小 t（对应极小噪声）的 loss 权重，让网络更专注于大 t 时更困难的去噪任务。
+**与 Langevin Dynamics 的联系**：
+采样过程 $x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\varepsilon_\theta) + \sigma_t z$ 在连续极限下退化为 Langevin 动力学：
 
-**算法流程**：
-- **训练**：采样 x_0、t、ε → 计算加噪图像 x_t → 梯度下降优化 ||ε - ε_θ(x_t, t)||^2
-- **采样**：从 x_T ~ N(0, I) 开始 → 迭代 T 步逐步去噪 → 输出 x_0
+$$dx = -\frac{1}{2}\nabla_x U(x)dt + dW_t$$
 
-### 4. 网络架构
+这意味着扩散模型的采样过程可以理解为**在数据分布的"势能面"上执行退火 Langevin 动力学**——从高温（大噪声）逐步降温，最终落入数据分布的典型样本区域。
 
-使用基于 U-Net 的主干网络，类似 unmasked PixelCNN++，采用：
-- Group Normalization 替代 Batch Norm
-- 16x16 分辨率处的 self-attention
-- Transformer 正弦位置嵌入用于编码时间步 t
-- 参数跨时间共享
+这两个理论联系解释了扩散模型的优异生成质量：ε-预测参数化将复杂的生成问题转化为简单的去噪问题，而 Langevin 动力学的退火性质则保证了采样过程的稳定性。
 
 ---
 

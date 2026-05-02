@@ -63,69 +63,176 @@ status: Read
 
 ## Method 核心方法
 
+Flow Matching 的方法论遵循一个清晰的逻辑链条：CNF 基础 → FM 目标的不可行性 → CFM 的等价性突破 → 条件路径的设计空间 → OT 最优性 → 工程实现。以下逐步展开。
+
 ### 1. 连续归一化流（CNF）基础
 
-CNF 定义了一个概率密度路径 p_t，由向量场 v_t 通过 ODE 生成：
+CNF 是一类通过常微分方程（ODE）定义概率变换的生成模型。核心对象有三个：
 
-d/dt φ_t(x) = v_t(φ_t(x), t)
+**概率密度路径** $p: [0,1] \times \mathbb{R}^d \to \mathbb{R}_{>0}$，满足 $\int p_t(x)dx = 1$。边界条件：$p_0 = p$（简单先验，如标准高斯），$p_1 \approx q$（数据分布）。
 
-其中 φ_0(x) = x，p_0 是简单先验（如高斯），p_1 近似数据分布 q。
+**时间依赖向量场** $v_t: [0,1] \times \mathbb{R}^d \to \mathbb{R}^d$，定义微分同胚流 $\phi_t$ 满足：
 
-### 2. Flow Matching (FM) 目标
+$$\frac{d}{dt}\phi_t(x) = v_t(\phi_t(x)), \quad \phi_0(x) = x$$
 
-FM 的目标是学习一个向量场 v_t 来生成从 p_0 到 p_1 ≈ q 的概率路径。直觉上，如果已知概率路径 p_t(x) 和生成它的向量场 u_t(x)，可以直接回归：
+**前推方程（Push-forward）**：$p_t = [\phi_t]_* p_0$，即 $\phi_t$ 将先验分布 p_0 变换为 p_t。连续方程 $\frac{d}{dt}p_t + \text{div}(p_t v_t) = 0$ 提供了验证向量场是否生成概率路径的必要充分条件。
 
-L_FM(θ) = E_{t, p_t(x)} [||v_θ(x, t) - u_t(x)||^2]
+传统 CNF 训练使用最大似然（需求解 ODE 的正反向传播），计算量极大，是阻碍其规模化的根本瓶颈。
 
-但问题在于：**p_t 和 u_t 是未知的**——这就是 CNF 训练一直需要模拟的原因。
+### 2. Flow Matching (FM) 目标——直觉与困难
 
-### 3. Conditional Flow Matching (CFM)——核心创新
+FM 的核心思想是直接回归生成目标概率路径的向量场。假设已知目标概率路径 p_t(x) 及其生成向量场 u_t(x)，FM 目标简单直观：
 
-CFM 的关键洞察是：虽然边际概率路径 p_t 和对应的向量场 u_t 未知，但可以定义**条件路径**——以单个数据点 x_1 为条件的概率路径 p_t(x | x_1) 和条件向量场 u_t(x | x_1)。然后通过 CFM 目标训练：
+$$\mathcal{L}_{\text{FM}}(\theta) = \mathbb{E}_{t, p_t(x)}\left[\|v_\theta(x, t) - u_t(x)\|^2\right]$$
 
-L_CFM(θ) = E_{t, q(x_1), p_t(x|x_1)} [||v_θ(x, t) - u_t(x|x_1)||^2]
+其中 $t \sim \mathcal{U}[0,1]$，$x \sim p_t(x)$。
 
-**核心定理**：FM 和 CFM 有相同的梯度（∇_θ L_FM = ∇_θ L_CFM），但 CFM 完全不需要知道未知的边际向量场，只需要容易计算的条件向量场。
+**根本困难**：p_t 和 u_t 都是未知的——我们不知道从 p_0 到 p_1 的概率路径"长什么样"，也不知道生成它的向量场是什么。这正是传统 CNF 训练必须借助 ODE 模拟的原因。FM 初看似乎陷入了循环论证。
 
-### 4. 条件概率路径的设计
+### 3. Conditional Flow Matching (CFM)——突破性洞察
 
-条件概率路径需要满足：
-- p_0(x | x_1) = p_0(x)（与 x_1 无关，因为开始时没有任何信息）
-- p_1(x | x_1) ≈ δ(x - x_1)（最终集中在 x_1 附近，通常用均值 x_1、方差很小的高斯近似）
+CFM 的解决方案极为巧妙：**将未知的边际问题分解为已知的条件问题**。
 
-#### 高斯条件路径
+#### 3.1 条件概率路径的构造
 
-最自然的构造是使用高斯条件分布：
+给定单个数据点 x_1，定义以 x_1 为条件的**条件概率路径** $p_t(x|x_1)$，满足：
+- $p_0(x|x_1) = p_0(x)$：t=0 时与 x_1 无关（所有路径从同一先验出发）
+- $p_1(x|x_1) \approx \delta_{x_1}$：t=1 时集中在 x_1 附近（用均值 x_1、标准差 σ_min 的高斯近似）
 
-p_t(x | x_1) = N(x; μ_t(x_1), σ_t^2 I)
+边际概率路径通过对数据分布 q(x_1) 做边缘化得到：
 
-需要满足 μ_0 = 0, σ_0 = 1 和 μ_1 = x_1, σ_1 = σ_min。
+$$p_t(x) = \int p_t(x|x_1) q(x_1) dx_1$$
 
-对应的条件向量场也取高斯形式：u_t(x | x_1) = (x - μ_t(x_1)) σ_t'/σ_t + μ_t'(x_1)
+#### 3.2 边际向量场的边缘化公式
 
-#### 两种关键路径设计
+类似地，定义**条件向量场** $u_t(\cdot|x_1)$（生成 $p_t(\cdot|x_1)$），边际向量场通过加权平均得到：
 
-**扩散路径（Diffusion Path）**：μ_t = √ᾱ_t x_1, σ_t = √(1-ᾱ_t)
-- 对应 DDPM 的前向过程，训练目标等价于 ε-预测去噪得分匹配
-- **Flow Matching 将 DDPM 统一为 CNF 特例**
+$$u_t(x) = \int u_t(x|x_1) \frac{p_t(x|x_1) q(x_1)}{p_t(x)} dx_1$$
 
-**OT 路径（Optimal Transport Path）**：μ_t = t x_1, σ_t = 1 - (1-σ_min)t
-- 均值和方差均随 t 线性变化
-- 产生**直线轨迹**，比扩散路径更简单
-- 向量场形式：u_t(x | x_1) = (x_1 - (1-σ_min)x) / (1 - (1-σ_min)t)
+#### 3.3 核心定理（Theorem 1 & 2）
+
+**Theorem 1（生成性）**：以上定义的边际向量场 u_t 确实生成边际概率路径 p_t，即满足连续方程。
+
+**Theorem 2（等价性，最关键的突破）**：FM 和 CFM 目标有完全相同的梯度：
+
+$$\nabla_\theta \mathcal{L}_{\text{FM}}(\theta) = \nabla_\theta \mathcal{L}_{\text{CFM}}(\theta)$$
+
+其中 CFM 目标为：
+
+$$\mathcal{L}_{\text{CFM}}(\theta) = \mathbb{E}_{t, q(x_1), p_t(x|x_1)}\left[\|v_\theta(x, t) - u_t(x|x_1)\|^2\right]$$
+
+**为什么这是突破性的？** CFM 目标只依赖于条件向量场 u_t(x|x_1)，而后者是**容易计算**的（只需要单个数据点 x_1 的信息，不需要知道整个数据分布的形状）。Theorem 2 的精妙之处在于：优化简单的条件目标等价于优化困难的边际目标。
+
+#### 3.4 证明直觉（Theorem 2 的证明概要）
+
+核心技巧是将 FM 损失展开为三项：
+
+$$\|v_t - u_t\|^2 = \|v_t\|^2 - 2\langle v_t, u_t \rangle + \|u_t\|^2$$
+
+其中 $\mathbb{E}_{p_t}\|v_t\|^2 = \mathbb{E}_{q(x_1), p_t(x|x_1)}\|v_t\|^2$（通过边缘化 $p_t$），而交叉项 $\mathbb{E}_{p_t}\langle v_t, u_t \rangle = \mathbb{E}_{q(x_1), p_t(x|x_1)}\langle v_t, u_t(x|x_1) \rangle$（通过 u_t 的边缘化定义和 Fubini 定理交换积分顺序）。因此 FM 和 CFM 在期望意义上等价。
+
+### 4. 高斯条件路径的设计空间
+
+CFM 框架对条件路径的设计是完全开放的。论文重点探索了**高斯条件路径族**：
+
+$$p_t(x|x_1) = \mathcal{N}(x | \mu_t(x_1), \sigma_t(x_1)^2 I)$$
+
+边界条件：$\mu_0 = 0, \sigma_0 = 1$ 和 $\mu_1 = x_1, \sigma_1 = \sigma_{\min}$。
+
+#### 4.1 条件向量场的闭式解（Theorem 3）
+
+论文证明了对于高斯路径，最简单的仿射流 $\psi_t(x) = \sigma_t(x_1)x + \mu_t(x_1)$ 对应的向量场为：
+
+$$u_t(x|x_1) = \frac{\sigma'_t(x_1)}{\sigma_t(x_1)}(x - \mu_t(x_1)) + \mu'_t(x_1)$$
+
+通过重参数化 $x = \psi_t(x_0)$（其中 $x_0 \sim p(x_0) = \mathcal{N}(0, I)$），CFM 损失简化为：
+
+$$\mathcal{L}_{\text{CFM}}(\theta) = \mathbb{E}_{t, q(x_1), p(x_0)}\left[\|v_\theta(\psi_t(x_0), t) - (x_1 - (1-\sigma_{\min})x_0)\|^2\right]$$
+
+#### 4.2 两种关键路径的对比分析
+
+**扩散路径（Diffusion/Variance Preserving Path）**：
+
+$$\mu_t = \alpha_{1-t}x_1, \quad \sigma_t = \sqrt{1-\alpha_{1-t}^2}$$
+
+其中 $\alpha_t = e^{-\frac{1}{2}T(t)}$，$T(t) = \int_0^t \beta(s)ds$。这精确对应 DDPM 的 VP-SDE 前向过程。
+
+- 轨迹呈**曲线**，在 t→1 处有"过冲"现象
+- 在 t=1 处理论上不能精确到达干净数据（需要 σ_min 近似）
+- 对应向量场：$u_t(x|x_1) = -\frac{T'(1-t)}{2}\left[\frac{e^{-T(1-t)}x - e^{-\frac{1}{2}T(1-t)}x_1}{1-e^{-T(1-t)}}\right]$
+
+**OT 路径（Optimal Transport / Rectified Flow Path）**：
+
+$$\mu_t = t x_1, \quad \sigma_t = 1 - (1-\sigma_{\min})t$$
+
+- 均值和方差**线性变化**，轨迹为**直线**
+- 在 t∈[0,1] 整个区间都有良好定义（不需要截断）
+- 对应向量场：$u_t(x|x_1) = \frac{x_1 - (1-\sigma_{\min})x}{1 - (1-\sigma_{\min})t}$
+- 向量场可分解为 $u_t(x|x_1) = g(t) \cdot h(x|x_1)$（方向恒定，幅值随时间变化）
 
 ![](https://ar5iv.labs.arxiv.org/html/2210.02747/assets/figures/2d_traj/2d_traj_diff.png)
 
-*Figure 2: Diffusion 路径（上）与 OT 路径（下）的 2D 轨迹对比。OT 路径产生直线流，从源分布到目标分布的路径更直接、更短，因此可以用更少的 ODE 步骤完成采样。*
+*Figure 2: Diffusion 路径（上）与 OT 路径（下）的 2D 轨迹对比。注意扩散路径的弯曲和过冲现象——粒子先越过目标再折返；OT 路径始终保持恒定方向的直线运动，因此可用更少 ODE 步骤完成采样。*
 
-### 5. 与扩散模型的统一
+### 5. OT 路径的最优性
 
-CFM 框架将 DDPM 的训练过程天然解释为 Flow Matching：
-- DDPM 的噪声预测目标等价于学习 OT 路径下的条件向量场
-- DDPM 的随机采样（SDE）在 CFM 中对应 ODE 采样
-- CFM 可以无缝结合扩散模型积累的工程实践（U-Net 架构、EMA、classifier-free guidance 等）
+OT 路径不只是一个"工程选择"，它具有严格的数学最优性：
 
----
+**Wasserstein-2 最优传输视角**：条件流 $\psi_t(x) = (1-(1-\sigma_{\min})t)x + tx_1$ 恰好是两个高斯分布 $p_0(\cdot|x_1) = \mathcal{N}(0, I)$ 和 $p_1(\cdot|x_1) = \mathcal{N}(x_1, \sigma_{\min}^2 I)$ 之间的**Wasserstein-2 最优传输位移映射**。
+
+OT 插值（McCann 插值）定义为：
+
+$$p_t = [(1-t)\text{id} + t\psi]_\star p_0$$
+
+这意味着 OT 路径在"最优传输成本"意义上是最短的——粒子以恒定速度沿直线从源分布移动到目标分布，没有任何不必要的绕路。
+
+**对训练的影响**：
+- OT 向量场方向恒定（只随时间缩放），回归任务更简单，收敛更快
+- OT 路径的直线性质使 ODE 求解器的局部截断误差更小
+- 在相同 NFE（函数评估次数）下，OT 路径的数值精度更高
+
+### 6. 训练 Pipeline 与工程实现
+
+#### 6.1 网络架构
+
+论文使用与 ADM（Dhariwal & Nichol, 2021）相同的 U-Net 架构，关键配置：
+
+| 数据集 | 通道数 | 深度 | 注意力分辨率 | Batch Size | GPUs | 迭代数 |
+|--------|--------|------|-------------|------------|------|--------|
+| CIFAR-10 | 256 | 2 | 16 | 256 | 2 | 391K |
+| ImageNet-32 | 256 | 3 | 16,8 | 1024 | 4 | 250K |
+| ImageNet-64 | 192 | 3 | 32,16,8 | 2048 | 16 | 157K |
+| ImageNet-128 | 256 | 3 | 32,16,8 | 1536 | 32 | 500K |
+
+所有模型使用 Adam 优化器（β₁=0.9, β₂=0.999, weight decay=0），学习率 1e-4 到 5e-4。
+
+#### 6.2 采样与推理
+
+采样过程使用黑盒 ODE 求解器求解 $\frac{d}{dt}\phi_t(x_0) = v_\theta(\phi_t(x_0), t)$（从 t=0 到 t=1）：
+- **高质量采样**：dopri5 自适应步长求解器（atol=rtol=1e-5）
+- **快速采样**：固定步数 Euler/Midpoint 求解器（5-100 步）
+- OT 路径在少步数下优势尤为明显——10 步 OT 的质量接近 100 步 diffusion
+
+#### 6.3 对数似然评估
+
+通过瞬时变量变换（instantaneous change of variables）公式计算：
+
+$$\log p_1(x_1) = \log p_0(x_0) - \int_0^1 \text{div}(v_\theta(\phi_t(x_0), t)) dt$$
+
+使用 Hutchinson 迹估计器（随机向量 z ∼ N(0,I) 满足 E[zz^T] = I）对散度做无偏估计，大幅降低计算复杂度（从 O(d²) 到 O(d)）。
+
+### 7. 与扩散模型的统一关系
+
+CFM 框架将扩散模型自然地纳入 CNF 框架：
+
+| 扩散模型概念 | Flow Matching 对应 |
+|-------------|-------------------|
+| DDPM 的噪声预测 ε_θ | OT 路径的条件向量场 v_θ |
+| Score Matching 目标 | 扩散路径下的 CFM |
+| DDIM ODE 采样 | CNF ODE 求解器 |
+| SDE 随机采样 | 可选的概率流 ODE 或 SDE 形式 |
+
+关键结论：**扩散模型是 Flow Matching 在特定条件路径选择下的特例**；Flow Matching 跳出了扩散过程的框架限制，允许直接设计更优的概率路径。
 
 ## 实验/评估/结果
 
@@ -137,14 +244,19 @@ CFM 框架将 DDPM 的训练过程天然解释为 Flow Matching：
 
 ### 图像生成
 
-**CIFAR-10（32x32）**：
-- OT-CFM 生成质量与 DDPM 相当
-- 使用少至 10 步采样即能产生合理质量（DDPM 需要 1000 步）
+**主对比实验（Table 1 from paper）：相同 U-Net 架构，对比不同训练目标**
 
-**ImageNet 64x64**：
-- OT-CFM + ODE 采样在 142 步达到 FID 2.76（与 SOTA 扩散模型可比）
-- 使用更少步骤（如 5 步）时质量仍优于同条件扩散模型
-- 与 score SDE、DDPM 的对比证明了 CFM 框架的优势
+| Model | CIFAR-10 NLL↓ / FID↓ / NFE↓ | ImageNet-32 NLL↓ / FID↓ / NFE↓ | ImageNet-64 NLL↓ / FID↓ / NFE↓ |
+|-------|------------------------------|--------------------------------|--------------------------------|
+| DDPM | 3.12 / 7.48 / 274 | 3.54 / 6.99 / 262 | 3.32 / 17.36 / 264 |
+| Score Matching | 3.16 / 19.94 / 242 | 3.56 / 5.68 / 178 | 3.40 / 19.74 / 441 |
+| ScoreFlow | 3.09 / 20.78 / 428 | 3.55 / 14.14 / 195 | 3.36 / 24.95 / 601 |
+| **FM w/ Diffusion** | 3.10 / 8.06 / 183 | 3.54 / 6.37 / 193 | 3.33 / 16.88 / 187 |
+| **FM w/ OT** | **2.99** / **6.35** / **142** | **3.53** / **5.02** / **122** | **3.31** / **14.45** / **138** |
+
+*FM-OT 在所有数据集、所有指标上一致最优。NLL 更低、FID 更低、NFE 更少（采样更高效）。FM+Diffusion 路径在 FID 上与 DDPM 可比但 NFE 更少。Score Matching/SF 的 FID 远高于 FM。*
+
+**ImageNet 128×128**：FM-OT NLL 2.90、FID 20.9，仅用 500K iterations（batch 1536），是 ADM（4.36M iterations）图像吞吐量的 67%。
 
 ![](https://ar5iv.labs.arxiv.org/html/2210.02747/assets/figures/imagenet128/imagenet128_curated_.png)
 

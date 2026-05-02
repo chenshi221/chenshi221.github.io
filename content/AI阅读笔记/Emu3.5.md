@@ -52,60 +52,51 @@ status: Read
 
 ## Method 核心方法
 
+Emu3.5 是一个 34.1B 参数的原生多模态世界模型，通过标准 decoder-only Transformer + IBQ 离散视觉 tokenizer + 统一的 next-token prediction 目标，在 13T token 的视频交错数据上预训练，配合 GRPO 大规模 RL 后训练和 DiDA 推理加速。
+
 ### 1. 统一架构
 
-![](https://arxiv.org/html/2510.26583/x3.png)
+| 参数 | 值 |
+|------|-----|
+| 总参数 | 34.1B（31.2B Transformer + 2.9B Embedding） |
+| 层数 | 64，hidden 5120，intermediate 25600 |
+| 注意力 | GQA（64Q/8KV）+ QK-Norm + RoPE |
+| 激活 | SwiGLU + RMSNorm pre-norm |
+| 词表 | 282,926（151,854 text + 131,072 vision tokens） |
+| 上下文 | 32,768 tokens，dropout 0.1 |
 
-*Figure 3: Emu3.5 架构概览——标准 decoder-only Transformer 统一处理文本和视觉 token，通过 next-token prediction 进行端到端大规模训练。推理时通过 DiDA 将逐 token 自回归转换为双向并行生成，加速约 20 倍。*
+标准 decoder-only Transformer，文本和视觉 token 统一序列处理。视觉 token loss 权重 0.5（防止视觉 token 主导训练）。
 
-- 标准 decoder-only Transformer（64 层，5120 hidden，34.1B 参数）
-- GQA（64Q/8KV）+ QK-Norm + SwiGLU + RoPE
-- Vocab 282,926（151,854 text + 131,072 vision tokens）
-- 上下文长度 32,768
+### 2. Tokenizer：IBQ + SigLIP 蒸馏 + 扩散解码器
 
-### 2. Tokenizer
+采用 **IBQ**（Improved Binary Quantization）框架，降采样因子 f=16。视觉 codebook 扩展至 131,072（参数 455M，宽度缩放），通过 **SigLIP 特征蒸馏**（REPA 式）增强离散 token 语义信息。
 
-- IBQ 框架，降采样因子 f=16
-- 视觉 codebook 扩展至 131,072（相比 Emu3 大幅增加）
-- SigLIP 特征蒸馏（REPA）增强离散 token 语义信息
-- 扩散解码器（可选）：2x 分辨率 + 细节增强，LoRA 蒸馏加速 10x（50 steps → 4 steps）
-- 视频解码器：DiT 架构，以生成的关键帧 token 为条件，支持任意数量中间帧
+**扩散图像解码器（可选）**：同量化 token → 2x 分辨率输出 + 细节增强。LoRA 蒸馏加速 10x（50→4 steps）。
 
-### 3. 预训练（13T tokens，两阶段）
+**视频解码器**：DiT 架构，以生成的关键帧 token 为条件，额外 4 通道 mask 支持任意数量中间帧。
 
-**数据组成**：
-- 视频交错数据：63M 视频（平均 6.5 分钟，约 790 年连续视频），通过 PySceneDetect 分镜 + Whisper ASR → 时序对齐的交错图文序列
-- 图文对：500M image-text pairs + 30M video-text pairs
-- Any-to-Image：27.35M 编辑样本
-- 纯文本：3T tokens
+### 3. 预训练：13T tokens，视频交错为中心
+
+**数据组成**：视频交错数据（63M 视频，平均 6.5 分钟，790 年连续视频，占采样比 55%）为核心；500M 图文对 + 30M 视频-文本对 + 27.35M Any-to-Image + 3T 纯文本为辅助。
+
+**视频预处理 pipeline**：PySceneDetect 分镜 → Whisper ASR → spaCy 文本分割 → 时序对齐交错序列。两阶段过滤（基础：时长/分辨率/人脸检测/语言平衡；高级：DeQA 帧质量 + DINO/FG-CLIP 去重 + LLM 文本评分）。
 
 **两阶段预训练**：
-- S1（10T tokens）：基础对齐，max 1024 visual tokens（512x512）
-- S2（3T tokens）：高质量增强，更高分辨率（up to 1024x1024），更多交错标注
 
-### 4. 后训练
+| 阶段 | Tokens | 分辨率 | 数据采样比 | LR |
+|------|--------|--------|-----------|-----|
+| S1 | 10T | max 1024 tokens (512²) | 视频交错 55% | 5e-4 |
+| S2 | 3T | 1024-4096 tokens (512²-1024²) | 视频交错 55% + 增强标注 | 1e-5 |
 
-- **SFT**（150B tokens）：建立统一多模态生成接口，涵盖通用任务、X2I、视觉叙事、视觉引导、世界探索、具身操控
-- **RL**（GRPO）：大规模强化学习增强多模态推理和生成
+S2 引入语义分割/摘要、视觉 caption、多模态摘要等丰富标注。所有阶段 AdamW（β₁=0.9, β₂=0.95），cosine schedule，TP=8, CP=2。
 
-### 5. DiDA（Discrete Diffusion Adaptation）
+### 4. 后训练：SFT + GRPO RL + DiDA
 
-- 将自回归逐 token 解码转换为离散扩散的双向并行预测
-- 每张图推理加速约 20 倍
-- 仅需几十亿 tokens 的适配数据
-- 不牺牲质量
+**SFT（150B tokens，两阶段）**：建立统一多模态生成接口，覆盖 6 大任务——通用（T2I/语言/VL 29.7B）、Any-to-Image（56.2B）、视觉叙事（10.1B）、视觉引导（22.5B）、世界探索（17.5B）、具身操控（14.1B）。Stage 1 标准分辨率 → Stage 2 高分辨率（T2I 1024px）。
 
-![](https://arxiv.org/html/2510.26583/x9.png)
+**GRPO RL**：首个大规模联合多任务多模态 RL。统一奖励系统包含通用奖励（CLIP 对齐 + VLM 准确度 + 美学评分）+ 任务特定奖励（OCR 保真度、人脸识别、VLM 一致性）。GRPO 算法，batch 640，LR 1e-6，rollout 8。平均 reward 从 4.5 升至 7.1+。
 
-*Figure 9: DiDA（Discrete Diffusion Adaptation）——(a) 预训练/SFT/RL 阶段使用标准 next-token prediction；(b) 适配阶段每张图复制一份含噪副本，噪声 token 因果关注前置干净 token 并双向关注同图内噪声 token，实现并行生成。*
-
-### 6. 任务能力
-
-- **Any-to-Image（X2I）**：开放世界编辑、精确控制、文本渲染 SOTA
-- **视觉叙事**：交错生成连贯故事线（图文交织），维持角色/风格一致性
-- **视觉引导**：逐步操作过程的交错生成（烹饪、手工等）
-- **世界探索**：用户交互式 + 自由探索式的虚拟世界漫游
-- **具身操控**：长时域任务分解为子任务序列，预测关键帧
+**DiDA（离散扩散适配）**：将逐 token 自回归转换为双向并行预测。每张图复制含噪副本，噪声 token 因果关注前置干净 token 并双向关注同图内噪声 token。加速约 20 倍，仅需几十亿 tokens 适配数据，不牺牲质量。
 
 ---
 
@@ -113,25 +104,41 @@ status: Read
 
 ### 图像生成与编辑
 
-- GenEval / DPG-Bench 等上与 Gemini 2.5 Flash Image 可比
-- 文本渲染超越 Gemini 2.5 Flash Image
-- X2I 编辑任务可与 FLUX.1 Kontext 竞争
+与 Gemini 2.5 Flash Image (Nano Banana) 在图像生成和编辑 benchmark 上性能可比，文本渲染超越 Gemini。
 
-### 交错生成
+**GenEval 对比（Figure 1a）**：Emu3.5 在 GenEval 上的综合表现与闭源扩散模型竞争，作为首个自回归模型在质量和速度上媲美扩散模型。
 
-- 视觉叙事和视觉引导上，Automated Win Rate 超越 Gemini 2.5 Flash Image
-- 角色一致性、时序连贯性突出
+**交错生成偏好评估（Figure 1b）**：在视觉叙事和视觉引导任务上，Automated Win Rate 超越 Gemini 2.5 Flash Image。
 
-### 世界建模
+### 预训练 Scaling 行为
 
-- 世界探索和具身操控展现通用泛化能力
-- 跨域泛化：从真实场景泛化到想象场景
+**九个验证集上的 loss 曲线**：3 个域内（T2I/I2T/视频交错）+ 3 个 OOD（ISG-Bench/OpenING/MMIE）+ 3 个 SFT 下游（视觉叙事/视觉引导/世界探索），全部持续下降——证明视频交错为中心的大规模预训练具有稳健的泛化能力。
 
-### 关键发现
+### 训练 Recipe 汇总
 
-- 随着预训练计算量增加，OOD 多模态任务的 validation loss 持续下降——更强的泛化信号
-- RL 后训练建立了共享的多模态接口，不同任务间可相互迁移和受益
-- NTP 模型可高效转化为双向预测器（DiDA）
+| Hyperparameter | Stage 1 | Stage 2 |
+|---------------|---------|---------|
+| Learning Rate | 5e-4 | 1e-5 |
+| Batch Size | 448 | 448 |
+| Sequence Length | 32768 | 32768 |
+| Seen Tokens | 10.3T | 3.5T |
+| Visual:Text Loss Weight | 0.5:1.0 | 0.5:1.0 |
+| Text / Image-Text / Video-Text / X2I / Video Interleaved | 0.2/0.2/0.05/0/0.55 | 0.18/0.16/0.08/0.03/0.55 |
+
+### SFT 任务数据统计
+
+| Task | #Tokens (B) | Output Type |
+|------|------------|-------------|
+| General (T2I+Language+VL) | 29.7 | Text/Image |
+| Any-to-Image (X2I) | 56.2 | Image |
+| Visual Narrative | 10.1 | Interleaved |
+| Visual Guidance | 22.5 | Interleaved |
+| World Exploration | 17.5 | Interleaved |
+| Embodied Manipulation | 14.1 | Interleaved |
+
+### RL Training
+
+多任务 GRPO RL 训练过程中，平均 reward 从 ~4.5 稳定上升至 >7.1，证明统一奖励聚合机制有效整合了异构任务反馈。
 
 ---
 

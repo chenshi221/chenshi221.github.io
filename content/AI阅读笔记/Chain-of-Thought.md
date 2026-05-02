@@ -21,7 +21,7 @@ venue: 'NeurIPS 2022'
 tags:
   - 论文
   - 推理
-  - Prompt Engineering
+  - Prompt-Engineering
   - 思维链
   - LLM
 url: 'https://arxiv.org/abs/2201.11903'

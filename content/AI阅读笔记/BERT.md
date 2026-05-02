@@ -53,63 +53,95 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 模型架构
+BERT 的方法论由四个紧密关联的部分组成：双向 Transformer 架构 → 三合一输入表示 → 双任务预训练（MLM+NSP） → 统一微调框架。
 
-BERT 使用多层双向 Transformer 编码器，与原版 Transformer 几乎相同。两种规格：
+### 1. 模型架构：双向 Transformer 编码器
 
-| 模型 | 层数 L | 隐藏维度 H | 注意力头数 A | 参数量 |
-| --- | --- | --- | --- | --- |
-| BERT_BASE | 12 | 768 | 12 | 110M |
-| BERT_LARGE | 24 | 1024 | 16 | 340M |
+BERT 使用多层双向 Transformer 编码器，与原始 Transformer 的编码器几乎相同（仅调整了层数、宽度和头数）：
 
-BERT_BASE 与 OpenAI GPT 参数量相同（比的是双向 vs 单向的效果差异）。
+| 模型 | L | H | A | 参数量 | FFN 维度 |
+|------|---|---|---|--------|---------|
+| BERT_BASE | 12 | 768 | 12 | 110M | 3072 |
+| BERT_LARGE | 24 | 1024 | 16 | 340M | 4096 |
 
-架构差异对比：
+BERT_BASE 与 OpenAI GPT 参数量完全一致——这是一个精心设计的对比：架构大小相同，唯一差异是**双向 vs 单向**。
 
-![](https://arxiv.org/html/1810.04805v2/x3.png)
+**与 GPT/ELMo 的架构对比（原文 Figure 3）**：
 
-*Figure 3: BERT（双向 Transformer）、OpenAI GPT（从左到右 Transformer）和 ELMo（独立训练的左右向 LSTM 拼接）的架构对比。只有 BERT 在所有层中联合使用左右双向上下文。*
+| 模型 | 架构 | 注意力方向 | 预训练目标 |
+|------|------|-----------|-----------|
+| **BERT** | Transformer Encoder | **双向**（全层左右上下文） | MLM + NSP |
+| OpenAI GPT | Transformer Decoder | 单向（仅左→右） | 自回归 LM |
+| ELMo | 独立 LSTM（左→右 + 右→左） | 浅层拼接（非深层交互） | 双向 LM |
 
-### 2. 输入表示
+BERT 是**唯一在所有层中联合使用左右双向上下文**的模型——GPT 的单向限制使每个 token 只能基于前文预测自己；ELMo 的左右 LSTM 独立训练、仅在顶层拼接，缺少深层交互。
 
-使用 WordPiece（30K 词汇表）。输入为三类 embedding 的和：
-- **Token Embedding**：词本身的 embedding
-- **Segment Embedding**：标识属于句子 A 还是句子 B
-- **Position Embedding**：可学习的位置 embedding
+### 2. 输入表示：三合一 Embedding
 
-特殊 token：
-- `[CLS]`：每个序列的第一个 token，对应最终隐藏状态用于分类任务
-- `[SEP]`：分隔两个句子的特殊 token
+使用 WordPiece tokenizer（30K 词表）。每个 token 的输入表示是三个 embedding 的**逐元素求和**：
 
-### 3. 预训练任务
+$$\text{Input} = E_{\text{token}} + E_{\text{segment}} + E_{\text{position}}$$
 
-#### Task 1: Masked Language Model (MLM)
+- **Token Embedding**：子词嵌入（WordPiece 将未知词拆分，如 "playing"→"play"+"##ing"）
+- **Segment Embedding**：EA 或 EB，标识属于句子 A 还是 B（对 NSP 任务关键）
+- **Position Embedding**：可学习的位置嵌入，支持最大 512 位置
 
-随机 mask 15% 的输入 token，让模型基于上下文预测被 mask 的原始 token。这是实现双向预训练的关键——因为如果直接双向预测每个词，模型会"看到自己"。
+**特殊 token**：
 
-为缓解预训练和微调之间的 mismatch（微调时没有 `[MASK]` token），对选中的 15% token：
-- **80%** 替换为 `[MASK]`
-- **10%** 替换为随机 token
-- **10%** 保持不变
+| Token | 位置 | 用途 |
+|-------|------|------|
+| `[CLS]` | 每个序列首位 | 最终隐藏状态 $C \in \mathbb{R}^H$ 聚合全序列信息，用于分类 |
+| `[SEP]` | 句子 A 末 + 句子 B 末 | 分隔句子，同时句子分隔信号送达所有层 |
+| `[MASK]` | 被遮位置（仅预训练） | MLM 目标 |
 
-#### Task 2: Next Sentence Prediction (NSP)
+输入序列结构：`[CLS] Tok_A ... [SEP] Tok_B ... [SEP]`。对单句任务，仅用句子 A。
 
-50% 的时间里句子 B 是真实的下一个句子（IsNext），50% 是随机句子（NotNext）。`[CLS]` 的最终隐藏向量 C 用于预测。这个任务让模型理解句子间的关系，对 QA 和 NLI 至关重要。
+### 3. 预训练任务 1：Masked Language Model（核心创新）
 
-### 4. 预训练数据
+**问题**：标准自回归 LM 天然是单向的（每个 token 预测下一个）。要实现双向，简单的"双向预测"不可行——每个 token 在多层的间接路径中会"看到自己"。
 
-- BooksCorpus（800M 词）
-- English Wikipedia（2,500M 词）
-- 强调使用**文档级**语料（保留长连续序列），而非打散的句子级语料
+**解决**：随机 mask 15% 的输入 token，基于未 mask 的上下文预测被 mask 位置的原 token。由于 mask token 被替换为 `[MASK]`，模型无法"看到自己"。
 
-### 5. 微调
+**80-10-10 策略**（解决 pretrain-finetune mismatch）：
 
-对各种下游任务，只需将任务特定的输入输出插入 BERT，端到端微调所有参数：
-- **分类任务**（GLUE）：`[CLS]` 对应的 C 向量 + 线性分类器
-- **QA 任务**（SQuAD）：引入 start/end 向量，与每个 token 的隐藏向量做点积后 softmax
-- **推理任务**（SWAG）：构造 4 个输入序列，`[CLS]` 向量打分
+| 比例 | 操作 | 目的 |
+|------|------|------|
+| 80% | 替换为 `[MASK]` | 主要训练信号 |
+| 10% | 替换为**随机** token | 教会模型"纠错"——不仅是填空 |
+| 10% | **保持不变** | 偏向真实 token 分布（微调时无 [MASK]） |
 
-微调成本极低：所有实验结果可在单块 Cloud TPU 上 1 小时内复现，或在 GPU 上几小时完成。
+仅对选中的 15% token 做以上操作——实际被替换为 [MASK] 的仅约 12%（15%×80%）。损失仅计算被 mask 位置（非全部 token），使用交叉熵。
+
+### 4. 预训练任务 2：Next Sentence Prediction
+
+构造句子对 (A, B)：50% B 是真实的下一句（IsNext），50% B 是随机句子（NotNext）。`[CLS]` 的最终向量 C 通过二分类器预测。NSP 教会模型理解**句子间关系**——对 QA（问题-段落）和 NLI（前提-假设）任务至关重要。
+
+**消融证明**（原文 Table 5）：去掉 NSP 导致 QNLI（-3.5）和 SQuAD（-0.6 F1）显著下降。NSP 不是 universally beneficial——后来 RoBERTa 证明去掉 NSP 在某些任务上更好，但 BERT 首次建立了这个方向。
+
+### 5. 预训练设置
+
+| 配置 | 值 |
+|------|-----|
+| 数据 | BooksCorpus（800M 词）+ English Wikipedia（2500M 词）——**仅文档级**语料 |
+| 优化器 | Adam（β₁=0.9, β₂=0.999, ε=1e-6），L2 weight decay 0.01 |
+| 学习率 | warmup 10K steps → peak 1e-4 → linear decay |
+| Batch | 256 序列（BASE：16 TPU 4 天；LARGE：64 TPU 4 天） |
+| Dropout | 0.1（所有层） |
+| 激活函数 | GELU（非 ReLU） |
+| 序列长度 | 512 tokens（90% 步）→ 128 tokens（剩余 10%，加速） |
+
+### 6. 微调：统一框架适配所有任务
+
+微调成本极低——所有实验可在单 Cloud TPU 上 1 小时内复现，或在 GPU 上几小时完成。
+
+| 任务类型 | 输入 | 输出头 | 代表任务 |
+|---------|------|--------|---------|
+| **单句分类** | [CLS] + 句子 | C → 线性分类器 | SST-2, CoLA |
+| **句对分类** | [CLS] + A + [SEP] + B | C → 线性分类器 | MNLI, QQP, RTE, MRPC |
+| **QA** | [CLS] + 问题 + [SEP] + 段落 | 每个 token 向量 → start/end 点积+softmax | SQuAD v1.1/v2.0 |
+| **序列标注** | [CLS] + 句子 | 每个 token 向量 → 分类器 | CoNLL-2003 NER |
+
+**超参数**：微调 epoch 数少（2-4 epochs），学习率小（2e-5 到 5e-5），batch 16 或 32。微调对超参数选择有一定敏感性，建议多试几组。
 
 ---
 

@@ -48,41 +48,37 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 架构设计
+Show-o2 的核心思路是在 3D 因果 VAE 空间中构建统一视觉表征，通过双路径时空融合同时捕获语义（SigLIP 级别）和低级细节，再以 AR（语言头）+ Flow Matching（流头）的混合范式实现理解与生成。
 
-- **3D 因果 VAE**（Wan2.1）：空间 8x + 时间 4x 压缩，统一处理图像和视频
-- **双路径时空融合**：
-  - Semantic layers S(·)：共享 SigLIP ViT block，通过蒸馏从 noisy latent 中提取语义特征（对比 SigLIP 原始图像特征）
-  - Projector P(·)：简单 2D patch embedding，保留完整 low-level 信息
-  - STF：特征维度拼接 + RMSNorm + 2 层 MLP 融合
-- **LLM 骨干**：Qwen2.5-1.5B/7B-Instruct
-- **两个专用头**：
-  - Language head：自回归 NTP（causal attention）
-  - Flow head：几层 Transformer + adaLN-Zero（DiT 风格），Flow Matching 预测 velocity v_t
-- **Omni-attention**：序列内 causal，视觉表征内 full attention
+### 1. 统一视觉表征：双路径时空融合
 
-### 2. 两阶段训练
+**3D 因果 VAE 空间**（基于 Wan2.1）：空间 8x + 时间 4x 压缩，统一处理图像和视频。给定 n 个 visual latents x_t 在噪声水平 t（x_t = t·x_1 + (1-t)·x_0），经过两条路径：
 
-**Stage 1**（仅训练 projector + fusion + flow head）：
-- 66M 图文对（≥512px），LMM 重标注
-- 渐进加入视频-文本对和交错数据
-- 150K iterations，64 H100，约 1.5 天
+- **语义路径 S(·)**：共享 SigLIP-so400m ViT block + 新的 2×2 patch embedding。通过预蒸馏训练——从 noisy latent 提取特征，以余弦相似度对齐 SigLIP 原始图像特征（L_distill = -1/n Σ log sim(S(x_t), SigLIP(X))）。蒸馏后余弦相似度约 0.9
+- **低级路径 P(·)**：简单 2D patch embedding，保留完整 low-level 信息
+- **STF 融合**：特征维度拼接 → RMSNorm → 2 层 MLP → 统一视觉表征 u = STF(S(x_t), P(x_t))
 
-**Stage 2**（全模型）：
-- 9M 高质量多模态理解 + 16M 高质量生成数据
-- 35K iterations，约 15 小时
+### 2. 序列构建与 Omni-Attention
 
-**扩展到 7B**：
-- 复用 1.5B 的预训练 flow head
-- 轻量 MLP 对齐 hidden size
-- 快速适配，无需从头训练
+统一格式：`[BOS] {Text} [BOI/BOV] {Image/Video} [EOI/EOV] {Text} ... [EOS]`
 
-### 3. 关键设计
+**Omni-Attention**：序列维度 causal attention（文本自回归），视觉表征内部 full attention（双向上下文去噪）。
 
-- Semantic layers 预蒸馏：从 noisy latent 提取特征与 SigLIP 原始图像特征对齐（余弦相似度 ~0.9）
-- Text dropout 0.1 启用 CFG
-- Stage 1 α=0.2，Stage 2 α=1.0（loss 权重）
-- 高分辨率增强：512x512 + 1024x1024 + TextAtlas 文本丰富数据
+### 3. 双头建模
+
+- **语言头**：自回归 NTP（交叉熵），标准 causal attention
+- **流头**：若干 Transformer 层 + adaLN-Zero（DiT 风格），Flow Matching 预测 velocity v_t = dx_t/dt。训练目标 L = α·L_NTP + L_FM
+
+### 4. 两阶段训练策略（核心效率突破）
+
+Stage 1 仅训练 projector + fusion + flow head（冻结 LLM 和 semantic layers），无需大规模文本语料保留语言能力：
+
+| 阶段 | 可训练组件 | 数据 | 配置 |
+|------|-----------|------|------|
+| **Stage 1** | Projector + STF + Flow Head | 66M 图文对（≥512px，LMM 重标注）+ 渐进视频/交错数据 | 150K iters，α=0.2，64 H100，~1.5天 |
+| **Stage 2** | 全模型（除 VAE） | 9M 高质量理解 + 16M 高质量生成 + 1.6M 视频理解 | 35K iters，α=1.0，~15小时 |
+
+**扩展到 7B**：复用 1.5B 的预训练 flow head → 轻量 MLP 对齐 hidden size → 3K iters 预热 → 同 Stage 1/2 训练。总训练 ~2.5 天（128 H100）。
 
 ---
 
@@ -90,31 +86,45 @@ status: Read
 
 ### 多模态理解
 
-- 1.5B：MME 1450.9 / MMStar 43.4，超越 Janus-Pro-1.5B
-- 7B：MME 1620.5 / MMStar 56.6 / MM-Bench 79.3，超越 Janus-Pro-7B
-- 视频理解（Show-o2+）：VideoMME 57.4/60.9，接近 LLaVA-OV
+**图像理解（Table 3 from paper）**：
+
+| Model | #Params | MME-p↑ | GQA↑ | MMMU↑ | MMStar↑ | AI2D↑ |
+|-------|---------|--------|------|-------|---------|-------|
+| Janus-Pro | 1.5B | 1444.0 | 59.3 | 36.3 | - | - |
+| **Show-o2** | **1.5B** | **1450.9** | **60.0** | **37.1** | **43.4** | **69.0** |
+| Janus-Pro | 7B | 1567.1 | 62.0 | 41.0 | - | - |
+| Mogao | 7B | 1592.0 | 60.9 | 44.2 | - | - |
+| **Show-o2** | **7B** | **1620.5** | **63.1** | **48.9** | **56.6** | **78.6** |
+
+**视频理解（Table 4，Show-o2†）**：7B 模型在 VideoMME 上 57.4/60.9 (wo/w-subs)，NExT-QA 79.0，接近 LLaVA-OV 专用理解模型。
 
 ### 图像生成
 
-- GenEval：1.5B 73% / 7B 76%（仅用 66M 图文对，远少于 Janus-Pro 的 144M）
-- DPG-Bench：1.5B 85.02 / 7B 86.14（超越 SD3-Medium 84.08 和 Janus-Pro 84.19）
-- OneIG-Bench：7B Alignment 0.817
+**GenEval（Table 5，仅 66M 图文对）**：
+
+| Model | #Params | #Data | Overall↑ |
+|-------|---------|-------|---------|
+| SD3-Medium | 2B | - | 0.74 |
+| Janus-Pro | 7B | 144M | 0.80 |
+| BAGEL | 14B | 1600M | 0.88 |
+| **Show-o2** | 1.5B | **66M** | **0.73** |
+| **Show-o2** | 7B | **66M** | **0.76** |
+
+**DPG-Bench（Table 6）**：1.5B 85.02 / 7B 86.14，超越 SD3-Medium (84.08) 和 Janus-Pro (84.19)。
+
+**OneIG-Bench（Table 7）**：7B Alignment 0.817（统一模型最高），但 Text 0.002（文字渲染弱）。
 
 ### 视频生成
 
-- Text-to-Video VBench：2B 参数 81.34，超越 Show-1(6B) 和 Emu3(8B)
-- Image-to-Video 各指标与专用模型可比
+**T2V VBench（Table 8）**：2B 参数 81.34 总分，超越 Show-1(6B, 78.93)、Emu3(8B, 80.96)。Motion Smoothness 98.25、Subject Consistency 97.28。
 
-### 交错生成
+### 消融实验
 
-- 视觉叙事：图文交错生成连贯故事
-- 支持中文和英文双语
-
-### 消融
-
-- 空间-时间融合：提升理解（MME +23.1）和生成（FID -1.3）
-- CFG 7.5 + 50 steps 最佳
-- Stage 2 训练一致提升生成质量
+| 消融 | 结果 |
+|------|------|
+| 空间-时间融合 | MME +23.1，FID -1.3 |
+| CFG 7.5 + 50 steps | 最佳 GenEval/DPG 平衡 |
+| Stage 2 训练 | GenEval 0.63→0.73，DPG 83.28→84.70 |
 
 ---
 

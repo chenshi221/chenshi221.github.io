@@ -108,9 +108,9 @@ status: Read
   - D_opt ∝ C^0.56（最优数据量随计算预算的增长）
 - **含义**：当前与 Chinchilla 规律一致——数据与模型应大致同比例增长
 
-![](https://arxiv.org/html/2512.24762/x5.png)
+![](https://ar5iv.labs.arxiv.org/html/2512.24762/assets/x4.png)
 
-*Figure 5: 推荐域数据上的 Scaling Law——Top-Left: 不同模型大小在 FLOPs 上的训练 loss 和凸包络线；Top-Right: 固定 token 预算下 loss vs 模型大小的 log-log 图；Bottom: N_opt ∝ C^0.44 和 D_opt ∝ C^0.56，验证推荐领域遵循可预测的幂律缩放。*
+*Figure 5: 推荐域数据上的 Scaling Law——N_opt ∝ C^0.44, D_opt ∝ C^0.56，验证推荐领域遵循可预测的幂律缩放。*
 
 ### 5. On-Policy Distillation
 
@@ -126,9 +126,7 @@ status: Read
   - 平均 Recall@10：+26.8%
   - 在 4 个能力层级上都取得了提升
 
-![](https://arxiv.org/html/2512.24762/x7.png)
-
-*Figure 7: On-Policy Distillation 流程——Student（Policy Model）对给定 prompt 采样轨迹，Teacher Model 通过 Reverse KL divergence 提供反馈作为 reward，Policy Model 用策略梯度方法迭代优化，实现跨域推荐能力迁移。*
+*On-Policy Distillation：Student（Policy Model）采样轨迹 → Teacher 通过 Reverse KL 提供 reward → Policy Model 策略梯度优化，实现跨域推荐能力迁移。（详见原文 Figure 7）*
 
 ### 6. 多任务 SFT
 

@@ -148,6 +148,10 @@ tags:
 - [[Wiki/Concepts/MLA 多头潜在注意力]] — DeepSeek 的低秩 KV cache 压缩，93.3% 推理内存减少，让 MoE 推理变为经济可行。更新：2026-04-30
 - [[Wiki/Concepts/CLIP 对比语言图像预训练]] — OpenAI 的双塔多模态基石，零样本分类 + 语言作为视觉通用监督信号的方法论革命。更新：2026-04-30
 - [[Wiki/Concepts/知识蒸馏]] — 从模型压缩到推理能力迁移，DeepSeek-R1 蒸馏到 Kimi long2short 的范式演变。更新：2026-04-30
+- [[Wiki/Concepts/VQ-VAE 离散 Token 化]] — VQ-VAE 原理、RQ-Kmeans 变体、codebook 设计、连续 vs 离散表示的架构选择。更新：2026-05-01
+- [[Wiki/Concepts/Agent 图像编辑]] — 推理-规划-执行-验证闭环的编辑新范式，GoT/Mind-Brush/VisionCreator/Agent Banana 全景。更新：2026-05-01
+- [[Wiki/Concepts/审美评估与推理]] — 从 LAION predictor 到 Aes-R1 RAPO 的审美评分与推理，编辑的「北星」标尺。更新：2026-05-01
+- [[Wiki/Concepts/编辑数据合成方法]] — 五代数据合成范式（纯合成→真实+LLM→自适应→层级分类→情感特化→多参考）。更新：2026-05-01
 
 ## Entities
 

@@ -53,55 +53,182 @@ FLUX.1 Kontext 的出发点是：**能否训练一个原生支持图像编辑的
 
 ## Method 核心方法
 
-![](https://ar5iv.labs.arxiv.org/html/2506.15742/assets/img/kontext_v2.jpg)
+FLUX.1 Kontext 的方法论是一个四层架构：底座 FLUX DiT → 序列拼接统一范式 → Rectified Flow 训练 → LADD 蒸馏加速。以下逐层拆解。
 
-*Figure 1: FLUX.1 Kontext 的架构总览——左侧为输入图像和文本指令，通过 VAE 编码为 latent token，与文本 token 拼接后送入 DiT 进行 Rectified Flow 去噪，最终解码为编辑后的目标图像。序列拼接方案无需任务特定的架构修改即可统一生成和编辑。*
+### 1. 底座架构：FLUX DiT (Diffusion Transformer)
 
-### 1. 序列拼接范式（Sequence Concatenation）
+FLUX.1 Kontext 建立在 FLUX.1 的 DiT 架构之上，后者是一个大规模 Rectified Flow Transformer，在图像 VAE 的潜空间中训练。
 
-核心思想非常简洁：
+#### 1.1 混合双流/单流 Transformer 块
 
-- **T2I 生成模式**：[BOS][Text Tokens][SEP][Noise Tokens]
-- **图像编辑模式**：[BOS][Input Image Tokens][SEP][Text Tokens][SEP][Output Noise Tokens]
-
-模型看到的是输入图 + 指令 + 输出图的完整上下文，通过 Rectified Flow 将输出部分的噪声 token 逐步去噪为目标图像。
-
-这种设计的优势：
-- 不需要额外的编码器处理输入图像
-- 输入和输出共享同一个 VAE 和 Transformer
-- 任务拓展只需改输入格式，不需要改架构
-
-### 2. 3D RoPE（3D 旋转位置编码）
-
-拼接序列中同时存在输入图像、文本和输出图像的 token，它们各自有二维空间结构。3D RoPE 为每种模态的 token 分配独立的位置维度：
-
-- X 维度和 Y 维度：图像 token 的空间位置
-- Z 维度：区分不同模态/图像（输入图=0，输出图=1）
-- 文本 token 的 X、Y 维度设为 0
-
-这使得模型能区分"这是输入图左上角的 token"v.s."这是输出图左上角的 token"。
+FLUX DiT 由两种 Transformer 块交替组成：
 
 ![](https://ar5iv.labs.arxiv.org/html/2506.15742/assets/img/fusedditblock.jpg)
 
-*Figure 2: FLUX 的 Fused DiT Block 及 3D RoPE 示意图——混合双流/单流 Transformer 块，结合 3D RoPE 为每个 latent token 赋予 (t, h, w) 时空坐标，实现跨图像 token 的位置区分。*
+*Figure 2: FLUX 的 Fused DiT Block。混合双流（double stream）和单流（single stream）块，结合 3D RoPE 为每个 latent token 赋予 (t, h, w) 时空坐标。融合 FFN 块将注意力输入/输出投影与 MLP 合并以提升 GPU 利用率。*
 
-### 3. Rectified Flow
+- **双流块（Double Stream Blocks）**：文本 token 和图像 token 使用独立的权重参数。注意力操作在拼接后的 token 序列上进行（实现跨模态信息混合），但 FFN 分别处理各自模态。这种分离设计允许文本和视觉特征保持各自的表示空间特性。
+- **单流块（Single Stream Blocks）**：在双流块之后，将文本和图像 token 拼接为统一序列，经过 38 层单流 Transformer 块。此时文本和图像共享全部参数，实现深层统一建模。最终丢弃文本 token，仅保留图像 token 用于解码。
 
-FLUX Kontext 使用 Rectified Flow（一种 OT 路径的变体）作为生成框架：
+**融合 FFN 块（Fused FFN Block）**：受 ViT-22B 启发，FLUX 将注意力层的输入/输出投影与 MLP 层合并：
+- 将调制参数数量减少一半
+- 合并后的矩阵乘法更大，GPU 利用率更高
+- 训练和推理效率显著提升
 
-- 前向过程：x_t = (1-t)·x_0 + t·ε
-- 向量场方向：从噪声直线指向干净数据
-- 训练目标：学习 v_θ(x_t, t)，预测速度方向 (x_1 - x_0)
-- 直线轨迹使得少步采样更高效
+#### 1.2 高保真 VAE
 
-### 4. LADD 蒸馏（Latent Adversarial Diffusion Distillation）
+FLUX 从头训练了一个卷积 VAE，关键设计选择：
 
-将大 FLUX 模型的生成能力蒸馏到更小的模型：
+| VAE | 潜通道数 | PDist ↓ | SSIM ↑ | PSNR ↑ |
+|-----|---------|---------|--------|--------|
+| **FLUX-VAE** | **16** | **0.332** | **0.896** | **31.1** |
+| SD3-VAE | 16 | 0.452 | 0.858 | 29.6 |
+| SD3-TAE | 16 | 0.746 | 0.774 | 27.9 |
+| SDXL-VAE | 4 | 0.890 | 0.748 | 25.9 |
+| SD-VAE | 4 | 0.949 | 0.720 | 25.0 |
 
-- 使用大型 FLUX 模型作为 teacher
-- 学生模型在前向 ODE 轨迹上学习 teacher 的向量场
-- 结合对抗训练（discriminator）提升蒸馏后的感知质量
-- 实现少步（1-4 步）高质量生成
+- 16 个潜通道（是 SDXL 的 4 倍），大幅提升重建保真度
+- 使用感知距离（VGG PDist）和对抗损失联合训练
+- 冻结的 VAE：训练和推理时保持固定，所有图像先编码为潜 token 再送入 DiT
+
+#### 1.3 3D 旋转位置编码（3D RoPE）
+
+FLUX 使用分解式三维 RoPE，为每个 latent token 分配时空坐标：
+
+$$\text{pos}(t, h, w) = [\text{RoPE}_t(t), \text{RoPE}_h(h), \text{RoPE}_w(w)]$$
+
+- **t 维度**：时间步（单图时 t≡0；多帧/视频时递增）
+- **h, w 维度**：图像空间位置（对应 latent grid 的行列索引）
+- 三个维度的 RoPE 在注意力计算中分别作用于 Q 和 K 的不同子空间
+
+这种设计让模型在注意力计算中能够天然地区分 token 的空间邻近性和时间连续性。
+
+### 2. 序列拼接范式——统一生成与编辑的极简方案
+
+这是 FLUX Kontext 最核心的设计哲学：**用单一的 token 序列格式覆盖所有任务**，通过改变序列构成来切换任务模式，而非修改模型架构。
+
+#### 2.1 Token 序列构造
+
+所有图像首先通过冻结的 FLUX-VAE 编码为 latent patch token。序列拼接规则：
+
+**T2I 生成模式**（y = ∅）：
+```
+[BOS] [Text Tokens: T₁ T₂ ... Tₙ] [SEP] [Noise Tokens: N₁ N₂ ... Nₘ]
+```
+纯文本到图像生成，与标准 FLUX.1 完全一致。
+
+**图像编辑模式**（y ≠ ∅）：
+```
+[BOS] [Context Image Tokens: C₁ C₂ ... Cₖ] [SEP] [Text Tokens: T₁ ... Tₙ] [SEP] [Noise Tokens: N₁ ... Nₘ]
+```
+上下文图像 token + 编辑指令 + 噪声 token 的拼接，模型在完整上下文中去噪生成目标图像。
+
+#### 2.2 3D RoPE 在拼接序列中的应用
+
+拼接序列的关键挑战：**如何让模型区分"输入图的左上角 token"和"输出图的左上角 token"**（它们的 h, w 坐标可能相同）。
+
+3D RoPE 的解决方案：为上下文图像 token 和输出图像 token 分配不同的 t 坐标：
+
+$$\mathbf{u}_{\text{output}} = (0, h, w), \quad \mathbf{u}_{\text{context}} = (1, h, w)$$
+
+t 坐标作为"虚拟时间维度"将上下文和目标的潜在空间干净地分离，同时保持各自的内部空间结构。扩展到多图场景（y₁, y₂, ..., y_N）只需递增 t 坐标：u_{y_i} = (i, h, w)。
+
+#### 2.3 设计方案对比
+
+| 方案 | 效果 | 问题 |
+|------|------|------|
+| **通道拼接**（输入+输出 latent 沿通道维拼接） | 初始实验效果较差 | 强制输入和输出共享空间坐标，语义混淆 |
+| **序列拼接**（token 序列首尾相接） ✓ | 显著优于通道拼接 | 序列长度增加，但对 Transformer 天然支持 |
+| **独立编码器**（额外 encoder 处理输入） | 增加参数和复杂度 | 违背"极简统一"的设计哲学 |
+
+### 3. Rectified Flow 训练
+
+#### 3.1 前向过程与训练目标
+
+FLUX Kontext 使用 Rectified Flow（OT 路径的变体）在潜空间中训练：
+
+**前向加噪**：$z_t = (1-t) \cdot x_0 + t \cdot \varepsilon$，其中 $\varepsilon \sim \mathcal{N}(0,1)$
+
+**速度预测目标**（velocity prediction）：
+
+$$\mathcal{L}_{\theta} = \mathbb{E}_{t \sim p(t), x, y, c, \varepsilon}\left[\|v_{\theta}(z_t, t, y, c) - (\varepsilon - x_0)\|_2^2\right]$$
+
+与 DDPM 预测噪声 ε 不同，这里预测的是速度方向 $\varepsilon - x_0$（从数据指向噪声的向量）。这使得采样路径成为**直线**：$x_t = (1-t)x_0 + t\varepsilon$。
+
+**纯文本模式**：当 y=∅ 时，省略所有上下文 token，保留标准 T2I 生成能力。
+
+#### 3.2 Logit-Normal 时间步采样
+
+时间步 t 从 Logit-Normal 分布采样（而非均匀分布）：
+
+$$p(t; \mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}} \cdot \frac{1}{t(1-t)} \cdot \exp\left(-\frac{(\text{logit}(t) - \mu)^2}{2\sigma^2}\right)$$
+
+其中 $\text{logit}(t) = \log\frac{t}{1-t}$，默认 σ=1.0。
+
+**μ 的物理意义——与 Resolution Shift 的关系**：论文证明，此前工作中用于高分辨率训练的"时间步 shift"参数 α 可以通过 Logit-Normal 的 μ 参数统一表达：μ = log α。例如 α=3.0（1024² 分辨率常用值）对应 μ≈1.0986。
+
+**分辨率自适应**：训练时根据图像分辨率调整 μ：
+- 低分辨率（256²）：μ 较小（噪声时间占比少）
+- 高分辨率（1024²）：μ 较大（噪声时间占比多，网络更多时间学习全局结构）
+
+推理时可通过公式 $t' = \frac{\alpha t}{1 + (\alpha-1)t}$ 重新分配时间步。
+
+#### 3.3 多任务联合训练
+
+从纯 T2I 的 FLUX.1 checkpoint 出发，在 I2I（图像编辑）和 T2I 数据上联合微调：
+- 收集和筛选数百万关系对 $(x | y, c)$（目标图 | 上下文图, 文本指令）
+- I2I 和 T2I 在同一个 batch 中混合训练
+- 单上下文图像为主要条件模式（多图能力天然支持但未重点优化）
+
+### 4. LADD 蒸馏——交互式速度的引擎
+
+LADD（Latent Adversarial Diffusion Distillation）是实现 3-5 秒/图推理速度的核心技术。
+
+#### 4.1 两阶段流程
+
+**Stage 1：Teacher 训练**。使用完整的 Rectified Flow 目标（Eq.3）训练大型 FLUX Kontext 模型，50-250 步 ODE 采样 + CFG（classifier-free guidance）。
+
+**Stage 2：学生蒸馏**。将 teacher 的生成能力迁移到更小的学生模型：
+
+- **蒸馏损失**：学生在 teacher 的 ODE 轨迹上学习向量场。给定从 teacher 采样路径上的点 $z_t$，学生预测的向量场应与 teacher 在该点的向量场一致
+- **对抗损失**：引入判别器（discriminator），对学生生成的低步数（1-4 步）样本进行真伪判断，提升感知质量
+- **学生模型变体**：
+  - FLUX.1 Kontext \[pro\]：完整模型 + LADD，平衡质量与速度
+  - FLUX.1 Kontext \[dev\]：12B DiT，仅 I2I 训练（无 T2I），通过 guidance-distillation 获得
+  - FLUX.1 Kontext \[max\]：更多计算预算，追求极致生成质量
+
+#### 4.2 蒸馏效果
+
+| 模型 | 采样步数 | 推理时间（1024²） | 质量 |
+|------|---------|------------------|------|
+| Teacher（未蒸馏） | 50-250 | >30s | Reference |
+| \[pro\]（LADD） | 4-8 | 3-5s | 接近 teacher |
+| \[dev\]（12B） | 1-4 | 1-3s | 略低于 \[pro\] |
+
+LADD 使 FLUX Kontext 在保持编辑质量的同时，推理速度比竞品（如 GPT-Image-1）快一个数量级。
+
+### 5. 训练基础设施与工程细节
+
+#### 5.1 分布式训练
+
+| 组件 | 配置 | 说明 |
+|------|------|------|
+| 并行策略 | FSDP2 (Full Sharded Data Parallel v2) | 分片参数、梯度和优化器状态 |
+| 混合精度 | all-gather: bfloat16, reduce-scatter: float32 | 通信用低精度节省带宽，梯度和用高精度保证数值稳定 |
+| 激活检查点 | 选择性（selective activation checkpointing） | 只重计算 attention 和 FFN 的激活，减少 VRAM 峰值 |
+| 注意力加速 | Flash Attention 3 | 利用异步和低精度加速注意力计算 |
+| 编译优化 | 逐块区域编译（regional compilation） | 对单个 Transformer 块做 torch.compile |
+
+#### 5.2 安全训练
+
+- 基于分类器的数据过滤：去除 NCII（非自愿亲密图像）和 CSAM（儿童性虐待材料）相关内容
+- 对抗训练（adversarial training）：在蒸馏阶段引入对抗样本增强鲁棒性
+
+#### 5.3 推理时技术
+
+- **Classifier-Free Guidance (CFG)**：文本丢弃率 0.1，引导强度根据任务调整
+- **ODE 求解器**：Euler 或 Heun 方法，步数可调（质量-速度权衡）
+- **VAE 解码**：16 通道 latent → 1024×1024×3 像素，单次前向传播
 
 ---
 

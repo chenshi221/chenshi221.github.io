@@ -71,86 +71,88 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 架构：解耦 VLM + DiT
+OmniGen2 的方法论采用"强基座 + 多任务 RL 对齐"的两阶段设计。基座提供 foundation，GRPO 渐进式课程实现跨任务协同增益。
 
-![](https://arxiv.org/html/2506.18871/x2.png)
+### 1. 架构：解耦 VLM + DiT + Omni-RoPE
 
-*Figure 2: OmniGen2 架构——采用解耦设计：VLM（Qwen2.5-VL-3B）负责多模态理解，DiT 负责高质量图像合成。两种图像编码器分工：ViT 编码图像供 VLM 理解，VAE 编码图像供 DiT 生成。*
+| 组件 | 选型 | 角色 |
+|------|------|------|
+| **VLM** | Qwen2.5-VL-3B（冻结） | 多模态理解、世界知识、指令理解 |
+| **DiT** | Lumina-Image 2.0 架构（随机初始化） | 高质量图像合成，参数跨模态共享 |
+| **图像编码** | ViT（VLM 理解）+ Flux-VAE（DiT 像素级细节） | 双编码器分工 |
 
-- **VLM**：Qwen2.5-VL-3B（冻结），提供多模态理解、世界知识、指令理解
-- **DiT**：随机初始化，专注高质量图像合成（Lumina-Image 2.0 架构，参数跨模态共享）
-- 两者串行：VLM 处理输入→隐藏态作为 DiT 条件
-- 与 MetaQuery 的关键区别：直接使用 VLM 可变长隐藏态（非固定大小 query token），无信息瓶颈
-- 低层视觉特征：Flux-VAE 提供像素级细节（用于编辑等任务保持一致性）
+VLM 处理输入后，其**可变长隐藏态**直接作为 DiT 条件（非固定大小 query token，无信息瓶颈——这是与 MetaQuery 的关键区别）。
 
-### 2. Omni-RoPE：统一 3D 位置编码
+**Omni-RoPE：统一 3D 位置编码**
 
-- 每个 token 分配三维位置标识：$(\Delta_I^{(k)}, h, w)$
-- $\Delta_I^{(k)}$：图像实例 ID（同图内共享），区分不同图像/模态
-- $(h, w)$：局部 2D 空间坐标（从 (0,0) 计算），保持空间对应
-- 关键优势：输入和输出图像中对应 patch 获得相同空间编码（编辑一致性），$\Delta_I$ 区分多图像（IC 任务）
-- Toy 实验验证：比 Lumina-Image-2.0 和 Qwen2-VL 的 RoPE 变体收敛快约 3 倍，最终 loss 低约 6 倍
+每个 token 分配三维位置标识 $(\Delta_I^{(k)}, h, w)$：
+- $\Delta_I^{(k)}$：图像实例 ID（同图共享），区分不同图像/模态
+- $(h, w)$：局部 2D 空间坐标
 
-![](https://arxiv.org/html/2506.18871/x3.png)
+关键优势：编辑任务中输入和输出图像对应 patch 获得相同空间编码（编辑一致性）；$\Delta_I$ 区分多图像（IC 任务）。Toy 实验验证：比 Lumina-Image-2.0 和 Qwen2-VL 的 RoPE 变体收敛快约 3 倍，最终 loss 低约 6 倍。
 
-*Figure 3: Omni-RoPE 示意图——每个 token 分配三维位置标识 (ΔI^(k), h, w)，其中 ΔI^(k) 区分不同图像实例，(h, w) 保留局部 2D 空间坐标。编辑任务中输入和输出图像对应 patch 获得相同空间编码，保证编辑一致性。*
+### 2. 数据构建管线
 
-### 3. 数据构建管线
+| 数据类型 | 来源 | 规模 |
+|---------|------|------|
+| 基础 T2I | 开源图文对 + Qwen2.5-VL-72B 标注 + LLaVA-OneVision | 140M + 10M |
+| 编辑 | SEED-Data-Edit + OmniEdit + 自建 inpainting/视频管线 | - |
+| In-Context | 视频源（SAM2 分割 + VLM 语义过滤） | 保证主体一致性 |
+| 交错/反思 | 增强时序推理和自校正能力 | - |
 
-- 基础能力：140M 开源 T2I 图文对 + 10M Qwen2.5-VL-72B 标注 + LLaVA-OneVision
-- 编辑数据：整合 SEED-Data-Edit、OmniEdit + 自建 inpainting/视频管线
-- IC 数据：从视频源构建（SAM2 分割 + VLM 语义过滤），保证主体一致性
-- 交错/反思数据：增强时序推理和自校正能力
+### 3. 基座模型训练
 
-### 4. 基座模型训练
+两阶段：预训练（分辨率课程 256→512→1024，先 T2I 后多任务混合）→ SFT（1024 分辨率，精调推理和组合能力）。Rectified Flow 目标。
 
-- 两阶段：预训练（分辨率课程 256→512→1024，先 T2I 后多任务混合）→ SFT（1024 分辨率，精调推理和组合能力）
-- Rectified Flow 目标
+### 4. 渐进式多任务 GRPO 指令对齐（核心创新）
 
-### 5. 渐进式多任务 GRPO 指令对齐
-
-这是 OmniGen2 最核心的创新。
-
-**任务调度**（Edit → GenEval → IC）：
-- $\mathcal{T}_1$ = (Edit, 通用编辑, EditScore 奖励模型)
-- $\mathcal{T}_2$ = (T2I, GenEval, 可验证奖励)
-- $\mathcal{T}_3$ = (IC, 通用 in-context, Qwen2.5-VL-72B 评判)
+**三阶段课程**：$\mathcal{T}_1$(Edit, EditScore RM) → $\mathcal{T}_2$(T2I, GenEval, 可验证奖励) → $\mathcal{T}_3$(IC, Qwen2.5-VL-72B 评判)
 
 **关键设计原则**：
-- 排除易 reward hacking 的奖励（如 HPSv3 美学奖励）
-- 排除缺乏协同效应的任务（如 OCR only）
-- 编辑优先于 T2I（编辑任务提供更丰富的监督信号，为后续学习奠定基础）
+- 排除易 reward hacking 的奖励（如 HPSv3 美学奖励——导致 PQ 虚高但 SC/IC 崩溃）
+- 排除缺乏协同效应的任务（如 OCR only——降低编辑性能）
+- **编辑优先于 T2I**：编辑任务提供更丰富的监督信号，为后续学习奠定更强基础
 
 ---
 
 ## 实验/评估/结果
 
-### 多模态理解
-
-- MMBench 79.1 / MMMU 53.1 / MM-Vet 61.8
-
 ### T2I 生成
 
-- GenEval 0.95（超越 BAGEL 0.88、Qwen-Image 0.91）
-- OneIG-Bench 0.47（仅次于 Gemini 2.5 Flash Image 和 Qwen-Image）
+
+
+| Benchmark | OmniGen2 | 对比 |
+|-----------|---------|------|
+| **GenEval** | **0.95** | BAGEL 0.88, Qwen-Image 0.91, GPT-4o 0.84 |
+| OneIG-Bench | 0.47 | 仅次于 Gemini 2.5 Flash Image 和 Qwen-Image |
 
 ### 图像编辑
 
-- GEdit-Bench Overall 7.21，SC 7.58（语义一致性第二），PQ 7.94（感知质量第一）
-- Emu-Edit 上 CLIP-Out 0.311（编辑准确性最高），DINO 0.876（最佳）
-- ImgEdit-Bench 超越 BAGEL
+| Benchmark | OmniGen2 | 对比 |
+|-----------|---------|------|
+| **GEdit-Bench Overall** | **7.21** | SC 7.58（第二）, PQ 7.94（**第一**） |
+| Emu-Edit CLIP-Out | **0.311** | 编辑准确性最高 |
+| Emu-Edit DINO | **0.876** | 最佳 |
+| ImgEdit-Bench | 超越 BAGEL | - |
 
-### In-Context 生成（OmniContext）
+### In-Context 生成 (OmniContext)
 
-- Overall 7.95，超越 Qwen-Image-Edit-2509 (7.69) 和 Gemini 2.5 Flash Image (7.84)
-- Scene 类别 7.86 尤其突出
+| Model | Overall |
+|-------|---------|
+| Qwen-Image-Edit-2509 | 7.69 |
+| Gemini 2.5 Flash Image | 7.84 |
+| **OmniGen2** | **7.95** |
 
-### 消融：RL 策略的关键发现
+*Scene 类别 7.86 尤其突出。*
 
-1. **任务选择**：技能重叠带来协同增益（Edit & GenEval 超越各自单任务），技能冲突导致负迁移（OCR only 降低编辑性能）
-2. **奖励信号**：HPSv3 美学奖励导致 reward hacking（PQ 虚高 8.22，SC 和 IC 崩溃）
-3. **调度顺序**：Edit 优先 > T2I 优先（编辑任务更丰富的监督构建更强基础）
-4. **最终课程**（Edit → GenEval → IC）在各指标上均最优
+### 消融：RL 策略关键发现
+
+| 实验 | 发现 |
+|------|------|
+| 任务选择 | 技能重叠→协同增益（Edit & GenEval 超单任务）；技能冲突→负迁移（OCR only 降低编辑） |
+| 奖励信号 | HPSv3 美学奖励→reward hacking（PQ 虚高 8.22，SC/IC 崩溃） |
+| 调度顺序 | Edit 优先 > T2I 优先（编辑提供更丰富监督） |
+| **最终课程** | Edit → GenEval → IC **在各指标上均最优** |
 
 ---
 

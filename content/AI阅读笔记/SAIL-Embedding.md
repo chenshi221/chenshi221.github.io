@@ -23,7 +23,7 @@ status: Read
 ---
 **一句话总结**：SAIL-Embedding 是字节跳动（抖音）提出的全模态嵌入基础模型，支持文本+图像+音频任意组合输入，通过动态 hard negative mining、自适应多源数据平衡、MRL 多粒度表示、COSENT 排序损失、mICL 跨模态对比、Stochastic Specialization Training 和协作感知推荐增强训练（CRE: Seq2Item + ID2Item 蒸馏），在抖音推荐系统的 i2i 和 q2i 检索任务上全面超越 CLIP 式和 VLM 式基线，线上带来 +0.5% 7 天 LT 增益。
 
-![](https://arxiv.org/html/2510.12709/x1.png)
+![](https://arxiv.org/html/2510.12709v3/x1.png)
 
 *Figure 1: SAIL-Embedding 能力总览——支持全模态嵌入任务，包括分类、q2i 检索、i2i 检索等。*
 
@@ -52,7 +52,7 @@ status: Read
 
 ### 1. 全模态架构
 
-![](https://arxiv.org/html/2510.12709/x4.png)
+![](https://arxiv.org/html/2510.12709v3/x4.png)
 
 *Figure 4: SAIL-Embedding 模型架构总览——文本（标题/OCR/ASR）、视觉（ViT+Visual Perceiver）、音频（CLAP）三模态 token 拼接后输入 LLM，通过 tanh+mean pooling 获得统一多模态嵌入，用对比学习训练 query-target pairs。*
 
@@ -99,7 +99,7 @@ status: Read
 - **ID2Item 蒸馏**：对齐模型输出与推荐系统的 ID embeddings
   - 主任务（220M 样本）+ 辅助 i2i 任务（20M），多任务防止内容感知能力退化
 
-![](https://arxiv.org/html/2510.12709/x7.png)
+![](https://arxiv.org/html/2510.12709v3/x7.png)
 
 *Figure 7: 推荐增强训练（CRE）——(a) Seq2Item 蒸馏：用户历史观看序列聚合后与目标视频做对比学习；(b) ID2Item 蒸馏：对齐 SAIL-Embedding 输出与推荐系统 ID embeddings，实现内容理解与协同信号的桥接。*
 

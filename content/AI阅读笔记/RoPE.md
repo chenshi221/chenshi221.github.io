@@ -53,7 +53,7 @@ status: Read
 
 ## Method 核心方法
 
-![](https://arxiv.org/html/2104.09864/x1.png)
+![](https://ar5iv.labs.arxiv.org/html/2104.09864/assets/x1.png)
 
 *Figure 1: Rotary Position Embedding（RoPE）的实现示意图。通过旋转矩阵将位置信息乘性地融入 query 和 key 表示。*
 
@@ -83,16 +83,18 @@ $$q_m^T k_n = (R_m W_q x_m)^T (R_n W_k x_n) = x_m^T W_q^T R_m^T R_n W_k x_n = x_
 
 由于旋转矩阵的正交性（R_m^T R_n = R_{n-m}），点积结果仅依赖于相对位置 (n-m)，而非绝对位置 m 和 n。
 
-![](https://arxiv.org/html/2104.09864/x2.png)
+![](https://ar5iv.labs.arxiv.org/html/2104.09864/assets/x2.png)
 
 *Figure 2: RoPE 的远程衰减性。注意力权重随相对距离增大而自然衰减，模拟了"近处词更相关"的语言学特性。*
 
-### 关键性质
+### 关键性质与设计原理
 
-1. **相对位置的自然依赖**：注意力分数天然包含相对位置信息 (n-m)，无需额外计算
-2. **远程衰减**：随着 |n-m| 增大，RoPE 引入的注意力权重自然衰减，模拟了语言中"近处词更相关"的特性
-3. **序列长度灵活**：可以外推到训练时未见过的更长序列
-4. **线性注意力兼容**：因为位置信息通过乘性（旋转）而非加性融入，可以应用到线性自注意力中
+| 性质 | 机制 | 意义 |
+|------|------|------|
+| **相对位置自然依赖** | 点积 $q_m^T k_n$ 仅含 (n-m)，无需额外计算 | 比 Transformer-XL 的显式相对编码更简洁 |
+| **远程衰减** | $|n-m|$ 增大→注意力权重自然衰减 | 模拟"近处词更相关"的语言学特性 |
+| **序列长度灵活** | 可外推到训练未见长度（只需修改频率 θ） | LLaMA 系列支持的上下文扩展直接受益 |
+| **线性注意力兼容** | 位置信息通过**乘性**（旋转）融入，非加性 | 唯一与线性/稀疏注意力架构兼容的相对位置编码 |
 
 ### 与现有方法的对比
 
@@ -119,7 +121,7 @@ $$q_m^T k_n = (R_m W_q x_m)^T (R_n W_k x_n) = x_m^T W_q^T R_m^T R_n W_k x_n = x_
 
 部分实验在预训练语言模型上进行，代码和 checkpoint 发布在 GitHub。RoFormer 已正式集成到 HuggingFace Transformers 库中。
 
-![](https://arxiv.org/html/2104.09864/x3.png)
+![](https://ar5iv.labs.arxiv.org/html/2104.09864/assets/x3.png)
 
 *Figure 3: 语言建模预训练中 RoPE 的效果评估。（左）BERT 和 RoFormer 的训练 loss，RoFormer 收敛更快；（右）PerFormer 使用/不使用 RoPE 的训练 loss，RoPE 带来更快收敛和更低 loss。*
 

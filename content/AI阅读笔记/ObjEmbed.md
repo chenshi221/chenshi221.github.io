@@ -77,24 +77,23 @@ status: Read
 
 ## 实验/评估/结果
 
-在 18 个 benchmark 上评估，涵盖三大类任务：
+在 18 个 benchmark 上评估，涵盖三大类任务。
 
-### 开放词汇目标检测
-- COCO / LVIS 上超越专用 OVD 模型
-- Object token 提供强大语义判别力，IoU token 提供精确的定位质量评估
+### 核心设计验证
 
-### 指代表达理解（REC）
-- RefCOCO/RefCOCO+/RefCOCOg 上表现优异
-- 统一 embedding 空间使得文本指代和视觉目标可以直接匹配
+| 设计选择 | 对比 | 效果 |
+|---------|------|------|
+| Object + IoU 双 token | 单一 token | 语义判别+定位质量解耦优于统一 |
+| Sigmoid focal loss | Softmax CE | 大类别空间下优势明显 |
+| Qwen3-VL 骨干 | 更小 VL 模型 | 更强的多模态理解提升效果 |
 
-### 目标检索
-- 跨图像目标检索：同一类别/实例的目标在嵌入空间中聚集
-- Object token 展现出强大的细粒度判别能力
+### 三大任务
 
-### 消融实验
-- Object + IoU 双 token 设计 > 单一 token
-- Sigmoid focal loss > Softmax CE（在大类别空间下）
-- Qwen3-VL 骨干 > 更小的 VL 模型
+| 任务 | 关键 benchmark | 方法优势 |
+|------|--------------|---------|
+| 开放词汇检测 (OVD) | COCO / LVIS | Object token 提供语义判别力，IoU token 提供定位质量 |
+| 指代表达理解 (REC) | RefCOCO/+/g | 统一 embedding 空间直接匹配文本指代和视觉目标 |
+| 目标检索 | 跨图像检索 | Object token 细粒度判别能力，同类别聚集 |
 
 ---
 

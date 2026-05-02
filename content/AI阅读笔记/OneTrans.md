@@ -15,7 +15,7 @@ tags:
   - 序列建模
   - 特征交互
   - 工业部署
-  - Scaling Law
+  - Scaling-Law
 url: ''
 code: 未开源
 rating: ⭐⭐⭐⭐

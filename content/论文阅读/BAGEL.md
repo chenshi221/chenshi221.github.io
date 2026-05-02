@@ -25,7 +25,7 @@ tags:
   - 多模态
   - 统一模型
   - MoT
-  - Flow Matching
+  - Flow-Matching
   - 涌现
   - 图像生成
   - 图像编辑

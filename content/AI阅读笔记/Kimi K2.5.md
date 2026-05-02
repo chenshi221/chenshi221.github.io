@@ -65,7 +65,7 @@ Kimi K2.5 致力于解决两个关键问题：
 - 关键发现：视觉 RL 提升了文本性能（MMLU-Pro +1.7、GPQA-Diamond +2.1）
 - 最终采用能力域（而非模态）划分 RL：同一能力域专家同时从纯文本和多模态 query 学习
 
-![](https://arxiv.org/html/2602.02276/x2.png)
+![](https://arxiv.org/html/2602.02276v1/x2.png)
 
 *Figure 2: 从 zero-vision SFT 出发的视觉 RL 训练曲线。视觉 benchmark 性能随 RL FLOPs 扩展持续提升，验证了 zero-vision 激活 + 长 RL 即可获得鲁棒视觉能力。*
 - **Toggle 策略**：交替执行 Phase0（预算约束、条件惩罚超长输出）和 Phase1（标准最大 token 限制），降低 25~30% 输出 token 同时基本保持性能
@@ -85,7 +85,7 @@ $$
 - Trainable orchestrator + 冻结子 agent（来自固定中间 checkpoint）
 - 解耦设计避免信用分配模糊和训练不稳定
 
-![](https://arxiv.org/html/2602.02276/x3.png)
+![](https://arxiv.org/html/2602.02276v1/x3.png)
 
 *Figure 3: Agent Swarm 架构。可训练的 orchestrator 动态创建专门的冻结子 agent，将复杂任务分解为可并行执行的子任务。*
 

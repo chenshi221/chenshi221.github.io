@@ -27,7 +27,7 @@ tags:
   - 多模态
   - 统一模型
   - Encoder-Free
-  - Flow Matching
+  - Flow-Matching
   - 像素空间
   - MAE
 url: 'https://arxiv.org/abs/2604.24763'
@@ -61,51 +61,50 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 架构简化
+Tuna-2 的核心主张是"彻底 Encoder-Free"——不用 VAE、不用 CLIP/SigLIP，仅用简单 patch embedding + masking-based feature learning 实现统一多模态建模。
 
-**Tuna → Tuna-R → Tuna-2**：
-- Tuna-R：移除 VAE，保留 SigLIP representation encoder
-- Tuna-2：进一步移除 representation encoder，用简单 patch embedding 层直接编码图像
+### 1. 架构演进：Tuna → Tuna-R → Tuna-2
 
-**Tuna-2 架构**：
-- Patch embedding：图像 → 视觉 token
-- Qwen2.5-7B-Instruct：视觉 token + 文本 token 联合处理
-- Language head：自回归文本预测
-- Flow head：pixel-space flow matching
+| 变体 | VAE | Representation Encoder | 说明 |
+|------|-----|----------------------|------|
+| Tuna | ✓ | ✓ (SigLIP) | 原始 encoder-based 设计 |
+| Tuna-R | ✗ | ✓ (SigLIP) | 移除 VAE，pixel-space FM；保留 SigLIP 作为理解锚点 |
+| **Tuna-2** | **✗** | **✗** | **完全 Encoder-Free**：patch embedding 直接编码像素 |
 
-### 2. Pixel-Space Flow Matching
+### 2. Tuna-2 架构
 
-- 采用 x-prediction + v-loss 范式（来自 JiT）
-- Rectified flow + linear schedule：$x_t = t x_1 + (1-t) x_0$
-- 模型预测 clean image $x_\theta$，转换为 velocity $v_\theta$ 后回归
+- **Patch embedding**：简单 2D patch embedding → 像素 token（无预训练，随机初始化）
+- **LLM**：Qwen2.5-7B-Instruct，视觉 token + 文本 token 联合处理
+- **Language head**：自回归 NTP（causal attention）
+- **Flow head**：pixel-space flow matching
+
+### 3. Pixel-Space Flow Matching
+
+采用 x-prediction + v-loss 范式（来自 JiT）：
+
+- 前向：$x_t = t x_1 + (1-t) x_0$（Rectified flow + linear schedule）
+- 模型预测 clean image $\hat{x}_\theta$，转换为 velocity $v_\theta = \hat{x}_\theta - x_t$
+- 回归目标：$v = x_1 - x_0$
 - 推理用 Euler solver
-- 直接在像素空间操作，无需 VAE 压缩/解压
+- 直接在像素空间操作，无需 VAE 压缩/解压（避免 VAE 引入的信息损失和架构复杂度）
 
-### 3. Masking-based Feature Learning
+### 4. Masking-based Feature Learning（核心创新）
 
-这是 Tuna-2 最关键的训练创新：
+随机 mask 部分图像 patch（替换为 learnable mask token），**同时服务理解和生成**：
 
-- 随机 mask 部分图像 patch（替换为 learnable mask token）
-- **生成端**：预测 masked 和 unmasked 区域的 clean image → harder denoising + 鼓励 mask token 学习上下文信息
-- **理解端**：基于 masked 视觉输入预测文本 → 正则化，强制模型在部分视觉条件下推理
-- 类似于 MAE（理解）+ MaskGIT（生成）的融合
+- **生成端**：预测 masked 和 unmasked 区域的 clean image → harder denoising（类似 MAE 重建）+ 鼓励 mask token 学习上下文
+- **理解端**：基于 masked 视觉输入预测文本 → 正则化，强制模型在部分视觉条件下推理（类似 MAE 的语义学习）
 
-![](https://arxiv.org/html/2604.24763/x3.png)
+本质是 MAE（理解）+ MaskGIT（生成）的融合，通过统一 masking 机制实现正反馈。
 
-*Figure 3: Masking-based Feature Learning 方案——训练时使用可学习 mask token 同时服务理解和生成：理解端做正则化（基于部分视觉信息推理文本），生成端做 masked prediction（预测被 mask 区域的 clean image），相互增强。*
+### 5. 训练策略
 
-### 4. 训练策略
+| 阶段 | 数据 | 配置 |
+|------|------|------|
+| **Stage 1** | 550M 图文对（70% captioning + 30% T2I）+ 20% 纯文本（Nemotron） | 300K steps，64 nodes，lr=1e-4 |
+| **Stage 2 (SFT)** | 13M 指令遵循（FineVision）+ 2M 编辑（OmniEdit）+ 生成数据 | 50K steps，lr=2e-5 |
 
-**Stage 1（全模型预训练）**：
-- 550M 图文对（70% image captioning + 30% T2I）
-- 20% 混入纯文本数据（Nemotron）
-- 300K steps，64 nodes，lr=1e-4
-
-**Stage 2（SFT）**：
-- 13M 图像指令遵循（FineVision）+ 2M 图像编辑（OmniEdit）+ 高质量生成数据
-- 50K steps，lr=2e-5
-
-无需 Tuna-R 所需的额外 connector alignment 阶段
+**无需 connector alignment 阶段**（对比 encoder-based 方案的多阶段对齐），两阶段直接完成。Tuna-R 需要额外的 connector alignment 阶段来对齐 SigLIP 和 LLM。
 
 ---
 
@@ -113,20 +112,30 @@ status: Read
 
 ### 多模态理解
 
-- GQA 65.0 / MMVet 51.7 / MMMU 50.7 / OCRBench 79.7
-- 在 CountBench 81.7 / MMVP 77.3 等细粒度感知任务上大幅超越 Tuna-R 和所有 UMM 基线
-- Tuna-2 vs Tuna-R：理解任务全面领先，尤其在像素级感知（V* 59.2 vs 57.6）
+| 指标 | Tuna-2 (Enc-Free) | Tuna-R (Enc-Based) | 提升 |
+|------|-------------------|-------------------|------|
+| GQA | **65.0** | - | - |
+| MMVet | **51.7** | - | - |
+| MMMU | **50.7** | - | - |
+| OCRBench | **79.7** | - | - |
+| CountBench | **81.7** | 大幅领先 | 细粒度感知优势最大 |
+| MMVP | **77.3** | 大幅领先 | - |
+| V* | **59.2** | 57.6 | +1.6 |
+
+*Tuna-2 在细粒度视觉感知（CountBench/MMVP）上优势最大——encoder-free 设计避免了预训练编码器的分辨率限制和归纳偏置。*
 
 ### 图像生成
 
-- GenEval：可与 encoder-based 方案竞争
-- DPG-Bench：优秀
+GenEval 和 DPG-Bench 上可与 encoder-based 方案竞争。
 
-### 核心发现
+### 核心发现：训练轨迹对比
 
-- **训练早期**：encoder-based（Tuna-R）收敛更快（SigLIP 提供好的初始化）
-- **训练后期**：encoder-free（Tuna-2）逐渐超越，尤其在细粒度理解上
-- **原因**：pretrained encoder 有固定的分辨率限制和归纳偏置，限制了视觉细节的捕获；encoder-free 设计允许端到端学习更适合任务的视觉表征
+| 训练阶段 | Encoder-Based (Tuna-R) | Encoder-Free (Tuna-2) |
+|---------|----------------------|----------------------|
+| 早期 | 收敛更快（SigLIP 提供好的初始化） | 收敛较慢 |
+| 后期 | 性能趋于饱和 | **逐渐超越**（尤其细粒度理解） |
+
+**原因**：预训练编码器有固定分辨率限制和归纳偏置，限制了视觉细节的捕获；encoder-free 设计允许端到端学习更适合任务的视觉表征。
 
 ---
 

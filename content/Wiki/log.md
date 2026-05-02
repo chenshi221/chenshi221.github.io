@@ -365,3 +365,16 @@ tags:
   - Questions: 5 个（+3）
   - Contradictions: 1 个（首次填充，6 条矛盾）
   - 总页面: 160+
+
+
+## [2026-05-01] concept | 补充 4 个核心概念页
+
+- Type: 概念补充
+- Created Concepts (4):
+  - [[Wiki/Concepts/VQ-VAE 离散 Token 化]] — VQ-VAE 原理（encoder→codebook→decoder）、RQ-Kmeans 变体、codebook collapse 问题、连续 vs 离散表示的架构选择。应用覆盖 Show-o2/Lumina-DiMOO/Emu3.5/OneRec/BAGEL。深度分析：离散化是必须的还是历史包袱、RQ-Kmeans 的工业务实选择、连续-离散混合表示的长期趋势。
+  - [[Wiki/Concepts/Agent 图像编辑]] — 推理-规划-执行-验证闭环的编辑新范式，GoT→Agent Banana→Mind-Brush→VisionCreator 全景。与端到端编辑的本质区别对比表、设计空间分析（推理深度/知识来源/训练范式）、路由式架构预测。
+  - [[Wiki/Concepts/审美评估与推理]] — 从 LAION predictor 到 Aes-R1 RAPO 的审美评分与推理，编辑的「北星」标尺。深度分析：评分器的文化偏见、准和懂的分离、审美推理对编辑价值的低估。
+  - [[Wiki/Concepts/编辑数据合成方法]] — 六代数据合成范式演进（纯合成→真实+LLM→自适应→层级分类→情感特化→多模态多参考）。深度分析：好指令→好编辑的隐性假设、in-context 示例偏见放大、四轮筛选是无奈之举、交互式数据合成的未来。
+- Updated: [[Wiki/index]], [[Wiki/overview]]
+- Notes: 这 4 个概念页填补了 Wiki 中「被多个来源和主题反复引用但缺少独立页面」的知识空白。VQ-VAE 是连接连续视觉和离散 Token 的桥梁概念（至少 5 个来源共同依赖）；Agent 图像编辑与通用 LLM Agent 有本质区别（视觉感知循环、编辑轨迹评估、VRL）；审美评估跨生成/编辑/评估三个方向；编辑数据合成是该领域的「元方法论」。
+- Wiki 当前规模: Concepts: 37 (+4)；总页面: 165+

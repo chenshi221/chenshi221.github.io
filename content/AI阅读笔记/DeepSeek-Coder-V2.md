@@ -45,10 +45,18 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 训练策略
+DeepSeek-Coder-V2 从 DeepSeek-V2 中间 checkpoint 出发，通过代码为主的继续预训练，将通用 MoE 模型特化为代码智能模型。
 
-- **继续预训练**：从 DeepSeek-V2 的中间 checkpoint（已训 4.2T tokens）开始，继续训练 6T tokens
-- 总训练量：10.2T tokens
+### 1. 模型规模
+
+| 版本 | 总参数 | 激活参数 | 专家数 | 架构 |
+|------|--------|---------|--------|------|
+| DeepSeek-Coder-V2 (16B) | 16B | 2.4B | 2 experts | MoE (细粒度代码) |
+| DeepSeek-Coder-V2 (236B) | 236B | 21B | 160 experts | MoE (继承 V2) |
+
+### 2. 训练策略
+
+- **继续预训练**：从 DeepSeek-V2 的中间 checkpoint（已训 4.2T tokens）开始，继续训练 6T tokens，总 10.2T tokens
 - 数据配比：代码 60% + 数学 10% + 自然语言 30%
 - 16B 版本使用 FIM（Fill-In-Middle）训练（PSM 模式，FIM 率 0.5），236B 仅用 Next-Token-Prediction
 - 优化器：AdamW（β1=0.9, β2=0.95, weight_decay=0.1），余弦衰减至初始值的 10%
@@ -74,7 +82,7 @@ status: Read
 - SFT：30 万条指令（代码 2 万 + 数学 3 万 + 通用数据），共 300M tokens
 - RL：GRPO 算法。**关键发现**：用奖励模型信号优于用原始编译器信号。编译器只能给 0/1 反馈且测试用例覆盖不全，训练一个奖励模型更鲁棒。
 
-![](https://arxiv.org/html/2406.11931/x3.png)
+![](https://arxiv.org/html/2406.11931v1/x3.png)
 
 *Figure 3: RL 训练中奖励模型信号 vs 原始编译器信号的对比。奖励模型提供更鲁棒的训练信号，在 LeetCode 和 LeetCode-zh 上均优于编译器 0/1 反馈。*
 

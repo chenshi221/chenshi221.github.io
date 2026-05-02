@@ -53,63 +53,98 @@ status: Read
 
 ## Method 核心方法
 
-### 1. 架构总览：编码器-解码器结构
+Transformer 由三个核心组件构成：注意力机制（Scaled Dot-Product + Multi-Head）→ 位置编码 → 编码器-解码器堆叠。以下按数学推导和设计分析展开。
 
-Transformer 保留了经典的编码器-解码器框架：
-- **编码器**：N=6 层堆叠，每层包含 Multi-Head Self-Attention + Position-wise FFN，各子层均采用残差连接 + Layer Normalization
-- **解码器**：N=6 层堆叠，每层包含 Masked Multi-Head Self-Attention + Cross-Attention（Q 来自解码器，K/V 来自编码器输出）+ Position-wise FFN
+### 1. 架构总览：编码器-解码器
 
-所有子层输出维度 d_model = 512（base）/ 1024（big）。
+Transformer 保留了经典的 Encoder-Decoder 框架，但完全用注意力替代了循环和卷积。输入序列 $x = (x_1, ..., x_n)$ 经过编码器产生连续表示 $z = (z_1, ..., z_n)$，解码器根据 z 自回归生成输出序列 $y = (y_1, ..., y_m)$——每一步生成时，解码器消费前一步的输出作为额外输入。
 
-### 2. Scaled Dot-Product Attention
+**编码器**：N=6 层堆叠。每层两个子层：
+- Multi-Head Self-Attention
+- Position-wise FFN
 
-核心公式：
+每子层采用 **残差连接 + Layer Normalization（Post-Norm）**：$\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))$。所有子层输出维度 d_model = 512（Base）/ 1024（Big）。
 
-$$\mathrm{Attention}(Q,K,V)=\mathrm{softmax}(\frac{QK^{T}}{\sqrt{d_{k}}})V$$
+**解码器**：N=6 层堆叠。每层三个子层（区别于编码器）：
+- **Masked** Multi-Head Self-Attention（防止当前位置 attend 到未来位置）
+- Multi-Head **Cross-Attention**（Q 来自解码器前一子层，K/V 来自编码器顶层输出——这是编码器-解码器信息传递的唯一路径）
+- Position-wise FFN
 
-除以 sqrt(d_k) 的原因：当 d_k 较大时，点积的数值增大，会将 softmax 推到梯度极小的饱和区。缩放后避免了这一问题。
+同样每子层残差+LN。
 
-![](https://arxiv.org/html/1706.03762/x2.png)
+### 2. Scaled Dot-Product Attention——核心计算单元
 
-*Figure 2: （左）Scaled Dot-Product Attention。（右）Multi-Head Attention，由多个并行的注意力层组成。*
+三组输入 Q（Query）、K（Key）、V（Value）——Q 和 K 的维度为 d_k，V 的维度为 d_v。注意力计算为加权 V 求和，权重来自 Q 和 K 的相容性：
 
-### 3. Multi-Head Attention
+$$\mathrm{Attention}(Q,K,V)=\mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_{k}}}\right)V$$
 
-将 Q、K、V 分别用 h 组不同的线性投影矩阵映射到 d_k、d_k、d_v 维度，并行计算注意力，然后拼接再投影。
+**为什么需要 $\sqrt{d_k}$ 缩放？** 当 d_k 较大时，点积值增大，将 softmax 推入梯度极小的饱和区。除以 $\sqrt{d_k}$ 使方差保持为 1（假设 Q/K 独立且均值为 0 方差为 1，则 QK^T 方差为 d_k）。这是 Transformer 训练稳定的关键微调。
 
-$$\mathrm{MultiHead}(Q,K,V)=\mathrm{Concat}(\mathrm{head_{1}},...,\mathrm{head_{h}})W^{O}$$
+实际计算中，注意力以矩阵形式高效实现——Q、K、V 均为矩阵（不是逐向量计算），利用高度优化的批量矩阵乘法。
 
-$$\mathrm{head_{i}}=\mathrm{Attention}(QW^{Q}_{i},KW^{K}_{i},VW^{V}_{i})$$
+### 3. Multi-Head Attention——并行的多子空间注意力
 
-Base: h=8, d_k=d_v=64（d_model/h）。Big: h=16, d_k=d_v=64。
+单头注意力的表示能力有限。Multi-Head Attention 将 Q、K、V 用 h 组不同的可学习线性投影映射到 d_k、d_k、d_v 维度（而非直接在 d_model 上做注意力），并行计算 h 次注意力，然后拼接再投影回 d_model：
 
-### 4. Position-wise Feed-Forward Network
+$$\mathrm{MultiHead}(Q,K,V)=\mathrm{Concat}(\mathrm{head_1},...,\mathrm{head_h})W^{O}$$
 
-$$\mathrm{FFN}(x)=\max(0,xW_{1}+b_{1})W_{2}+b_{2}$$
+$$\mathrm{head_i}=\mathrm{Attention}(QW^{Q}_i,KW^{K}_i,VW^{V}_i)$$
 
-两个线性变换中间夹 ReLU，d_ff = 2048（base）/ 4096（big）。对每个位置独立且相同地应用。
+Base: h=8, d_k=d_v=d_model/h=64。Big: h=16, d_k=d_v=64。这种设计允许模型在不同表示子空间中同时关注不同位置——例如一个头关注句法结构，另一个头关注语义关联。
 
-### 5. 位置编码
+**三种注意力模式**：
 
-Transformer 没有循环和卷积，自身无法感知序列顺序。本文使用正弦位置编码加到 embedding 上：
+| 模式 | Q 来源 | K/V 来源 | 用途 |
+|------|--------|---------|------|
+| Self-Attention（编码器） | 编码器本层输入 | 编码器本层输入 | 每个位置关注同层所有位置 |
+| Masked Self-Attention（解码器） | 解码器本层输入 | 解码器本层输入 | 防信息泄露（mask 掉未来位置） |
+| Cross-Attention（解码器） | 解码器前一子层 | 编码器顶层输出 | 解码器关注输入序列 |
 
-$$PE_{(pos,2i)}=sin(pos/10000^{2i/d_{\text{model}}})$$
+### 4. Position-wise FFN——非线性变换
 
-$$PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{\text{model}}})$$
+$$\mathrm{FFN}(x)=\max(0,xW_1+b_1)W_2+b_2$$
 
-实验表明，可学习的位置 embedding 效果几乎相同，但正弦版本允许外推到更长序列。
+两个线性变换+ReLU：先升维到 d_ff=2048（Base）/ 4096（Big），再降维回 d_model。对每个位置独立且相同地应用（"position-wise"）。FFN 可看作两个 1×1 卷积（卷积核大小为 1）——这是 CNN 视角下的理解。
 
-### 6. 自注意力的优势分析
+### 5. 位置编码——注入序列顺序
 
-与循环层和卷积层相比，自注意力有三方面优势：
+Transformer 不含循环和卷积，自身对序列顺序完全不可知。解决方式：将位置编码**加**到输入 embedding 上：
 
-| 层类型 | 每层复杂度 | 最少串行操作数 | 最大路径长度 |
-| --- | --- | --- | --- |
-| Self-Attention | O(n^2·d) | O(1) | O(1) |
-| Recurrent | O(n·d^2) | O(n) | O(n) |
-| Convolutional | O(k·n·d^2) | O(1) | O(log_k(n)) |
+$$PE_{(pos,2i)}=\sin(pos/10000^{2i/d_{\text{model}}})$$
 
-自注意力的信息传递路径最短（O(1)），长距离依赖学习能力最强。
+$$PE_{(pos,2i+1)}=\cos(pos/10000^{2i/d_{\text{model}}})$$
+
+其中 pos 是位置，i 是维度索引。这种正弦函数设计使模型能轻松学习相对位置关系：$PE_{pos+k}$ 可表示为 $PE_{pos}$ 的线性函数（通过旋转矩阵）。实验表明，可学习位置 embedding 效果几乎相同（25.7 vs 25.8），但正弦版本天然支持外推到更长序列。
+
+### 6. 模型规格与训练配置（原文 Table 3）
+
+| 超参数 | Base | Big |
+|--------|------|-----|
+| N（层数） | 6 | 6 |
+| d_model | 512 | 1024 |
+| d_ff | 2048 | 4096 |
+| h（头数） | 8 | 16 |
+| d_k = d_v | 64 | 64 |
+| P_drop | 0.1 | 0.3 |
+| ε_ls（Label Smoothing） | 0.1 | 0.1 |
+| 参数量 | 65M | 213M |
+| 总训练步数 | 100K | 300K |
+| 训练硬件 | 8×P100, 12h | 8×P100, 3.5天 |
+
+**优化器**：Adam（β₁=0.9, β₂=0.98, ε=10⁻⁹），学习率采用 warmup + 逆平方根衰减：$\text{lr}=d_{\text{model}}^{-0.5}\cdot\min(\text{step}^{-0.5},\text{step}\cdot\text{warmup}^{-1.5})$，warmup_steps=4000。**正则化**：Residual Dropout + Label Smoothing（0.1）。
+
+**推理**：自回归逐 token 解码（每次预测下一个 token），使用 beam search（beam size=4, length penalty α=0.6 for Base/1.0 for Big）。
+
+### 7. 自注意力的理论优势（原文 Table 1）
+
+| 层类型 | 每层复杂度 | 最少串行操作 | 最大路径长度 |
+|--------|-----------|-------------|-------------|
+| Self-Attention | O(n²·d) | **O(1)** | **O(1)** |
+| Recurrent | O(n·d²) | O(n) | O(n) |
+| Convolutional | O(k·n·d²) | O(1) | O(log_k n) |
+| Self-Attention (restricted) | O(r·n·d) | O(1) | O(n/r) |
+
+自注意力的关键优势：（1）**最少串行操作 O(1)**——所有位置同时计算，RNN 需 O(n) 串行步；（2）**最大路径长度 O(1)**——任意两位置直接连接，卷积需 O(log_k n)。代价是 O(n²) 的内存和计算（n 为序列长度），但论文讨论了将注意力限制在局部窗口（restricted self-attention）作为未来方向。
 
 ---
 

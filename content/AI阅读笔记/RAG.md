@@ -60,7 +60,7 @@ status: Read
 
 ## Method 核心方法
 
-![](https://arxiv.org/html/2005.11401/x1.png)
+![](https://arxiv.org/html/2005.11401v4/x1.png)
 
 *Figure 1: RAG 架构概览。将预训练的检索器（Query Encoder + Document Index）与预训练的 seq2seq 生成器（Generator）结合，端到端微调。对于 query x，使用 MIPS 检索 top-K 文档 z_i，最终的预测 y 通过边缘化不同文档下的生成结果得到。*
 
@@ -106,7 +106,7 @@ $$p_{\text{RAG-Token}}(y|x) \approx \prod_{i}^{N} \sum_{z \in \text{top-}k} p_{\
 
 ### 开放域 QA（核心结果）
 
-![](https://arxiv.org/html/2005.11401/x3.png)
+![](https://arxiv.org/html/2005.11401v4/x3.png)
 
 *Figure 3: （左）NQ 性能随检索文档数的变化；（中）NQ 检索召回率；（右）MS-MARCO Bleu-1 和 Rouge-L 随检索文档数的变化。RAG 仅需少量文档即可达到高召回率。*
 

@@ -48,7 +48,7 @@ status: Read
 
 ## Method 核心方法
 
-![](https://arxiv.org/html/2504.07491/x3.png)
+![](https://arxiv.org/html/2504.07491v3/x3.png)
 
 *Figure 3: Kimi-VL 模型架构。由 MoonViT 原生分辨率视觉编码器、MLP Projector 和 MoE 语言解码器（Moonlight, 2.8B 激活）三部分组成。*
 
@@ -80,7 +80,7 @@ status: Read
 - Joint Cooldown 中引入合成 QA pair 激活特定能力（低比例防止过拟合）
 - Long-context 两阶段扩展到 128K（RoPE 从 50k 到 800k）
 
-![](https://arxiv.org/html/2504.07491/x4.png)
+![](https://arxiv.org/html/2504.07491v3/x4.png)
 
 *Figure 4: Kimi-VL 的四阶段预训练流程。ViT 训练 → Joint Pre-training → Joint Cooldown → Joint Long-context，共 4.4T tokens。*
 

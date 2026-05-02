@@ -47,11 +47,23 @@ status: Read
 
 ## Method 核心方法
 
-![](https://arxiv.org/html/2412.19437/x2.png)
+![](https://arxiv.org/html/2412.19437v2/x2.png)
 
 *Figure 2: DeepSeek-V3 基础架构。继承 V2 的 MLA + DeepSeekMoE 设计，新增 auxiliary-loss-free 负载均衡策略。*
 
 ### 1. 架构创新
+
+DeepSeek-V3 基于 V2 的 MLA + DeepSeekMoE，核心新增两项改进：
+
+**架构对比**：
+
+| 组件 | 标准 Transformer | DeepSeek-V2 | DeepSeek-V3 |
+|------|-----------------|-------------|-------------|
+| 注意力 | MHA | MLA (低秩 KV 压缩) | MLA (继承) |
+| FFN | Dense FFN | DeepSeekMoE (细粒度专家) | DeepSeekMoE + **aux-loss-free 负载均衡** |
+| 训练精度 | BF16 | BF16 | **FP8 混合精度** |
+| 并行策略 | DP/TP | ZeRO-1 DP | DualPipe (计算-通信重叠) |
+| 预测 | 单 token | 单 token | **Multi-Token Prediction (MTP)** |
 
 #### Auxiliary-loss-free 负载均衡
 
@@ -71,7 +83,7 @@ status: Read
 - 保持完整因果链，每个深度共享 embedding 层和 output head
 - 同时可作 speculative decoding 加速推理
 
-![](https://arxiv.org/html/2412.19437/x3.png)
+![](https://arxiv.org/html/2412.19437v2/x3.png)
 
 *Figure 3: Multi-Token Prediction (MTP) 实现。顺序预测多个 future tokens，保持完整因果链，与并行预测方案不同。*
 

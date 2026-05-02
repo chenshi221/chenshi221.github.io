@@ -16,7 +16,7 @@ tags:
   - Lightning Attention
   - 混合注意力
   - CISPO
-  - RL Scaling
+  - RL-Scaling
   - MoE
 url: 'https://arxiv.org/abs/2506.13585'
 code: https://github.com/MiniMax-AI/MiniMax-M1
