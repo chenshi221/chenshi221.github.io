@@ -56,6 +56,24 @@ LLM Agent 架构是以大语言模型（LLM）为核心控制器，通过 Profil
 - [[Wiki/Sources/LLM Agent 综述 2024]]：本概念的主要出处。
 - [[Wiki/Sources/Agent AI Survey 2024]]：多模态 Agent 架构补充。
 
+## Harness 工程：Agent 架构的工程实现层
+
+AHE [[Wiki/Sources/AHE Agentic Harness Engineering]] 将 Agent 架构的四大模块**实例化为可编辑的 harness 组件**：
+
+| Agent 模块 | Harness 组件 | 可演化性 |
+|-----------|-------------|---------|
+| Profile | System Prompt | 易编辑但单用负增益 |
+| Memory | Long-term Memory | 最难但增益最大 (+5.6pp) |
+| Planning | （内化在模型推理中） | 不由 harness 直接控制 |
+| Action | Tools + Middleware + Skills + Sub-agents | 中等增益 (+2~3pp) |
+
+关键洞察：**Agent 架构的"动作"模块在 harness 中被拆分为 4+ 个解耦组件**，每个可独立编辑、独立回滚。这种文件级解耦是实现 AHE 三大可观测性支柱的前提。
+
+- 详见：[[Wiki/Concepts/Agentic Harness Engineering (AHE)]]
+- 详见：[[Wiki/Concepts/Harness 编码 Agent 线束]]
+
 ## 与已有 Wiki 的关系
 
 - 关联：[[Wiki/Topics/LLM Agent 与工具使用]]
+- 关联：[[Wiki/Concepts/Agentic Harness Engineering (AHE)]]
+- 关联：[[Wiki/Concepts/Harness 编码 Agent 线束]]

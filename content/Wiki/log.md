@@ -2,7 +2,7 @@
 type: log
 status: active
 created: '2026-04-29'
-updated: '2026-04-30'
+updated: '2026-05-03'
 tags:
   - meta
 ---
@@ -378,3 +378,17 @@ tags:
 - Updated: [[Wiki/index]], [[Wiki/overview]]
 - Notes: 这 4 个概念页填补了 Wiki 中「被多个来源和主题反复引用但缺少独立页面」的知识空白。VQ-VAE 是连接连续视觉和离散 Token 的桥梁概念（至少 5 个来源共同依赖）；Agent 图像编辑与通用 LLM Agent 有本质区别（视觉感知循环、编辑轨迹评估、VRL）；审美评估跨生成/编辑/评估三个方向；编辑数据合成是该领域的「元方法论」。
 - Wiki 当前规模: Concepts: 37 (+4)；总页面: 165+
+
+
+## [2026-05-03] ingest | AHE Agentic Harness Engineering
+
+- Source: [[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses.md]]
+- Created:
+  - Sources: [[Wiki/Sources/AHE Agentic Harness Engineering]]
+  - Concepts: [[Wiki/Concepts/Agentic Harness Engineering (AHE)]], [[Wiki/Concepts/Harness 编码 Agent 线束]]
+- Updated:
+  - [[Wiki/Concepts/LLM Agent 架构]] — 新增「Harness 工程：Agent 架构的工程实现层」章节，将 Agent 四大模块映射到 7 种 harness 组件
+  - [[Wiki/Topics/LLM Agent 与工具使用]] — 新增 AHE 来源、harness 相关概念和开放问题
+  - [[Wiki/index]]
+- Notes: AHE 是 2026 年来自复旦/北大/奇绩智峰的重要工作，解决了编码 Agent 中 harness 自动演化这个被低估的问题。核心洞察：**(1) harness 优化的瓶颈是可观测性而非 agent 能力**——三个支柱（组件/经验/决策可观测性）将每次编辑变成可证伪的契约；(2) **增益存在于 tools/middleware/long-term memory 中，而非 system prompt**——事实性结构可迁移，散文级策略不可；(3) **回归盲区是 self-evolution 的根本性不对称**——agent 能预测什么会变好但几乎无法预测什么会变差。AHE 首次将 harness 工程从"手工工艺"升级为"可自动化学习问题"，与 Wiki 已有的 Agent 架构、推理模型、国产大模型等知识形成互补——提供了"模型外优化"的新维度。
+- Wiki 当前规模: Sources: 98 (+1)；Concepts: 39 (+2)；总页面: 168+
