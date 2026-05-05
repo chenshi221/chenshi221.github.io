@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Tree%20of%20Thoughts%2C%20Deliberate%20Problem%20Solving%20with%20Large%20Language%20Models%2C%20Shunyu%20Yao%20et%20al.%2C%202023.no_watermark.zh-CN.dual.pdf"
 ---
 Shunyu Yao  
 Princeton University Dian Yu  

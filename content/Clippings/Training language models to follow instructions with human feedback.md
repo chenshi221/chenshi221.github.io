@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Making language models bigger does not inherently make them better at following a user’s intent.For example, large language models can generate outputs that are untruthful, toxic, or simply not helpful to the user.In…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/Training%20language%20models%20to%20follow%20instructions%20with%20human%20feedback%2C%20Long%20Ouyang%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 Part
 

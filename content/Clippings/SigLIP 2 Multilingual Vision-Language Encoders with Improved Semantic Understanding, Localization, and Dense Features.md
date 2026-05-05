@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/SigLIP%202%2C%20Multilingual%20Vision-Language%20Encoders%20with%20Improved%20Semantic%20Understanding%2C%20Localization%2C%20and%20Dense%20Features%2C%20Michael%20Tschannen%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 redactedtschannen@google.com
 

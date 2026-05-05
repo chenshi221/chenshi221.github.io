@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/Language%20Models%20are%20Few-Shot%20Learners%2C%20Tom%20B.%20Brown%20et%20al.%2C%202020.no_watermark.zh-CN.dual.pdf"
 ---
 Tom B. Brown Benjamin Mann <sup>1</sup> Nick Ryder <sup>1</sup> Melanie Subbiah <sup>1</sup> Jared Kaplan Prafulla Dhariwal Arvind Neelakantan Pranav Shyam Girish Sastry Amanda Askell Sandhini Agarwal Ariel Herbert-Voss Gretchen Krueger Tom Henighan Rewon Child Aditya Ramesh Daniel M. Ziegler Jeffrey Wu Clemens Winter Christopher Hesse Mark Chen Eric Sigler Mateusz Litwin Scott Gray Benjamin Chess Jack Clark Christopher Berner Sam McCandlish Alec Radford Ilya Sutskever Dario Amodei  
 OpenAI Equal contributionJohns Hopkins University, OpenAI  

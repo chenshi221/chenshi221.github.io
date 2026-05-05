@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "This paper presents a new vision Transformer, called Swin Transformer, that capably serves as a general-purpose backbone for computer vision. Challenges in adapting Transformer from language to vision arise from differ…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/Swin%20Transformer%2C%20Hierarchical%20Vision%20Transformer%20using%20Shifted%20Windows%2C%20Ze%20Liu%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 Ze Liu <sup>†</sup>  Yutong Lin <sup>†*</sup>  Yue Cao <sup>*</sup>  Han Hu <sup>*‡</sup>  Yixuan Wei <sup>†</sup>  
  Zheng Zhang  Stephen Lin  Baining Guo  

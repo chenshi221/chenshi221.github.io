@@ -11,6 +11,7 @@ created: 2026-04-30
 description: "Abstract page for arXiv paper 1506.02640: You Only Look Once: Unified, Real-Time Object Detection"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/You%20Only%20Look%20Once%2C%20Unified%2C%20Real-Time%20Object%20Detection%2C%20Joseph%20Redmon%20et%20al.%2C%202015.no_watermark.zh-CN.dual.pdf"
 ---
 ## Title:You Only Look Once: Unified, Real-Time Object Detection
 

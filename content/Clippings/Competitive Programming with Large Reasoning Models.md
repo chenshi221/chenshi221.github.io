@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Competitive%20Programming%20with%20Large%20Reasoning%20Models%2C%20%20OpenAI%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 OpenAI Contributions listed in Appendix A
 

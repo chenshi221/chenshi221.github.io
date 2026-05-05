@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We present high quality image synthesis results using diffusion probabilistic models, a class of latent variable models inspired by considerations from nonequilibrium thermodynamics. Our best results are obtained by tr…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Denoising%20Diffusion%20Probabilistic%20Models%2C%20Jonathan%20Ho%20et%20al.%2C%202020.no_watermark.zh-CN.dual.pdf"
 ---
 ![Refer to caption](https://ar5iv.labs.arxiv.org/html/2006.11239/assets/images/celebahq256_header_image_4x4.png)
 

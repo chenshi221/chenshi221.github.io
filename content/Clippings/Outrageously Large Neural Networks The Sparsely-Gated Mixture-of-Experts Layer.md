@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "The capacity of a neural network to absorb information is limited by its number of parameters. Conditional computation, where parts of the network are active on a per-example basis, has been proposed in theory as a way…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Outrageously%20Large%20Neural%20Networks%2C%20The%20Sparsely-Gated%20Mixture-of-Experts%20Layer%2C%20Noam%20Shazeer%20et%20al.%2C%202017.no_watermark.zh-CN.dual.pdf"
 ---
 Noam Shazeer Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com Azalia Mirhoseini Equally major contributorsWork done as a member of the Google Brain Residency program (g.co/brainresidency) Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com Krzysztof Maziarz <sup>∗</sup> Jagiellonian University, Cracow, krzysztof.maziarz@student.uj.edu.pl Andy Davis Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com Quoc Le Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com Geoffrey Hinton Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com Jeff Dean Google Brain, {noam,azalia,andydavis,qvl,geoffhinton,jeff}@google.com
 

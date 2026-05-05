@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We propose a method for editing images from human instructions: given an input image and a written instruction that tells the model what to do, our model follows these instructions to edit the image.To obtain training…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/InstructPix2Pix%2C%20Learning%20to%20Follow%20Image%20Editing%20Instructions%2C%20Tim%20Brooks%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 Tim Brooks\* Aleksander Holynski\* Alexei A. Efros  
 University of California, Berkeley

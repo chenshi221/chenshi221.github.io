@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Kimi%20K2.5%2C%20Visual%20Agentic%20Intelligence%2C%20%20Kimi%20Team%20et%20al.%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Kimi Team
 

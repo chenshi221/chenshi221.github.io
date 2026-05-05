@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We present DINO (DETR with Improved deNoising anchOr boxes), a state-of-the-art end-to-end object detector. DINO improves over previous DETR-like models in performance and efficiency by using a contrastive way for deno…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/DINO%2C%20DETR%20with%20Improved%20DeNoising%20Anchor%20Boxes%20for%20End-to-End%20Object%20Detection%2C%20Hao%20Zhang%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 <sup>1</sup>
 

@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Kimi%20k1.5%2C%20Scaling%20Reinforcement%20Learning%20with%20LLMs%2C%20%20Kimi%20Team%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Kimi Team
 

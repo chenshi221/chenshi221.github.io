@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Seedream%202.0%2C%20A%20Native%20Chinese-English%20Bilingual%20Image%20Generation%20Foundation%20Model%2C%20Lixue%20Gong%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Seed Vision Team    ByteDance
 

@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/Magic-MM-Embedding%2C%20Towards%20Visual-Token-Efficient%20Universal%20Multimodal%20Embedding%20with%20MLLMs%2C%20Qi%20Li%20et%20al.%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Qi Li Yanzhe Zhao Yongxin Zhou Yameng Wang Yandong Yang  
 Yuanjia Zhou Jue Wang Zuojian Wang Jinxiang Liu  

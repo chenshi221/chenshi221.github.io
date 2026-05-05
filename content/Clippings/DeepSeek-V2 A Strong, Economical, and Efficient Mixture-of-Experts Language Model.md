@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/DeepSeek-V2%2C%20A%20Strong%2C%20Economical%2C%20and%20Efficient%20Mixture-of-Experts%20Language%20Model%2C%20%20DeepSeek-AI%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 DeepSeek-AI  
 research@deepseek.com

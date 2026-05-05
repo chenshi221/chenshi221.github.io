@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Adding%20Conditional%20Control%20to%20Text-to-Image%20Diffusion%20Models%2C%20Lvmin%20Zhang%20et%20al.%2C%202023.no_watermark.zh-CN.dual.pdf"
 ---
 Lvmin Zhang, Anyi Rao, and Maneesh Agrawala  
 Stanford University  

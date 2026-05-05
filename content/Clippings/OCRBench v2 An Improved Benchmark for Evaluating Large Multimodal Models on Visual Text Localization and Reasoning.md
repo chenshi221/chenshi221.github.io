@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/OCRBench%20v2%2C%20An%20Improved%20Benchmark%20for%20Evaluating%20Large%20Multimodal%20Models%20on%20Visual%20Text%20Localization%20and%20Reasoning%2C%20Ling%20Fu%20et%20al.%2C%202024_dual_%E6%99%BA%E8%B0%B14Flash.pdf"
 ---
 Ling Fu <sup>1</sup>  Zhebin Kuang <sup>1</sup>  Jiajun Song <sup>1</sup>  Mingxin Huang <sup>2</sup>  Biao Yang <sup>1</sup>    
 Yuzhe Li <sup>1</sup>  Linghao Zhu <sup>1</sup>  Qidi Luo <sup>1</sup>  Xinyu Wang <sup>1</sup>  Hao Lu <sup>1</sup>  Zhang Li <sup>1</sup>  

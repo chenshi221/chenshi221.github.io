@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/EditWorld%2C%20Simulating%20World%20Dynamics%20for%20Instruction-Following%20Image%20Editing%2C%20Ling%20Yang%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Ling Yang <sup>1</sup>, Bohan Zeng <sup>1</sup> <sup>1</sup>, Jiaming Liu <sup>2</sup>, Hong Li <sup>1</sup>,  
 Minghao Xu <sup>4</sup>, Wentao Zhang <sup>1†</sup>, Shuicheng Yan <sup>3</sup>  

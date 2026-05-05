@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/olmOCR%2C%20Unlocking%20Trillions%20of%20Tokens%20in%20PDFs%20with%20Vision%20Language%20Models%2C%20Jake%20Poznanski%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 \[\]Jake Poznanski  \[\]Aman Rangapur \[\]Jon Borchardt \[\]Jason Dunkelberger \[\]Regan Huff \[\]Daniel Lin \[\]Christopher Wilhelm \[\]Kyle Lo  \[\]Luca Soldaini  \[\]Allen Institute for AI, Seattle, USA  {jakep|kylel|lucas}@allenai.org    indicates core contributors.
 

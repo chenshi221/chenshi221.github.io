@@ -1,12 +1,13 @@
 ---
 title: "OmniDocBench: Benchmarking Diverse PDF Document Parsing with Comprehensive Annotations"
-source: "https://arxiv.org/html/2412.07626v2"
+source: https://arxiv.org/html/2412.07626v2
 author:
 published:
 created: 2026-04-30
 description:
 tags:
-  - "clippings"
+  - clippings
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/OmniDocBench%2C%20Benchmarking%20Diverse%20PDF%20Document%20Parsing%20with%20Comprehensive%20Annotations%2C%20Linke%20Ouyang%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Linke Ouyang <sup>1∗</sup>  Yuan Qu <sup>1∗</sup>  Hongbin Zhou <sup>1∗</sup>  Jiawei Zhu <sup>1∗</sup>  Rui Zhang <sup>1∗</sup>  Qunshu Lin <sup>2∗</sup>    
 Bin Wang <sup>1∗†</sup>  Zhiyuan Zhao <sup>1</sup> Man Jiang <sup>1</sup> Xiaomeng Zhao <sup>1</sup> Jin Shi <sup>1</sup> Fan Wu <sup>1</sup> Pei Chu <sup>1</sup> Minghao Liu <sup>3</sup>  

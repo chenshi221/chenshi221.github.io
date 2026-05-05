@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/OneTrans%2C%20Unified%20Feature%20Interaction%20and%20Sequence%20Modeling%20with%20One%20Transformer%20in%20Industrial%20Recommender%2C%20Zhaoqi%20Zhang%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Zhaoqi Zhang Nanyang Technological University  
 ByteDanceSingaporeSingapore [zhaoqi.zhang@bytedance.com](mailto:zhaoqi.zhang@bytedance.com), Haolei Pei ByteDanceSingaporeSingapore [haolei.pei@bytedance.com](mailto:haolei.pei@bytedance.com), Jun Guo ByteDanceSingaporeSingapore [jun.guo@bytedance.com](mailto:jun.guo@bytedance.com), Tianyu Wang ByteDanceSingaporeSingapore [tianyu.wang01@bytedance.com](mailto:tianyu.wang01@bytedance.com), Yufei Feng ByteDanceHangzhouChina [fengyihui@bytedance.com](mailto:fengyihui@bytedance.com), Hui Sun ByteDanceHangzhouChina [sunhui.sunh@bytedance.com](mailto:sunhui.sunh@bytedance.com), Shaowei Liu ByteDanceSingaporeSingapore [liushaowei.nphard@bytedance.com](mailto:liushaowei.nphard@bytedance.com) and Aixin Sun Nanyang Technological UniversitySingaporeSingapore [axsun@ntu.edu.sg](mailto:axsun@ntu.edu.sg)

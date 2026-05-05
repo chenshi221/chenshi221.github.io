@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "This paper shows that masked autoencoders (MAE) are scalable self-supervised learners for computer vision. Our MAE approach is simple: we mask random patches of the input image and reconstruct the missing pixels. It is…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Masked%20Autoencoders%20Are%20Scalable%20Vision%20Learners%2C%20Kaiming%20He%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 Kaiming He <sup>∗,†</sup> Xinlei Chen <sup>∗</sup> Saining Xie Yanghao Li Piotr Dollár Ross Girshick  
 <sup>∗</sup> equal technical contribution    <sup>†</sup> project lead  

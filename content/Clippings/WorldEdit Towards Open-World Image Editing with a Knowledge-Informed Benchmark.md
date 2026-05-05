@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/WorldEdit%2C%20Towards%20Open-World%20Image%20Editing%20with%20a%20Knowledge-Informed%20Benchmark%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Wang Lin <sup>1</sup>  Feng Wang <sup>2</sup>  Majun Zhang <sup>1</sup>  Wentao Hu <sup>3</sup>  Tao Jin <sup>1</sup>  
  Zhou Zhao <sup>1</sup>  Fei Wu <sup>1</sup>  Jingyuan Chen <sup>1</sup>  Alan Yuille <sup>2</sup>  Sucheng Ren <sup>2</sup>  

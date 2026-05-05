@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/An%20Image%20is%20Worth%2016x16%20Words%2C%20Transformers%20for%20Image%20Recognition%20at%20Scale%2C%20Alexey%20Dosovitskiy%20et%20al.%2C%202020.no_watermark.zh-CN.dual.pdf"
 ---
 Alexey Dosovitskiy <sup>∗,†</sup>, Lucas Beyer <sup>∗</sup>, Alexander Kolesnikov <sup>∗</sup>, Dirk Weissenborn <sup>∗</sup>,  
   

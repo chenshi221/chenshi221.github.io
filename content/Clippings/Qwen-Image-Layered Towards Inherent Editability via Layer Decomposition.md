@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Qwen-Image-Layered%2C%20Towards%20Inherent%20Editability%20via%20Layer%20Decomposition%2C%20Shengming%20Yin%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Shengming Yin <sup>1</sup>  Zekai Zhang <sup>2</sup>  Zecheng Tang <sup>2</sup>  Kaiyuan Gao <sup>2</sup>  
 Xiao Xu <sup>2</sup>  Kun Yan <sup>2</sup>  Jiahao Li <sup>2</sup>  Yilei Chen <sup>2</sup>  Yuxiang Chen <sup>2</sup>  

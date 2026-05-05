@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Envisioning%20Beyond%20the%20Pixels%2C%20Benchmarking%20Reasoning-Informed%20Visual%20Editing%2C%20Xiangyu%20Zhao%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Xiangyu Zhao <sup>1,2∗</sup>, Peiyuan Zhang <sup>3∗</sup>, Kexian Tang <sup>2,4∗</sup>, Xiaorong Zhu <sup>1∗</sup>,  
 Hao Li <sup>2</sup>, Wenhao Chai <sup>5</sup>, Zicheng Zhang <sup>1,2</sup>, Renqiu Xia <sup>1,2</sup>,  

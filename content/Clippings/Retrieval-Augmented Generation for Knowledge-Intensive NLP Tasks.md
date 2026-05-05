@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks%2C%20Patrick%20Lewis%20et%20al.%2C%202020.no_watermark.zh-CN.dual.pdf"
 ---
 Patrick Lewis ${}^{\dagger}{}^{\ddagger}$, Ethan Perez <sup>⋆</sup>,&Aleksandra Piktus <sup>†</sup>, Fabio Petroni <sup>†</sup>, Vladimir Karpukhin <sup>†</sup>, Naman Goyal <sup>†</sup>, Heinrich Küttler <sup>†</sup>,&Mike Lewis <sup>†</sup>, Wen-tau Yih <sup>†</sup>, Tim Rocktäschel ${}^{\dagger}{}^{\ddagger}$, Sebastian Riedel ${}^{\dagger}{}^{\ddagger}$, Douwe Kiela <sup>†</sup>  
 <sup>†</sup> Facebook AI Research; <sup>‡</sup> University College London; <sup>⋆</sup> New York University;  

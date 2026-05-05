@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Position encoding recently has shown effective in the transformer architecture. It enables valuable supervision for dependency modeling between elements at different positions of the sequence. In this paper, we first i…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/RoFormer%2C%20Enhanced%20Transformer%20with%20Rotary%20Position%20Embedding%2C%20Jianlin%20Su%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 Jianlin Su  
 Zhuiyi Technology Co., Ltd.  

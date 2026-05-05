@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/OneRec%20Technical%20Report%2C%20Guorui%20Zhou%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 OneRec Team
 

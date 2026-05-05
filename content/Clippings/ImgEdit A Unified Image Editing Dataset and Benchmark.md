@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/ImgEdit%2C%20A%20Unified%20Image%20Editing%20Dataset%20and%20Benchmark%2C%20Yang%20Ye%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Yang Ye <sup>1,3,*</sup> $*$ Equal Contributors, $\dagger$ Corresponding Authors <sup>1</sup> Peking University, Shenzhen Graduate School, <sup>2</sup> Peng Cheng Laboratory, <sup>3</sup> Rabbitpre AI  
 {yang.ye@stu, yuanli-ece@}.pku.edu.cn Xianyi He <sup>1,3,*</sup> $*$ Equal Contributors, $\dagger$ Corresponding Authors <sup>1</sup> Peking University, Shenzhen Graduate School, <sup>2</sup> Peng Cheng Laboratory, <sup>3</sup> Rabbitpre AI  

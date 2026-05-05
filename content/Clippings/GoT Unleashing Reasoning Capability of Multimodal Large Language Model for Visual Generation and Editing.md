@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/GoT%2C%20Unleashing%20Reasoning%20Capability%20of%20Multimodal%20Large%20Language%20Model%20for%20Visual%20Generation%20and%20Editing%2C%20Rongyao%20Fang%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Rongyao Fang <sup>1</sup>   Chengqi Duan <sup>2</sup> <sup>∗</sup> Kun Wang <sup>3</sup> Linjiang Huang <sup>6</sup> Hao Li <sup>1,4</sup> Shilin Yan  
 Hao Tian <sup>3</sup> Xingyu Zeng <sup>3</sup> Rui Zhao <sup>3</sup> Jifeng Dai <sup>4,5</sup> Xihui Liu <sup>2</sup> Hongsheng Li <sup>1</sup> <sup>†</sup>  

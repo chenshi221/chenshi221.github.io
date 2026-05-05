@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Step1X-Edit%2C%20A%20Practical%20Framework%20for%20General%20Image%20Editing%2C%20Shiyu%20Liu%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Step1X-Image Team  
 StepFun  

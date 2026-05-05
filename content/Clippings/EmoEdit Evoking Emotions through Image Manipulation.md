@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/EmoEdit_Evoking_Emotions_through_Image_Manipulation_CVPR_2025_paper.no_watermark.zh-CN.dual.pdf"
 ---
 Jingyuan Yang <sup>1</sup>, Jiawei Feng <sup>1</sup>, Weibin Luo <sup>1</sup>, Dani Lischinski <sup>2</sup>, Daniel Cohen-Or <sup>3</sup>, Hui Huang <sup>1</sup>  
 <sup>1</sup> CSSE, Shenzhen University <sup>2</sup> The Hebrew University of Jerusalem <sup>3</sup> Tel Aviv University  

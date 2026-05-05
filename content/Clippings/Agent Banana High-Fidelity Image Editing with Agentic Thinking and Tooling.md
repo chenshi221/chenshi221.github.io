@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Agent%20Banana%2C%20High-Fidelity%20Image%20Editing%20with%20Agentic%20Thinking%20and%20Tooling%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Ruijie Ye <sup>1,2†</sup>, Jiayi Zhang <sup>3†</sup>, Zhuoxin Liu <sup>4†</sup>, Zihao Zhu <sup>1</sup>, Siyuan Yang <sup>1</sup>,  
 Li Li <sup>5</sup>, Tianfu Fu <sup>6</sup>, Franck Dernoncourt <sup>7‡</sup>, Yue Zhao <sup>5</sup>, Jiacheng Zhu <sup>8§</sup>,  

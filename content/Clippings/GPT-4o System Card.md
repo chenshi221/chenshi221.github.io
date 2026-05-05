@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/GPT-4o%20System%20Card%2C%20%20OpenAI%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 OpenAI Please cite this work as “OpenAI (2024)". Full authorship contribution statements appear at the end of the document.
 

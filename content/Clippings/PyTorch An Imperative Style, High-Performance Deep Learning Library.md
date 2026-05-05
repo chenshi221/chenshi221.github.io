@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Deep learning frameworks have often focused on either usability or speed, but not both. PyTorch is a machine learning library that shows that these two goals are in fact compatible: it provides an imperative and Python…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/PyTorch%2C%20An%20Imperative%20Style%2C%20High-Performance%20Deep%20Learning%20Library%2C%20Adam%20Paszke%20et%20al.%2C%202019.no_watermark.zh-CN.dual.pdf"
 ---
 Adam Paszke  
 University of Warsaw  

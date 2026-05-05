@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/LoRA%2C%20Low-Rank%20Adaptation%20of%20Large%20Language%20Models%2C%20Edward%20J.%20Hu%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 Edward Hu   Yelong Shen <sup>∗</sup>   Phillip Wallis   Zeyuan Allen-Zhu  
 Yuanzhi Li   Shean Wang   Lu Wang   Weizhu Chen  

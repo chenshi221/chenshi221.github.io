@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/DeepSeek%20LLM%2C%20Scaling%20Open-Source%20Language%20Models%20with%20Longtermism%2C%20%20DeepSeek-AI%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 001 Authors are ordered alphabetically by the last name.
 

@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We present evaluation results for FLUX.1 Kontext, a generative flow matching model that unifies image generation and editing. The model generates novel output views by incorporating semantic context from text and image…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/FLUX.1%20Kontext%2C%20Flow%20Matching%20for%20In-Context%20Image%20Generation%20and%20Editing%20in%20Latent%20Space%2C%20Black%20Forest%20Labs%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Black Forest Labs  
 Stephen Batifol  Andreas Blattmann  Frederic Boesel  Saksham Consul  Cyril Diagne  

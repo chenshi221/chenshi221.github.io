@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/A%20Survey%20on%20Large%20Language%20Model%20based%20Autonomous%20Agents.no_watermark.zh-CN.dual.pdf"
 ---
 Lei Wang    Chen Ma <sup>1</sup>    Xueyang Feng <sup>1</sup>    Zeyu Zhang    Hao Yang    Jingsen Zhang    Zhi-Yuan Chen    Jiakai Tang          Wayne Xin Zhao    Zhewei Wei    Ji-Rong Wen Gaoling School of Artificial Intelligence, Renmin University of China, Beijing, 100872, China
 

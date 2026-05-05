@@ -1,12 +1,13 @@
 ---
 title: "OmniGen2: Towards Instruction-Aligned Multimodal Generation"
-source: "https://arxiv.org/html/2506.18871v4"
+source: https://arxiv.org/html/2506.18871v4
 author:
 published:
 created: 2026-04-30
 description:
 tags:
-  - "clippings"
+  - clippings
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/OmniGen2%2C%20Towards%20Instruction-Aligned%20Multimodal%20Generation%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Chenyuan Wu <sup>1,2</sup>, Jiahao Wang <sup>1,3∗</sup>, Pengfei Zheng <sup>1,2∗</sup>, Ruiran Yan <sup>1,2∗</sup>, Shitao Xiao <sup>1∗</sup> <sup>4</sup>, Xin Luo <sup>1,2∗</sup>,  
 Yueze Wang <sup>1∗</sup>, Wanli Li <sup>1,4</sup>, Xiyan Jiang <sup>1,4</sup> <sup>2</sup>, Yexin Liu <sup>1</sup> <sup>2</sup>, Junjie Zhou <sup>1</sup>, Ziyi Xia <sup>1</sup>,  

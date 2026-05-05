@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/BERT%2C%20Pre-training%20of%20Deep%20Bidirectional%20Transformers%20for%20Language%20Understanding%2C%20Jacob%20Devlin%20et%20al.%2C%202018.no_watermark.zh-CN.dual.pdf"
 ---
 Jacob Devlin  Ming-Wei Chang  Kenton Lee  Kristina Toutanova  
 Google AI Language  

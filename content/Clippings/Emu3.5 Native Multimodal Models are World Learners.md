@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/Emu3.5%2C%20Native%20Multimodal%20Models%20are%20World%20Learners%2C%20Yufeng%20Cui%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Emu3.5 Team  
 BAAI

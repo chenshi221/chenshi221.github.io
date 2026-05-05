@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/OneRec-Think%2C%20In-Text%20Reasoning%20for%20Generative%20Recommendation%2C%20Zhanyu%20Liu%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Zhanyu Liu <sup>*</sup>, Shiyao Wang <sup>*</sup>, Xingmei Wang, Rongzhou Zhang, Jiaxin Deng,  
 Honghui Bao, Jinghao Zhang, Wuchao Li, Pengfei Zheng, Xiangyu Wu,  

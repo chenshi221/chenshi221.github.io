@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Multi-modal AI systems will likely become a ubiquitous presence in our everyday lives. A promising approach to making these systems more interactive is to embody them as agents within physical and virtual environments.…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Agent%20AI-Surveying%20the%20Horizons%20of%20Multimodal%20Interaction.no_watermark.zh-CN.dual.pdf"
 ---
 Zane Durante <sup>1†</sup>, Qiuyuan Huang <sup>2‡∗</sup>, Naoki Wake <sup>2∗</sup>,  
 Ran Gong <sup>3†</sup>, Jae Sung Park <sup>4†</sup>, Bidipta Sarkar <sup>1†</sup>, Rohan Taori <sup>1†</sup>, Yusuke Noda <sup>5</sup>,  

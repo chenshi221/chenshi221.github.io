@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/InterFormer%2C%20Effective%20Heterogeneous%20Interaction%20Learning%20for%20Click-Through%20Rate%20Prediction%2C%20Zhichen%20Zeng%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Zhichen Zeng <sup>∗1</sup>   Xiaolong Liu <sup>∗3</sup>   Mengyue Hang <sup>∗2</sup>   Xiaoyi Liu <sup>∗2</sup>   Qinghai Zhou <sup>2</sup>   Chaofei Yang <sup>2</sup>   Yiqun Liu <sup>2</sup>   Yichen Ruan <sup>2</sup>  Laming Chen <sup>2</sup>   Yuxin Chen <sup>2</sup>   Yujia Hao <sup>2</sup>   Jiaqi Xu <sup>2</sup>   Jade Nie <sup>2</sup>   Xi Liu <sup>2</sup>   Buyun Zhang <sup>2</sup>   Wei Wen <sup>2</sup>   Siyang Yuan <sup>2</sup>   Hang Yin <sup>2</sup>   Xin Zhang <sup>2</sup>   Kai Wang <sup>2</sup>   Wen-Yen Chen <sup>2</sup>   Yiping Han <sup>2</sup>   Huayu Li <sup>2</sup>   Chunzhi Yang <sup>2</sup>   Bo Long <sup>2</sup>   Philip S. Yu <sup>3</sup>   Hanghang Tong [^1]   Jiyan Yang <sup>2</sup>  
 <sup>1</sup> University of Illinois Urbana-Champaign, <sup>2</sup> Meta AI, <sup>3</sup> University of Illinois Chicago  

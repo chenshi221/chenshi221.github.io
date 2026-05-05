@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We introduce Graph of Thoughts (GoT): a framework that advances prompting capabilities in large language models (LLMs) beyond those offered by paradigms such as Chain-of-Thought or Tree of Thoughts (ToT). The key idea …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Graph%20of%20Thoughts%2C%20Solving%20Elaborate%20Problems%20with%20Large%20Language%20Models%2C%20Maciej%20Besta%20et%20al.%2C%202023.no_watermark.zh-CN.dual.pdf"
 ---
 00 white vlgray
 

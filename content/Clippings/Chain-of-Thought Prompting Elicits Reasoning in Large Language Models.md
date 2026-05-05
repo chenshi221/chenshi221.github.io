@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We explore how generating a chain of thought—a series of intermediate reasoning steps—significantly improves the ability of large language models to perform complex reasoning.In particular, we show how such reasoning …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/Chain-of-Thought%20Prompting%20Elicits%20Reasoning%20in%20Large%20Language%20Models%2C%20Jason%20Wei%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 Jason Wei Xuezhi Wang Dale Schuurmans Maarten Bosma  
 Brian Ichter Fei Xia Ed H. Chi Quoc V. Le Denny Zhou  

@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1.DeepSeek-R1-Zero, a model trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as a preliminary …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/03_Agent%E4%B8%8E%E6%8E%A8%E7%90%86/DeepSeek-R1%2C%20Incentivizing%20Reasoning%20Capability%20in%20LLMs%20via%20Reinforcement%20Learning%2C%20%20DeepSeek-AI%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 DeepSeek-AI  
 research@deepseek.com

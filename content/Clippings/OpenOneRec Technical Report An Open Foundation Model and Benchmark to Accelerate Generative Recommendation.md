@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "While the OneRec series has successfully unified the fragmented recommendation pipeline into an end-to-end generative framework, a significant gap remains between recommendation systems and general intelligence. Constr…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/OpenOneRec%20Technical%20Report%2C%20Guorui%20Zhou%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 OneRec Team  
 [https://huggingface.co/OpenOneRec](https://huggingface.co/OpenOneRec) [https://github.com/Kuaishou-OneRec/OpenOneRec](https://github.com/Kuaishou-OneRec/OpenOneRec)

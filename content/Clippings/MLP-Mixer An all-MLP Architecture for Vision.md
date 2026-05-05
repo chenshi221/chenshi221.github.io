@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Convolutional Neural Networks (CNNs) are the go-to model for computer vision.Recently, attention-based networks, such as the Vision Transformer, have also become popular.In this paper we show that while convolutions …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/MLP-Mixer%2C%20An%20all-MLP%20Architecture%20for%20Vision%2C%20Ilya%20Tolstikhin%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 Ilya Tolstikhin <sup>∗</sup>, Neil Houlsby <sup>∗</sup>, Alexander Kolesnikov <sup>∗</sup>, Lucas Beyer <sup>∗</sup>,  
   

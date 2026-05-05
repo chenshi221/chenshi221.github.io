@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Modern artificial intelligence (AI) systems are powered by foundation models.This paper presents a new set of foundation models, called Llama 3.It is a herd of language models that natively support multilinguality, c…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/The%20Llama%203%20Herd%20of%20Models%2C%20Aaron%20Grattafiori%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 1\]A detailed contributor list can be found in the appendix of this paper.
 

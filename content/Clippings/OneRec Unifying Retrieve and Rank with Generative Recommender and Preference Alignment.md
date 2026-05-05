@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/OneRec%2C%20Unifying%20Retrieve%20and%20Rank%20with%20Generative%20Recommender%20and%20Iterative%20Preference%20Alignment%2C%20Jiaxin%20Deng%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Jiaxin Deng KuaiShou Inc.Beijing, China [dengjiaxin03@kuaishou.com](mailto:dengjiaxin03@kuaishou.com), Shiyao Wang KuaiShou Inc.Beijing, China [wangshiyao08@kuaishou.com](mailto:wangshiyao08@kuaishou.com), Kuo Cai KuaiShou Inc.Beijing, China [caikuo@kuaishou.com](mailto:caikuo@kuaishou.com), Lejian Ren KuaiShou Inc.Beijing, China [renlejian@kuaishou.com](mailto:renlejian@kuaishou.com), Qigen Hu KuaiShou Inc.Beijing, China [huqigen03@kuaishou.com](mailto:huqigen03@kuaishou.com), Weifeng Ding KuaiShou Inc.Beijing, China [dingweifeng@kuaishou.com](mailto:dingweifeng@kuaishou.com), Qiang Luo KuaiShou Inc.Beijing, China [luoqiang@kuaishou.com](mailto:luoqiang@kuaishou.com) and Guorui Zhou KuaiShou Inc.Beijing, China [zhouguorui@kuaishou.com](mailto:zhouguorui@kuaishou.com)
 

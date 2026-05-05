@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/VisionCreator%2C%20A%20Native%20Visual-Generation%20Agentic%20Model%20with%20Understanding%2C%20Thinking%2C%20Planning%20and%20Creation%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Jinxiang Lai <sup>2∗</sup>, Zexin Lu <sup>1∗</sup>, Jiajun He <sup>1</sup>, Rongwei Quan <sup>1</sup>, Wenzhe Zhao <sup>1</sup>, Qinyu Yang <sup>1</sup>, Qi Chen <sup>1</sup>, Qin Lin <sup>1†</sup>, Chuyue Li <sup>1</sup>, Tao Gao <sup>1</sup>, Yuhao Shan <sup>1</sup>, Shuai Shao <sup>1</sup>,  
 Song Guo <sup>2§</sup>, Qinglin Lu <sup>1†</sup>  

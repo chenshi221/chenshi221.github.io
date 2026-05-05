@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/Tuna-2%2C%20Pixel%20Embeddings%20Beat%20Vision%20Encoders%20for%20Multimodal%20Understanding%20and%20Generation%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 1\]Meta AI 2\]The University of Hong Kong 3\]University of Waterloo \[\*\]Joint first authors, listed alphabetically by last name
 

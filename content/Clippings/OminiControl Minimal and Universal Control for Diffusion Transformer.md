@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/OminiControl%2C%20Minimal%20and%20Universal%20Control%20for%20Diffusion%20Transformer%2C%20Zhenxiong%20Tan%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Zhenxiong Tan  Songhua Liu  Xingyi Yang  Qiaochu Xue  Xinchao Wang  
 National University of Singapore  

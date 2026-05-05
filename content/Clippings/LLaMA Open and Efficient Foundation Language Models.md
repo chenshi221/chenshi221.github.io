@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We introduce LLaMA, a collection of foundation language models ranging from 7B to 65B parameters.We train our models on trillions of tokens, and show that it is possible to train state-of-the-art models using publicly…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/LLaMA%2C%20Open%20and%20Efficient%20Foundation%20Language%20Models%2C%20Hugo%20Touvron%20et%20al.%2C%202023.no_watermark.zh-CN.dual.pdf"
 ---
 Hugo Touvron, Thibaut Lavril <sup>1</sup>, Gautier Izacard <sup>1</sup>, Xavier Martinet Marie-Anne Lachaux, Timothee Lacroix, Baptiste Rozière, Naman Goyal Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin Edouard Grave <sup>1</sup>, Guillaume Lample <sup>1</sup>  
 Meta AI Equal contribution. Correspondence: {htouvron, thibautlav,gizacard,egrave,glample}@meta.com

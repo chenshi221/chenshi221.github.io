@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/Mind-Brush%2C%20Integrating%20Agentic%20Cognitive%20Search%20and%20Reasoning%20into%20Image%20Generation%2C%20Jun%20He%20et%20al.%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Jun He    Junyan Ye    Zilong Huang    Dongzhi Jiang    Chenjue Zhang    Leqi Zhu    Renrui Zhang    Xiang Zhang    Weijia Li
 

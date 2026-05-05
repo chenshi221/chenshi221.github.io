@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/AnyEdit%2C%20Mastering%20Unified%20High-Quality%20Image%20Editing%20for%20Any%20Idea%2C%20Qifan%20Yu%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Qifan Yu <sup>1</sup> <sup>1</sup>  Wei Chow <sup>1</sup> <sup>1</sup>  Zhongqi Yue <sup>2</sup> <sup>1</sup>  Kaihang Pan <sup>1</sup>  Yang Wu <sup>3</sup>  Xiaoyang Wan <sup>1</sup>  
 Juncheng Li <sup>1</sup> <sup>2</sup>  Siliang Tang <sup>1</sup>  Hanwang Zhang <sup>2</sup>  Yueting Zhuang <sup>1</sup> <sup>2</sup>  

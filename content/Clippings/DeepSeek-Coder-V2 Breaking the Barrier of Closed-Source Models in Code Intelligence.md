@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/DeepSeek-Coder-V2%2C%20Breaking%20the%20Barrier%20of%20Closed-Source%20Models%20in%20Code%20Intelligence%2C%20%20DeepSeek-AI%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 001 Core contributors
 

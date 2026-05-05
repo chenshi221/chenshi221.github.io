@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/EmotiCrafter%2C%20Text-to-Emotional-Image%20Generation%20based%20on%20Valence-Arousal%20Model%2C%20Shengqi%20Dang%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Shengqi Dang <sup>1,2</sup> <sup>†</sup>, Yi He <sup>1</sup> <sup>†</sup>, Long Ling <sup>1</sup>, Ziqing Qian <sup>1</sup>, Nanxuan Zhao <sup>3</sup>, Nan Cao <sup>1,2</sup> <sup>∗</sup>  
   

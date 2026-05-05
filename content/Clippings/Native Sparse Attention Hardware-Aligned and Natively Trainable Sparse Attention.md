@@ -1,12 +1,13 @@
 ---
 title: "Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention"
-source: "https://arxiv.org/html/2502.11089v2"
+source: https://arxiv.org/html/2502.11089v2
 author:
 published:
 created: 2026-04-30
 description:
 tags:
-  - "clippings"
+  - clippings
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Native%20Sparse%20Attention%2C%20Hardware-Aligned%20and%20Natively%20Trainable%20Sparse%20Attention%2C%20Jingyang%20Yuan%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 001 Contribution during internship at DeepSeek-AI.
 

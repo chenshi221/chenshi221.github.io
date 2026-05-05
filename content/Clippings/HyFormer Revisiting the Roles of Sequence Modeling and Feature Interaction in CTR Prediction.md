@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/HyFormer%2C%20Revisiting%20the%20Roles%20of%20Sequence%20Modeling%20and%20Feature%20Interaction%20in%20CTR%20Prediction%2C%20Yunwen%20Huang%20et%20al.%2C%202026.no_watermark.zh-CN.dual.pdf"
 ---
 Yunwen Huang [huangyunwen.eleanor@bytedance.com](mailto:huangyunwen.eleanor@bytedance.com) ByteDance AMLBeijingChina, Shiyong Hong [hongshiyong.66@bytedance.com](mailto:hongshiyong.66@bytedance.com) ByteDance SearchBeijingChina, Xijun Xiao [xiaoxijun@bytedance.com](mailto:xiaoxijun@bytedance.com) ByteDance AMLBeijingChina, Jinqiu Jin [jinjinqiu.02@bytedance.com](mailto:jinjinqiu.02@bytedance.com) ByteDance SearchBeijingChina, Xuanyuan Luo [xuanyuanluo@bytedance.com](mailto:xuanyuanluo@bytedance.com) ByteDance AMLHangzhouChina, Zhe Wang [zhewang.tim@gmail.com](mailto:zhewang.tim@gmail.com) ByteDance SearchBeijingChina, Zheng Chai <sup>†</sup> [chaizheng.cz@bytedance.com](mailto:chaizheng.cz@bytedance.com) ByteDance AMLHangzhouChina, Shikang Wu <sup>†</sup> [wushikang@bytedance.com](mailto:wushikang@bytedance.com) ByteDance SearchBeijingChina, Yuchao Zheng [zhengyuchao.yc@bytedance.com](mailto:zhengyuchao.yc@bytedance.com) ByteDance AMLHangzhouChina and Jingjian Lin [linjingjian000@gmail.com](mailto:linjingjian000@gmail.com) ByteDance SearchBeijingChina
 

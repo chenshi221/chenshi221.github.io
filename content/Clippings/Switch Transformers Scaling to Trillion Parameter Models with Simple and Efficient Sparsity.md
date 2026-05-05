@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "In deep learning, models typically reuse the same parameters for all inputs.Mixture of Experts (MoE) models defy this and instead select different parameters for each incoming example.The result is a sparsely-activat…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Switch%20Transformers%2C%20Scaling%20to%20Trillion%20Parameter%20Models%20with%20Simple%20and%20Efficient%20Sparsity%2C%20William%20Fedus%20et%20al.%2C%202021.no_watermark.zh-CN.dual.pdf"
 ---
 William Fedus  
 liamfedus@google.com Barret Zoph <sup>*</sup>  

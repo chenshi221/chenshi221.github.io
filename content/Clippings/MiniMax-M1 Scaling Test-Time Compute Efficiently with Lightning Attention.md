@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/MiniMax-M1%2C%20Scaling%20Test-Time%20Compute%20Efficiently%20with%20Lightning%20Attention%2C%20%20MiniMax%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 MiniMax <sup>1</sup>
 

@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We investigate the optimal model size and number of tokens for training a transformer language model under a given compute budget.We find that current large language models are significantly undertrained, a consequenc…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/Training%20Compute-Optimal%20Large%20Language%20Models%2C%20Jordan%20Hoffmann%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 email@email 001 {jordanhoffmann|sborgeaud|amensch|sifre}@deepmind.com
 

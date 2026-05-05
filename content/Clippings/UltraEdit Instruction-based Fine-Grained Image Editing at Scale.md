@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/04_%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E4%B8%8E%E7%BC%96%E8%BE%91/UltraEdit%2C%20Instruction-based%20Fine-Grained%20Image%20Editing%20at%20Scale%2C%20Haozhe%20Zhao%20et%20al.%2C%202024.no_watermark.zh-CN.dual.pdf"
 ---
 Haozhe Zhao <sup>1,3⋆</sup>, Xiaojian Ma <sup>2⋆</sup>, Liang Chen <sup>1,5</sup>, Shuzheng Si <sup>4</sup>, Rujie Wu <sup>5</sup>, Kaikai An <sup>1,3</sup>,  
 Peiyu Yu <sup>6</sup>, Minjia Zhang <sup>7</sup>, Qing Li ${}^{2\text{{\char 0\relax}}}$, Baobao Chang ${}^{1\text{{\char 0\relax}}}$  

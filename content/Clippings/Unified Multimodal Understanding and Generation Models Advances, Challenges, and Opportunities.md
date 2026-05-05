@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/Unified%20Multimodal%20Understanding%20and%20Generation%20Models%2C%20Advances%2C%20Challenges%2C%20and%20Opportunities%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Shanshan Zhao <sup>*</sup>, Xinjie Zhang <sup>*</sup>, Jintao Guo <sup>*</sup>, Jiakui Hu, Lunhao Duan, Minghao Fu, Yong Xien Chng,  
 Guo-Hua Wang, Qing-Guo Chen <sup>†</sup>, Zhao Xu, Weihua Luo, Kaifu Zhang Xinjie Zhang is with Alibaba Group and Hong Kong University of Science and Technology. Jintao Guo and Minghao Fu are with Alibaba Group and Nanjing University. Jiakui Hu is with Alibaba Group and Peking University. Yong Xien Chng is with Alibaba Group and Tsinghua University. Shanshan Zhao, Lunhao Duan, Guo-Hua Wang, Qing-Guo Chen, Zhao Xu, Weihua Luo, and Kaifu Zhang are with Alibaba Group. Shanshan Zhao, Xinjie Zhang, and Jintao Guo contributed equally to this work. Project leader: Qing-Guo Chen.

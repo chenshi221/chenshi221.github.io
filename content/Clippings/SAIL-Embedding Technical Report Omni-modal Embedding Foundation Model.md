@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/SAIL-Embedding%20Technical%20Report%2C%20Omni-modal%20Embedding%20Foundation%20Model%2C%20Lin%20Lin%20et%20al.%2C%202025.zh-CN.dual%20%281%29.pdf"
 ---
 ###### Abstract
 

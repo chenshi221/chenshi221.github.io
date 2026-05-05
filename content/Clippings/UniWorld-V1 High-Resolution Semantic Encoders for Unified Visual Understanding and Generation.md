@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/UniWorld-V1%2C%20High-Resolution%20Semantic%20Encoders%20for%20Unified%20Visual%20Understanding%20and%20Generation%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 Bin Lin <sup>1,3</sup> <sup>1</sup> Peking University, Shenzhen Graduate School, <sup>2</sup> Peng Cheng Laboratory, <sup>3</sup> Rabbitpre AI  
 Zongjian Li <sup>1,3</sup> <sup>1</sup> Peking University, Shenzhen Graduate School, <sup>2</sup> Peng Cheng Laboratory, <sup>3</sup> Rabbitpre AI  

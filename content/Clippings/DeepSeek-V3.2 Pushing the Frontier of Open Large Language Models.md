@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/01_%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84/DeepSeek-V3.2%2C%20Pushing%20the%20Frontier%20of%20Open%20Large%20Language%20Models%2C%20%20DeepSeek-AI%20et%20al.%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 DeepSeek-AI  
 research@deepseek.com  

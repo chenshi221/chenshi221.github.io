@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "Mainstream Audio Analytics models are trained to learn under the paradigm of one class label to many recordings focusing on one task. Learning under such restricted supervision limits the flexibility of models because …"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/CLAP%2C%20Learning%20Audio%20Concepts%20From%20Natural%20Language%20Supervision%2C%20Benjamin%20Elizalde%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 ###### Abstract
 

@@ -7,6 +7,7 @@ created: 2026-04-30
 description: "We introduce a new paradigm for generative modeling built on Continuous Normalizing Flows (CNFs), allowing us to train CNFs at unprecedented scale. Specifically, we present the notion of Flow Matching (FM), a simulatio…"
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/05_%E5%85%B6%E4%BB%96/Flow%20Matching%20for%20Generative%20Modeling%2C%20Yaron%20Lipman%20et%20al.%2C%202022.no_watermark.zh-CN.dual.pdf"
 ---
 Yaron Lipman <sup>1,2</sup> Ricky T. Q. Chen <sup>1</sup> Heli Ben-Hamu <sup>2</sup> Maximilian Nickel <sup>1</sup> Matt Le <sup>1</sup>  
 <sup>1</sup> Meta AI (FAIR) <sup>2</sup> Weizmann Institute of Science

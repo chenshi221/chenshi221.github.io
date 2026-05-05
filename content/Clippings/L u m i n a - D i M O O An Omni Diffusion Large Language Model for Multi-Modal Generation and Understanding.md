@@ -7,6 +7,7 @@ created: 2026-04-30
 description:
 tags:
   - "clippings"
+pdf: "file:///Users/chenshi/Desktop/paper/02_%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/Lumina-DiMOO%2C%20An%20Omni%20Diffusion%20Large%20Language%20Model%20for%20Multi-Modal%20Generation%20and%20Understanding%2C%202025.no_watermark.zh-CN.dual.pdf"
 ---
 <sup>♣</sup> Equal Contribution.
 
