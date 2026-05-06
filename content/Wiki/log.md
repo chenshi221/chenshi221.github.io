@@ -2,7 +2,7 @@
 type: log
 status: active
 created: '2026-04-29'
-updated: '2026-05-03'
+updated: '2026-05-06'
 tags:
   - meta
 ---
@@ -392,3 +392,15 @@ tags:
   - [[Wiki/index]]
 - Notes: AHE 是 2026 年来自复旦/北大/奇绩智峰的重要工作，解决了编码 Agent 中 harness 自动演化这个被低估的问题。核心洞察：**(1) harness 优化的瓶颈是可观测性而非 agent 能力**——三个支柱（组件/经验/决策可观测性）将每次编辑变成可证伪的契约；(2) **增益存在于 tools/middleware/long-term memory 中，而非 system prompt**——事实性结构可迁移，散文级策略不可；(3) **回归盲区是 self-evolution 的根本性不对称**——agent 能预测什么会变好但几乎无法预测什么会变差。AHE 首次将 harness 工程从"手工工艺"升级为"可自动化学习问题"，与 Wiki 已有的 Agent 架构、推理模型、国产大模型等知识形成互补——提供了"模型外优化"的新维度。
 - Wiki 当前规模: Sources: 98 (+1)；Concepts: 39 (+2)；总页面: 168+
+
+## [2026-05-06] ingest | Self-Evolving Agents 综述
+
+- Source: [[Clippings/A Systematic Survey of Self-Evolving Agents.md]]
+- Created:
+  - Sources: [[Wiki/Sources/Self-Evolving Agents 综述]]
+  - Concepts: [[Wiki/Concepts/Self-Evolving Agents 自演化智能体]]
+- Updated:
+  - [[Wiki/Topics/LLM Agent 与工具使用]] — 新增 Self-Evolving Agents 综述来源和自演化智能体概念
+  - [[Wiki/index]]
+- Notes: 这篇来自厦门大学（2026-02）的综述系统性地梳理了自演化智能体领域，提出三大范式分类体系：(1) **模型中心自演化**——推理时（并行采样/顺序自纠正/结构化推理）和训练时（合成驱动离线蒸馏/探索驱动在线 RL）两条路线；(2) **环境中心自演化**——静态知识演化（Agentic RAG/深度研究）、动态经验演化（离线编译/在线适配/终身演化）、模块化架构演化（记忆/工具/交互协议）、智能体拓扑演化（多智能体结构搜索）；(3) **模型-环境协同演化**——多智能体策略协同演化和环境训练。核心洞察：**环境不应是静态背景，而应是与 Agent 共同演化的可优化伙伴**。当前挑战包括静态非自适应环境、过度依赖可验证任务、模拟环境真实性不足、持续依赖人类初始化和模型坍缩。应用覆盖自动化科学发现（GNoME 220万新材料、A-Lab 71%合成成功率）、自主软件工程（SWE-agent、Claude Code、Devin）和开放世界模拟（Voyager、Generative Agents）。与已有 Agent 架构、推理模型、RL 方法、RAG 等知识形成丰富交叉。
+- Wiki 当前规模: Sources: 99 (+1)；Concepts: 40 (+1)；总页面: 170+

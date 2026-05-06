@@ -2,7 +2,7 @@
 type: index
 status: active
 created: '2026-04-29'
-updated: '2026-05-03'
+updated: '2026-05-06'
 tags:
   - meta
 ---
@@ -113,6 +113,7 @@ tags:
 - [[Wiki/Sources/HyFormer 2025]] — HyFormer：交替 Query Decoding + Query Boosting，统一序列建模与特征交互。原文：[[Clippings/HyFormer Revisiting the Roles of Sequence Modeling and Feature Interaction in CTR Prediction]]。更新：2026-04-30
 - [[Wiki/Sources/InterFormer 2024]] — InterFormer：双向异构交互学习，Interaction Arch + Sequence Arch + Cross Arch。原文：[[Clippings/InterFormer Effective Heterogeneous Interaction Learning for Click-Through Rate Prediction]]。更新：2026-04-30
 - [[Wiki/Sources/AHE Agentic Harness Engineering]] — AHE：可观测性驱动的编码 Agent 线束自动演化，三大支柱闭环，10 轮提升 7.3pp。原文：[[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]]。更新：2026-05-03
+- [[Wiki/Sources/Self-Evolving Agents 综述]] — 自演化智能体系统性综述：模型中心→环境中心→模型-环境协同演化三大范式，厦门大学 2026。原文：[[Clippings/A Systematic Survey of Self-Evolving Agents.md]]。更新：2026-05-06
 
 ## Concepts
 
@@ -155,6 +156,7 @@ tags:
 - [[Wiki/Concepts/编辑数据合成方法]] — 五代数据合成范式（纯合成→真实+LLM→自适应→层级分类→情感特化→多参考）。更新：2026-05-01
 - [[Wiki/Concepts/Agentic Harness Engineering (AHE)]] — 可观测性驱动的 harness 自动演化闭环：三大支柱（组件/经验/决策可观测性）+ 编辑即契约。更新：2026-05-03
 - [[Wiki/Concepts/Harness 编码 Agent 线束]] — 编码 Agent 的 7 种模型外部可编辑工程组件，文件级解耦实现可演化性。更新：2026-05-03
+- [[Wiki/Concepts/Self-Evolving Agents 自演化智能体]] — 以最小人类监督自主协调改进循环的 Agent 范式：强自主性+主动探索，三大演化方向。更新：2026-05-06
 
 ## Entities
 
@@ -194,7 +196,7 @@ tags:
 - [[Wiki/Topics/扩散模型图像编辑与生成]] — 指令编辑→统一多模态→推理编辑→图层分解编辑的完整演进。来源数：26。更新：2026-04-30
 - [[Wiki/Topics/情感计算与图像生成]] — 情感图像编辑、生成、数据集与偏差审计。来源数：5。更新：2026-04-30
 - [[Wiki/Topics/大语言模型基础]] — LLM 架构、缩放定律与对齐方法全景（2017-2024）。来源数：10。更新：2026-04-30
-- [[Wiki/Topics/LLM Agent 与工具使用]] — Agent 架构综述（Profile-Memory-Planning-Action）+ Agent Banana 图像编辑应用 + AHE harness 自动演化。来源数：4。更新：2026-05-03
+- [[Wiki/Topics/LLM Agent 与工具使用]] — Agent 架构综述（Profile-Memory-Planning-Action）+ Agent Banana 图像编辑应用 + AHE harness 自动演化 + Self-Evolving Agents 自演化范式。来源数：5。更新：2026-05-06
 - [[Wiki/Topics/多模态 Embedding 与检索]] — 4 个 MLLM Embedding 模型：效率、物体级、多模态、工业级。来源数：4。更新：2026-04-30
 - [[Wiki/Topics/多模态 Benchmark 与评估]] — OCRBench v2 + OmniDocBench + olmOCR 评估体系。来源数：3。更新：2026-04-30
 - [[Wiki/Topics/Vision Transformer 演进]] — ViT → Swin → MLP-Mixer 的 Vision 基础模型架构演进。来源数：3。更新：2026-04-30
