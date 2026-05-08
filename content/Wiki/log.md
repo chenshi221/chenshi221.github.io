@@ -614,3 +614,18 @@ tags:
 - Created: [[Wiki/Sources/GLM-5 从 Vibe Coding 到 Agentic Engineering]]
 - Updated: [[Wiki/index]]
 - Notes: 智谱 AI & 清华 2025 年。744B MoE + DSA 稀疏注意力 + Muon Split 优化器。27T tokens 预训练。Vibe Coding→Agentic Engineering 范式转变。SWE/终端/搜索/幻灯片四类 Agent 环境。CC-Bench-V2 真实工程评估。中国芯片全栈适配。
+
+## [2026-05-08] deepen | AHE 论文详读 + 阅读笔记沉淀
+
+- Source: [[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]]
+- Created:
+  - [[论文阅读/AHE Agentic Harness Engineering]] — 完整阅读笔记，包含方法论、实验结果、案例研究、Agent Debugger 源码分析、优缺点分析、"能力窗口"假说
+- Updated:
+  - [[Wiki/Sources/AHE Agentic Harness Engineering]] — 补充 4 个演化案例研究轨迹（db-wal-recovery/path-tracing/mcmc-sampling-stan/configure-git-webserver）、自归因分析数据、扩展局限性分析
+- Source code investigation:
+  - 仓库: https://github.com/china-qijizhifeng/agentic-harness-engineering
+  - Agent Debugger 实现位于 `agents/evolve_agent/skills/agent-debugger-cli/`，是一个嵌入的 NexAU Agent（`debugger_agent`），受 20 次迭代硬限制
+  - 5 阶段工作流: Skim→Locate→Read in context→Cross-trace diff→Finalize
+  - 输出 5 种 issue 类型: {工具错误, 幻觉, 循环, 不合规, 截断}
+  - 关键发现: Agent Debugger 的"智能"很大程度上被 terminal trace 的结构化程度承载，而非自身的推理能力
+- Notes: 本次是对 AHE 论文的深度二次阅读，重点补充了 (1) 案例研究的技术细节——4 条轨迹展示了 prompt→tool→middleware 的层级递进演化路径；(2) Agent Debugger 的源码级分析——揭示其作为受迭代预算严格限制的 LLM Agent 的本质；(3) Terminal-Bench 依赖性评估——~70% 技术贡献依赖 terminal 环境特性（精确错误信号、确定性验证器、结构化轨迹）。阅读笔记参照 [[论文阅读/BAGEL]] 格式撰写。
