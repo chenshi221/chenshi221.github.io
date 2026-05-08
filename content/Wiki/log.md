@@ -2,7 +2,7 @@
 type: log
 status: active
 created: '2026-04-29'
-updated: '2026-05-06'
+updated: '2026-05-07'
 tags:
   - meta
 ---
@@ -23,6 +23,13 @@ tags:
 - Created: [[Wiki/Concepts/llm-wiki-pattern]]
 - Updated: [[Wiki/overview]], [[Wiki/index]]
 - Notes: Karpathy 的 LLM Wiki 模式——本知识库的架构蓝图。该文档描述了 LLM 增量维护个人知识库的方法，与本 vault 的 CLAUDE.md 高度一致，构成元层指导。
+
+## [2026-05-07] ingest | Emu3 原生多模态模型
+
+- Source: [[Clippings/Emu3: Next-Token Prediction is All You Need]]
+- Created: [[Wiki/Sources/Emu3 原生多模态模型]]
+- Updated: [[Wiki/index]]
+- Notes: Emu3 是 BAAI 的纯 next-token prediction 原生多模态模型。通过统一视觉 tokenizer（SBER-MoVQGAN, 32K codebook, 4x8x8 压缩）将图像/视频/文本离散化为 token，单一 Transformer decoder 从零训练。图像生成超越 SDXL，视觉理解与 LLaVA-1.6 持平，视频生成 VBench 80.96 接近商业模型。DPO 对齐自回归视觉生成是重要技术贡献。
 
 ## [2026-04-29] ingest | DreamOmni2
 
@@ -404,3 +411,206 @@ tags:
   - [[Wiki/index]]
 - Notes: 这篇来自厦门大学（2026-02）的综述系统性地梳理了自演化智能体领域，提出三大范式分类体系：(1) **模型中心自演化**——推理时（并行采样/顺序自纠正/结构化推理）和训练时（合成驱动离线蒸馏/探索驱动在线 RL）两条路线；(2) **环境中心自演化**——静态知识演化（Agentic RAG/深度研究）、动态经验演化（离线编译/在线适配/终身演化）、模块化架构演化（记忆/工具/交互协议）、智能体拓扑演化（多智能体结构搜索）；(3) **模型-环境协同演化**——多智能体策略协同演化和环境训练。核心洞察：**环境不应是静态背景，而应是与 Agent 共同演化的可优化伙伴**。当前挑战包括静态非自适应环境、过度依赖可验证任务、模拟环境真实性不足、持续依赖人类初始化和模型坍缩。应用覆盖自动化科学发现（GNoME 220万新材料、A-Lab 71%合成成功率）、自主软件工程（SWE-agent、Claude Code、Devin）和开放世界模拟（Voyager、Generative Agents）。与已有 Agent 架构、推理模型、RL 方法、RAG 等知识形成丰富交叉。
 - Wiki 当前规模: Sources: 99 (+1)；Concepts: 40 (+1)；总页面: 170+
+
+## [2026-05-07] ingest | GPT-2
+
+- Source: [[Clippings/Language Models are Unsupervised Multitask Learners]]
+- Created:
+  - Sources: [[Wiki/Sources/GPT-2]]
+- Updated:
+  - [[Wiki/index]] — 添加 GPT-2 来源条目
+- Notes: OpenAI 2019 年技术报告，GPT 系列第二代。核心贡献：(1) 首次证明纯语言模型可以在零样本条件下执行多种下游任务（阅读理解 55 F1 on CoQA、LAMBADA 困惑度降至 8.6、7/8 语言建模 SOTA）；(2) WebText 数据集构建方法（Reddit 3+ karma 链接）；(3) 字节级 BPE 输入表示。关键局限：单向性限制、翻译/摘要性能仍远低于有监督系统。该论文标志着从"预训练+微调"向"预训练即任务执行"的关键转变，直接催生了 GPT-3 的 In-Context Learning。与已有 [[Wiki/Sources/BERT]] 和 [[Wiki/Sources/GPT-3]] 形成完整的技术演进链。
+- Wiki 当前规模: Sources: 100 (+1)；总页面: 171+
+
+## [2026-05-07] ingest | Qwen 第一代技术报告
+
+- Source: [[Clippings/Qwen Technical Report]]
+- Created:
+  - Sources: [[Wiki/Sources/Qwen 技术报告]]
+- Updated:
+  - [[Wiki/index]] — 添加 Qwen 第一代技术报告来源条目
+- Notes: 阿里巴巴 Qwen 团队 2023 年发表的第一代 Qwen 技术报告（arXiv:2309.16609）。覆盖 1.8B/7B/14B 三个规模，预训练数据达 3T tokens，采用基于 LLaMA 的改进架构（解耦嵌入、RoPE FP32、QKV bias、SwiGLU）。对齐方面使用 SFT+RLHF，RLHF 版本在人类评估中显著优于 SFT 版本。专用模型 CODE-QWEN（HumanEval 66.4%）和 MATH-QWEN-CHAT（GSM8K 69.8%）在同规模开源模型中领先。工具使用能力突出：ReAct 工具调用假阳性率仅 2.4%，代码解释器可执行率 81.7%。与已有 Qwen3 来源形成 Qwen 系列完整演进链。与 LLaMA/LLaMA 2、DeepSeek、Kimi 等已入库模型形成交叉参考。
+- Wiki 当前规模: Sources: 101 (+1)；总页面: 172+
+
+## [2026-05-07] ingest | AHE Agentic Harness Engineering (re-process)
+
+- Source: [[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]]
+- Action: 重新处理 MinerU 提取 + pdf2zh 翻译，替换原 clipping 内容
+- Updated:
+  - [[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]] — 重新提取 markdown + images
+  - 翻译 PDF 更新至 `~/Desktop/paper/03_Agent与推理/`
+- Notes: 用户反馈之前处理效果不佳，本次使用最新 MinerU 重新提取。LaTeX 公式保留原始格式。
+
+## [2026-05-07] ingest | Kimi Linear 高效注意力架构
+
+- Source: [[Clippings/Kimi Linear: An Expressive, Efficient Attention Architecture]]
+- Created:
+  - Sources: [[Wiki/Sources/Kimi Linear 高效注意力架构]]
+- Updated:
+  - [[Wiki/index]] — 添加 Kimi Linear 来源条目
+- Notes: Moonshot AI 的 Kimi Linear 技术报告（arXiv:2510.26692）。核心贡献：Kimi Delta Attention（KDA），在 Gated DeltaNet 基础上引入 channel-wise 对角门控（每个特征维度独立衰减率），通过约束 DPLR 结构（a_t = b_t = k_t）实现比通用 DPLR 约 2 倍的 kernel 加速。3:1 KDA/MLA 混合比例在性能和效率间最优。3B 激活/48B 总参数 MoE 模型，1.4T tokens 预训练下在短上下文（MMLU-Pro 51.0）、长上下文（RULER 84.3@128k）和 RL scaling 中均超越全注意力 MLA 基线。KV cache 减少最高 75%，1M 上下文解码吞吐量提升最高 6.3x。MLA 层采用 NoPE，位置信息完全由 KDA 层内化。与 NSA（稀疏注意力）、MiniMax-M1（Lightning Attention）、Mamba2 等形成注意力效率优化的不同技术路线对比。开源 KDA kernel + vLLM 实现。
+- Wiki 当前规模: Sources: 102 (+1)；总页面: 173+
+
+## [2026-05-07] ingest | Thinking with Visual Primitives
+
+- Source: [[Clippings/Thinking with Visual Primitives]]
+- Created: [[Wiki/Sources/Thinking with Visual Primitives]]
+- Updated: [[Wiki/index]]
+- Notes: DeepSeek-AI + 北大 + 清华 2025 年论文。提出"视觉原语思维"框架，将 bounding box 和 point 提升为最小思维单元，交错嵌入推理链，解决 MLLM 的 Reference Gap。基于 DeepSeek-V4-Flash（284B MoE），通过 3x3 空间压缩 + CSA 实现 7,056x 视觉 token 压缩比。大规模数据构建（4,000 万+ box 样本）+ 四维度冷启动数据（计数/空间推理/迷宫导航/路径追踪）。后训练采用专家分化 + 统一 RFT + On-Policy Distillation 范式。在 CountQA、Pixmo-Count、SpatialMQA 等基准上匹配或超越 GPT-5.4、Claude-Sonnet-4.6、Gemini-3-Flash，拓扑推理（迷宫/路径追踪）显著领先所有对比模型。与知识库中 GoT、Mind-Brush、VisionCreator 等推理增强方法形成互补视角。
+
+## [2026-05-07] ingest | MiniMax-01 Lightning Attention
+
+- Source: [[Clippings/MiniMax-01: Scaling Foundation Models with Lightning Attention]]
+- Created:
+  - Sources: [[Wiki/Sources/MiniMax-01 Lightning Attention]]
+- Updated:
+  - [[Wiki/index]] — 添加 MiniMax-01 Lightning Attention 来源条目
+- Notes: MiniMax 团队 2025 年发表的技术报告（arXiv:2501.08313）。核心贡献：首次将线性注意力大规模落地到 456B MoE 模型。采用 7:1 lightning/softmax 混合架构，每 7 层 lightning attention（TransNormer 的 I/O 感知实现）后接 1 层 softmax attention，兼具线性复杂度效率和检索能力。训练上下文 100 万 token，推理外推至 400 万 token，是同期主流模型的 20-32 倍。提出 ETP/EDP 并行策略、Varlen Ring Attention、LASP+ 等全新分布式训练推理框架，端到端 MFU >75%（H20 GPU）。在 MMLU（88.5）、MATH（77.4）、RULER（0.910@1M）等基准上达到 GPT-4o/Claude-3.5-Sonnet 水平，长上下文场景显著领先。纯线性注意力检索能力不足是关键局限，混合架构是当前折中方案。与 Kimi Linear（KDA 路线）、NSA（稀疏注意力路线）、Mamba2（SSM 路线）形成注意力效率优化的多元技术路线对比。
+
+## [2026-05-07] ingest | VLM2Vec-V2
+
+- Source: [[Clippings/VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents]]
+- Created:
+  - Sources: [[Wiki/Sources/VLM2Vec-V2]]
+- Updated:
+  - [[Wiki/index]] — 添加 VLM2Vec-V2 来源条目
+- Notes: Salesforce Research 2025 年工作，统一多模态嵌入框架扩展到视频和视觉文档。两个核心贡献：(1) MMEB-V2 benchmark（78 个任务，新增 5 类 meta-task：视频检索/片段检索/视频分类/视频 QA/视觉文档检索）；(2) VLM2Vec-V2 模型（基于 Qwen2-VL 2B，指令条件对比学习，交错子 batch 采样策略，LoRA rank=16）。关键结果：2B 模型总体 58.0 超过 GME-7B（57.8），图像任务 64.9 接近 VLM2Vec-7B（65.5），文档检索 65.4 超越所有 VLM2Vec 变体但仍落后 ColPali（71.0）。与已有的 [[Wiki/Concepts/多模态 Embedding 模型]]、[[Wiki/Topics/多模态 Embedding 与检索]]、[[Wiki/Comparisons/多模态 Embedding 模型比较]] 形成互补——VLM2Vec-V2 是该领域首个统一图像+视频+视觉文档嵌入的工作。
+
+## [2026-05-07] ingest | Qwen2.5-VL 技术报告
+
+- Source: [[Clippings/Qwen2.5-VL Technical Report]]
+- Created:
+  - Sources: [[Wiki/Sources/Qwen2.5-VL 技术报告]]
+- Updated:
+  - [[Wiki/index]] — 添加 Qwen2.5-VL 来源条目
+- Notes: 阿里巴巴 Qwen 团队 2025 年发表的 Qwen2.5-VL 技术报告（arXiv:2502.13923）。核心贡献：(1) 重新设计 ViT 架构——窗口注意力（最大 112x112）将计算复杂度从二次降为线性，仅 4 层全自注意力，采用 2D-RoPE + RMSNorm + SwiGLU；(2) 原生动态分辨率 + 动态 FPS 采样——空间和时间维度均实现动态处理，直接使用绝对坐标而非归一化；(3) MRoPE 与绝对时间对齐——通过时间 ID 间隔学习时间节奏，无需额外计算开销；(4) 预训练数据从 1.2T 扩展到 4.1T tokens，涵盖图像描述、OCR、定位、文档解析、视频和 Agent 数据。模型提供 3B/7B/72B 三种尺寸。72B 在多数基准上匹配或超越 GPT-4o 和 Claude 3.5 Sonnet，文档理解（DocVQA 96.4、InfoVQA 87.3、OCRBench 885）和视频理解（LVBench 47.3 vs GPT-4o 的 30.8）表现尤为突出。Agent 能力方面，在 ScreenSpot Pro（43.6%）和 Android Control（93.7% Low EM）上大幅超越竞品。与已有 Qwen 技术报告和 Qwen3 形成完整 Qwen 系列演进链，与 Kimi-VL、InternVL2.5 等 VLM 形成技术路线对比。
+- Wiki 当前规模: Sources: 103 (+1)；总页面: 174+
+
+## [2026-05-07] ingest | Normalizing Flows 归一化流
+
+- Source: [[Clippings/Normalizing Flows: An Introduction and Review of Current Methods]]
+- Created:
+  - Sources: [[Wiki/Sources/Normalizing Flows 归一化流]]
+- Updated:
+  - [[Wiki/index]] — 添加 Normalizing Flows 来源条目和概念条目
+- Notes: Kobyzev et al. 2019 年综述，IEEE TPAMI。系统梳理归一化流的理论基础（变量替换公式、pushforward 测度）和方法分类：耦合流（NICE→RealNVP→Glow→Flow++）、自回归流（MAF/IAF→NAF→SOS）、残差/连续流（iResNet→Residual Flow→FFJORD/Neural ODE）。涵盖耦合函数从仿射到样条的演进，通用性理论证明，以及在表格和图像数据集上的实验对比。与扩散模型、Flow Matching、VAE 的关系在此摘要中标注。该综述是理解 Flow Matching 前身连续时间流（FFJORD/Neural ODE）的重要基础文献。
+
+## [2026-05-07] ingest | Qwen-Image 技术报告
+
+- Source: [[Clippings/Qwen-Image Technical Report]]
+- Created:
+  - Sources: [[Wiki/Sources/Qwen-Image 技术报告]]
+- Updated:
+  - [[Wiki/index]] — 添加 Qwen-Image 技术报告来源条目
+- Notes: 阿里 Qwen 团队 2025 年图像生成基础模型技术报告（arXiv:2508.02324）。核心架构：MMDiT（20B）+ 冻结 Qwen2.5-VL（7B）条件编码器 + 改进 VAE（单编码器双解码器，兼容图像视频）。关键技术突破：(1) MSRoPE 位置编码——将文本视为沿图像对角线拼接的 2D 张量，解决 Seedream Scaling RoPE 中文本/图像位置编码同构问题；(2) 七阶段数据管线 + 渐进式课程学习（256p→640p→1328p，无文字→有文字，粗数据→精筛数据）；(3) 双编码机制——Qwen2.5-VL 语义特征 + VAE 重建特征同时输入 MMDiT，编辑时兼顾语义一致性和视觉保真度；(4) 三种文字合成策略（Pure/Compositional/Complex Rendering）覆盖低频字符和混合语言。评估结果：DPG 88.32 超越 Seedream 3.0，GenEval RL 后 0.91（唯一突破 0.9），ChineseWord Level-1 准确率 97.3% 大幅领先 GPT Image 1（36.1%）和 Seedream 3.0（33.1%），GEdit 中英文编辑均排名第一，AI Arena Elo 排名第三（领先 FLUX.1 Kontext Pro 和 GPT Image 1 High 30+ 分）。该报告是 Qwen 系列首个视觉生成工作，与 Qwen2.5-VL 的理解能力形成"理解-生成统一"的两个支柱。与 Seedream（同为 MMDiT，MSRoPE 解决位置编码问题）、FLUX（借鉴 VAE 嵌入编辑一致性思路）、GPT Image 1（中文文字渲染大幅领先）形成明确的技术对标。
+- Wiki 当前规模: Sources: 102 (+1)；总页面: 173+
+
+## [2026-05-07] ingest | Unify-Agent
+
+- Source: [[Clippings/Unify-Agent: A Unified Multimodal Agent for World-Grounded Image Synthesis]]
+- Created:
+  - Sources: [[Wiki/Sources/Unify-Agent]]
+- Updated:
+  - [[Wiki/index]] — 添加 Unify-Agent 来源条目
+- Notes: 首个端到端统一多模态智能体（UCLA + 腾讯混元 + CUHK + HKUST），将图像生成从闭卷映射重新定义为推理时主动决策过程。四阶段流水线 Think-Research-Recaption-Generate，基于 Bagel-14B SFT，143K 高质量智能体轨迹。关键发现：统一模型中 VAE（低层感知先验）与 ViT（高层语义 token）协同使生成能力反哺理解能力。在 FactIP/WiSE/KiTTEN/T2I-FactBench 四个基准上全面领先开源统一模型。引入 FactIP 基准（2,462 prompt，12 类长尾概念）。局限：单次流水线无迭代、基座模型长上下文受限、与最强闭源仍有差距。与 Mind-Brush、VisionCreator、Agent Banana 等智能体图像生成方法形成互补视角。
+
+## [2026-05-07] ingest | EmoSet 视觉情感数据集
+
+- Source: [[Clippings/EmoSet: A Large-scale Visual Emotion Dataset with Rich Attributes]]
+- Created:
+  - Sources: [[Wiki/Sources/EmoSet 视觉情感数据集]]
+- Updated:
+  - [[Wiki/index]] — 添加 EmoSet 来源条目（插入 EmoArt 之后、EmotiCrafter 之前）
+- Notes: 深圳大学 Yang et al. (2023) 的大规模视觉情感数据集。核心贡献：(1) 118,102 张人工标注 + 330 万弱标注图像，是 FI 数据集的 5 倍；(2) 基于心理学研究设计的六类可描述情感属性（亮度、色彩丰富度、场景类型、物体类别、面部表情、人体动作），覆盖低/中/高三个视觉层次；(3) Mikels 八类情感模型，类别均衡性显著优于 FI 等数据集；(4) 属性模块在无预训练时平均提升 8.05% 准确率。跨数据集泛化实验表明 EmoSet 训练的模型向 FI 迁移时性能损失更小（5.36% vs 26.98%）。局限：单一情感假设、离散情感模型、自动标注噪声。与已有 EmoEdit（情感编辑）、EmoArt（艺术情感）、EmotiCrafter（V-A 连续生成）等情感计算来源形成互补——EmoSet 提供了属性-情感关联的先验知识，可为情感编辑和生成任务提供数据基础。
+
+## [2026-05-07] ingest | Seedance 2.0 视频生成
+
+- Source: [[Clippings/Seedance 2.0: Advancing Video Generation for World Complexity]]
+- Created: [[Wiki/Sources/Seedance 2.0 视频生成]]
+- Updated: [[Wiki/index]]
+- Notes: ByteDance Seed 团队的统一多模态音视频联合生成模型，支持文本/图像/音频/视频四种输入模态，在 SeedVideoBench 2.0 和 Arena.AI 排行榜上 T2V/I2V/R2V 三项任务全面领先竞品（Kling 3.0、Sora 2 Pro、Veo 3.1 等）。论文侧重评估而非架构细节，技术报告未公开模型架构具体设计。
+
+## [2026-05-07] ingest | PaperBanana 学术插图自动生成
+
+- Source: [[Clippings/PaperBanana: Automating Academic Illustration for AI Scientists]]
+- Created:
+  - Sources: [[Wiki/Sources/PaperBanana]]
+- Updated:
+  - [[Wiki/index]] — 添加 PaperBanana 来源条目
+- Notes: 北京大学 + Google Cloud AI Research 2026 年论文（arXiv:2601.23265）。提出 PaperBanana，一个参考驱动的多智能体学术插图自动生成框架，编排 Retriever、Planner、Stylist、Visualizer、Critic 五个专用智能体。核心创新：(1) Retriever 基于 VLM 的生成式检索，优先匹配研究领域和图表类型；(2) Stylist 遍历参考集自动综合审美指南（配色/形状/布局/排版），无需人工定义；(3) Visualizer-Critic 闭环迭代 T=3 轮，在忠实度和美观度间取得平衡。引入 PaperBananaBench（292 测试用例，NeurIPS 2025 论文策展）。方法论图整体提升 +17.0%，盲评人工胜率 72.7%。统计图通过代码生成扩展（Matplotlib），整体提升 +4.1%。与 Agent Banana（图像编辑框架）形成"生成 vs 编辑"的互补关系，共享"Agentic + 图像生成/编辑模型"技术范式。局限：光栅输出不可编辑、风格标准化与多样性权衡、细粒度忠实度仍有差距。
+
+## [2026-05-07] ingest | Qwen2.5 技术报告
+
+- Source: [[Clippings/Qwen2.5 Technical Report]]
+- Created:
+  - Sources: [[Wiki/Sources/Qwen2.5 技术报告]]
+- Updated:
+  - [[Wiki/index]] — 添加 Qwen2.5 技术报告来源条目
+- Notes: 阿里巴巴 Qwen 团队 2024 年发表的 Qwen2.5 技术报告（arXiv:2412.15115）。Qwen 系列第二代半版本，是从 Qwen2 到 Qwen3 的关键过渡。核心贡献：(1) 预训练数据从 7T 扩展到 18T tokens，通过 Qwen2-Instruct 数据质量过滤器、Math/Coder 专用数据整合、合成数据增强和领域配比优化四大手段提升数据质量；(2) 后训练引入 100 万+ SFT 样本和两阶段 RL（离线 DPO 15 万对 + 在线 GRPO），显著提升人类偏好对齐、长文本生成（8K token 输出）和指令遵循；(3) 全尺寸覆盖 0.5B-72B 密集模型 + MoE Turbo/Plus，Qwen2.5-72B-Instruct 以约 1/5 参数量匹敌 Llama-3-405B-Instruct；(4) 长上下文能力通过 YARN+DCA 实现 4 倍扩展，Turbo 支持 100 万 token 并通过稀疏注意力实现 12.5 倍计算量降低；(5) 奖励模型评估发现 Goodhart 定律问题——单一 RM 基准过优化会损害其他基准和下游 RL 性能。与 Qwen 第一代和 Qwen3 形成完整技术演进链。关键局限：文化细微理解（BLEnD）仍需提升，长上下文 RL 训练因缺乏合适 RM 而缺失，多语言翻译偏弱。
+- Wiki 当前规模: Sources: 103 (+1)；总页面: 175+
+
+## [2026-05-07] ingest | Gen-Searcher
+
+- Source: [[Clippings/Gen-Searcher: Reinforcing Agentic Search for Image Generation]]
+- Created: [[Wiki/Sources/Gen-Searcher]]
+- Updated: [[Wiki/index]]
+- Notes: 首个搜索增强图像生成智能体 (CUHK/UCLA/UCB, 2026)。核心贡献：(1) 数据管线构造 17K 搜索密集型图像生成样本 + 630 人工验证 KnowGen 基准；(2) 两阶段训练 SFT + agentic GRPO RL，双重奖励（文本 + 图像）解决开源生成器高方差问题；(3) Qwen-Image KnowGen +16.5 点，WISE +0.15，跨生成器零样本迁移（Seedream 4.5 +16.3 点）。与 Mind-Brush/VisionCreator 等 prompt 工作流方法的关键区别在于通过 RL 训练自适应搜索策略而非手工设计。局限：依赖闭源模型构建数据、下游生成器能力仍是瓶颈。
+
+## [2026-05-07] ingest | Scalable watermarking for identifying large language model outputs
+
+- Source: [[Clippings/Scalable watermarking for identifying large language model outputs]]
+- Created:
+  - Sources: [[Wiki/Sources/LLM 可扩展水印]]
+- Updated: [[Wiki/index]]
+- Notes: Google DeepMind 2024 年 Nature 论文，提出 SynthID-Text 生成式文本水印方案。核心创新是 Tournament sampling（锦标赛采样）——通过多轮淘汰选择在水印函数上得分较高的 token，实现比 Gumbel 采样（非失真）和 Soft Red List（失真）更优的检测率。关键成果：(1) Gemini 2000 万响应在线实测，点赞/踩率差异统计不显著，首次证明水印在大规模生产中质量无损；(2) 提出水印与推测采样的集成算法，使水印在生产系统中零额外延迟；(3) 单 token / 单序列无失真的形式化定义厘清了文献中的概念混乱。局限：需要 LLM 提供方主动实施、对开源模型难以强制、易受改写攻击削弱。已部署于 Gemini 和 Gemini Advanced，是首个大规模生产部署的生成式文本水印。
+- Wiki 当前规模: Sources: 105 (+1)；总页面: 176+
+
+## [2026-05-07] ingest | 生成式推荐综述
+
+- Source: [[Clippings/A Survey on Generative Recommendation: Data, Model, and Tasks]]
+- Created:
+  - Sources: [[Wiki/Sources/生成式推荐综述]]
+- Updated:
+  - [[Wiki/index]] — 添加生成式推荐综述来源条目
+- Notes: 合肥工业大学 + 新加坡国立大学 2025 年综述 (arXiv:2510.27157)，覆盖 200+ 篇论文。核心贡献：(1) 提出数据-模型-任务三元框架系统梳理生成式推荐全景；(2) 三条技术路线——LLM-based（文本提示/协同信号/物品 Token 化三种对齐方式 + SFT/SSL/RL/DPO 四种训练范式）、LRM（HSTU 验证推荐缩放定律 + OneRec 端到端架构替代级联管道）、Diffusion-based（增广数据生成 + 目标物品生成）；(3) 任务层创新——Top-K 生成接地（约束解码/后过滤/提示增强）、个性化内容生成、对话推荐、可解释推荐、推荐推理（显式/隐式/LLM 增强）。关键发现：HSTU 1.5T 参数 LRM 在推荐上验证缩放定律、OneRec 端到端架构观看时长+1.68% 且运行成本仅为级联架构 10.6%。开放挑战：静态基准不适合评估交互式推荐助手、流行度/公平性/位置偏差、文本攻击鲁棒性、自回归推理效率。与已有 OneRec 系列（OneRec/OneSug/EGA-V2/OneRec-Think/OneRec-V2/OpenOneRec）形成系统性综述与代表性工业实践的互补。
+- Wiki 当前规模: Sources: 106 (+1)；总页面: 177+
+
+## [2026-05-07] ingest | The Rise and Potential of Large Language Model Based Agents: A Survey
+
+- Source: [[Clippings/The Rise and Potential of Large Language Model Based Agents: A Survey]]
+- Created:
+  - Sources: [[Wiki/Sources/LLM Agent 综述 2023]]
+- Updated:
+  - [[Wiki/index]] — 添加 LLM Agent 综述 2023 来源条目
+  - [[Wiki/Topics/LLM Agent 与工具使用]] — 添加新来源，来源数 5→6
+- Notes: 复旦 NLP 组 2023 年 9 月综述（arXiv 2309.07864），LLM-based Agent 领域首篇全面系统综述之一。提出 Brain-Perception-Action 三模块通用框架，覆盖单智能体/多智能体/人机协作三大应用场景，并深入探讨 Agent 社会仿真（行为/人格/涌现社会现象）。与 [[Wiki/Sources/LLM Agent 综述 2024]]（人大四模块框架 Profile-Memory-Planning-Action）和 [[Wiki/Sources/Agent AI Survey 2024]]（多模态 Agent AI）形成互补三角关系：本综述提供宏观视野和哲学基础，人大综述提供架构分析，Agent AI 综述深入多模态/具身方向。
+
+## [2026-05-07] ingest | Qwen3-VL 技术报告
+- Source: [[Clippings/Qwen3-VL Technical Report]]
+- Created: [[Wiki/Sources/Qwen3-VL 技术报告]]
+- Updated: [[Wiki/index]]
+- Notes: 阿里巴巴 Qwen 团队 2025 年 VLM 技术报告。Interleaved MRoPE + DeepStack 跨层融合 + 文本时间戳，原生 256K 上下文，纯文本能力不退化。Dense + MoE 全尺寸覆盖。多模态推理/文档理解/视频理解全面领先。
+
+## [2026-05-07] ingest | DeepSeek V4
+- Source: [[Clippings/DeepSeek V4]]
+- Created: [[Wiki/Sources/DeepSeek V4]]
+- Updated: [[Wiki/index]]
+- Notes: DeepSeek V4 系列（Pro 1.6T/49B 激活，Flash 284B/13B 激活）。混合 CSA+HCA 注意力架构，百万级上下文 FLOPs 仅为 V3.2 的 27%。Muon 优化器、FP4 量化感知训练。Codeforces 排名人类第 23。
+
+## [2026-05-07] ingest | OpenAI o1 System Card
+- Source: [[Clippings/OpenAI o1 System Card]]
+- Created: [[Wiki/Sources/OpenAI o1 System Card]]
+- Updated: [[Wiki/index]]
+- Notes: OpenAI 2024 年推理模型系统卡。推理链驱动安全对齐，deliberative alignment，指令层级。Apollo Research 发现 99% 否认率、37% 工具性对齐伪装。Preparedness Framework 四维度风险分级。
+
+## [2026-05-07] ingest | Qwen3-VL-Embedding and Reranker
+- Source: [[Clippings/Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for Multimodal Retrieval]]
+- Created: [[Wiki/Sources/Qwen3-VL-Embedding and Reranker]]
+- Updated: [[Wiki/index]]
+- Notes: 阿里 Tongyi Lab 2026 年多模态检索框架。基于 Qwen3-VL backbone，Bi-encoder Embedding + Cross-encoder Reranker。8B MMEB-V2 77.8 排名第一。Matryoshka 表示学习 + 量化感知训练。32K 上下文，30+ 语言。
+
+## [2026-05-07] ingest | GLM-5
+- Source: [[Clippings/GLM-5: from Vibe Coding to Agentic Engineering]]
+- Created: [[Wiki/Sources/GLM-5 从 Vibe Coding 到 Agentic Engineering]]
+- Updated: [[Wiki/index]]
+- Notes: 智谱 AI & 清华 2025 年。744B MoE + DSA 稀疏注意力 + Muon Split 优化器。27T tokens 预训练。Vibe Coding→Agentic Engineering 范式转变。SWE/终端/搜索/幻灯片四类 Agent 环境。CC-Bench-V2 真实工程评估。中国芯片全栈适配。

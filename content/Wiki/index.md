@@ -2,7 +2,7 @@
 type: index
 status: active
 created: '2026-04-29'
-updated: '2026-05-06'
+updated: '2026-05-07'
 tags:
   - meta
 ---
@@ -17,6 +17,7 @@ tags:
 - [[Wiki/Sources/llm-wiki]] — Karpathy 的 LLM 维护知识库模式，本 Wiki 的架构基础。原文：[[Clippings/llm-wiki.md]]。更新：2026-04-29
 - [[Wiki/Sources/DDPM 扩散模型奠基论文]] — DDPM (2020, Ho et al.)，扩散模型奠基，前向/反向过程、简化训练目标。原文：[[Clippings/Denoising Diffusion Probabilistic Models]]。更新：2026-04-30
 - [[Wiki/Sources/Flow Matching 生成建模]] — Flow Matching (2023, Meta)，CNF 训练范式，OT 路径替代扩散路径。原文：[[Clippings/Flow Matching for Generative Modeling]]。更新：2026-04-30
+- [[Wiki/Sources/Normalizing Flows 归一化流]] — 归一化流综述 (2019, Kobyzev et al.)，可逆变换、Jacobian 行列式、耦合/自回归/连续流架构全景。原文：[[Clippings/Normalizing Flows: An Introduction and Review of Current Methods]]。更新：2026-05-07
 - [[Wiki/Sources/FLUX.1 Kontext 上下文编辑]] — FLUX.1 Kontext (2025, BFL)，flow matching 序列拼接统一生成与编辑。原文：[[Clippings/FLUX.1 Kontext Flow Matching for In-Context Image Generation and Editing in Latent Space]]。更新：2026-04-30
 - [[Wiki/Sources/Seedream 2.0 中英双语图像生成]] — Seedream 2.0 (2025, ByteDance)，中英双语图像生成基础模型。原文：[[Clippings/Seedream 2.0 A Native Chinese-English Bilingual Image Generation Foundation Model]]。更新：2026-04-30
 - [[Wiki/Sources/Seedream 3.0 技术报告]] — Seedream 3.0 (2025, ByteDance)，全面能力升级，4-8 倍加速。原文：[[Clippings/Seedream 3.0 Technical Report]]。更新：2026-04-30
@@ -24,12 +25,14 @@ tags:
 - [[Wiki/Sources/Transformer]] — Transformer 原始论文：纯注意力机制替代 RNN/CNN。原文：[[Clippings/Attention Is All You Need.md]]。更新：2026-04-30
 - [[Wiki/Sources/PyTorch 深度学习框架]] — PyTorch 设计哲学：命令式、Pythonic、Worse is Better。原文：[[Clippings/PyTorch An Imperative Style, High-Performance Deep Learning Library.md]]。更新：2026-04-30
 - [[Wiki/Sources/BERT]] — 双向 Transformer 编码器预训练，开创预训练+微调范式。原文：[[Clippings/BERT Pre-training of Deep Bidirectional Transformers for Language Understanding.md]]。更新：2026-04-30
+- [[Wiki/Sources/GPT-2]] — 1.5B 参数，零样本任务迁移，语言模型即无监督多任务学习器。原文：[[Clippings/Language Models are Unsupervised Multitask Learners]]。更新：2026-05-07
 - [[Wiki/Sources/GPT-3]] — 175B 参数，in-context learning 的规模化验证。原文：[[Clippings/Language Models are Few-Shot Learners.md]]。更新：2026-04-30
 - [[Wiki/Sources/InstructGPT]] — RLHF 对齐方法：SFT→RM→PPO 三阶段流程。原文：[[Clippings/Training language models to follow instructions with human feedback.md]]。更新：2026-04-30
 - [[Wiki/Sources/LLaMA]] — 仅用公开数据训练的 7B-65B 高效模型。原文：[[Clippings/LLaMA Open and Efficient Foundation Language Models.md]]。更新：2026-04-30
 - [[Wiki/Sources/Chinchilla 缩放定律]] — 计算最优缩放：参数与数据应等比例增长。原文：[[Clippings/Training Compute-Optimal Large Language Models.md]]。更新：2026-04-30
 - [[Wiki/Sources/GPT-4]] — 多模态输入、human-level 考试、predictable scaling。原文：[[Clippings/GPT-4 Technical Report.md]]。更新：2026-04-30
 - [[Wiki/Sources/GPT-4o]] — 全模态 omni 模型，端到端训练，语音低延迟。原文：[[Clippings/GPT-4o System Card.md]]。更新：2026-04-30
+- [[Wiki/Sources/OpenAI o1 System Card]] — OpenAI o1：推理链驱动安全对齐，deliberative alignment，CoT 可监控性，Preparedness Framework 分级管控。原文：[[Clippings/OpenAI o1 System Card]]。更新：2026-05-07
 - [[Wiki/Sources/Llama 3]] — 405B dense，15T 数据，DPO 对齐，开源 GPT-4 级。原文：[[Clippings/The Llama 3 Herd of Models.md]]。更新：2026-04-30
 - [[Wiki/Sources/RoPE]] — 旋转位置编码，融合绝对位置与相对位置依赖。原文：[[Clippings/RoFormer Enhanced Transformer with Rotary Position Embedding.md]]。更新：2026-04-30
 - [[Wiki/Sources/LoRA 低秩适配]] — 参数高效微调：冻结预训练权重，注入可训练秩分解矩阵。原文：[[Clippings/LoRA Low-Rank Adaptation of Large Language Models.md]]。更新：2026-04-30
@@ -49,6 +52,7 @@ tags:
 - [[Wiki/Sources/Unified Multimodal Survey]] — 统一多模态理解与生成综述（阿里）。原文：[[Clippings/Unified Multimodal Understanding and Generation Models Advances, Challenges, and Opportunities.md]]。更新：2026-04-30
 - [[Wiki/Sources/EmoEdit]] — EmoEdit：内容感知的情感图像编辑，Emotion adapter 即插即用。原文：[[Clippings/EmoEdit Evoking Emotions through Image Manipulation.md]]。更新：2026-04-30
 - [[Wiki/Sources/EmoArt]] — EmoArt：132K 艺术情感数据集，56 种风格多维标注。原文：[[Clippings/EmoArt A Multidimensional Dataset for Emotion-Aware Artistic Generation.md]]。更新：2026-04-30
+- [[Wiki/Sources/EmoSet 视觉情感数据集]] — EmoSet (2023, Yang et al.)：118K 人工标注 + 330 万弱标注，六类情感属性（亮度/色彩/场景/物体/表情/动作），Mikels 八类模型。原文：[[Clippings/EmoSet: A Large-scale Visual Emotion Dataset with Rich Attributes]]。更新：2026-05-07
 - [[Wiki/Sources/EmotiCrafter]] — EmotiCrafter：基于连续 V-A 模型的情感图像生成。原文：[[Clippings/EmotiCrafter Text-to-Emotional-Image Generation based on Valence-Arousal Model.md]]。更新：2026-04-30
 - [[Wiki/Sources/Affective Image Editing]] — AIEdiT：连续情感谱 + MLLM 监督的情感图像编辑。原文：[[Clippings/Affective Image Editing Shaping Emotional Factors via Text Descriptions.md]]。更新：2026-04-30
 - [[Wiki/Sources/Generating Fearful Images]] — AI 生成图像的情感偏差审计（偏向 fear）。原文：[[Clippings/Generating Fearful Images Investigating Potential Emotional Biases in Image-Generation Models.md]]。更新：2026-04-30
@@ -67,6 +71,7 @@ tags:
 - [[Wiki/Sources/OpenGPT-4o-Image]] — 层级分类编辑数据，80K 对。原文：[[Clippings/OpenGPT-4o-Image A Comprehensive Dataset for Advanced Image Generation and Editing.md]]。更新：2026-04-30
 - [[Wiki/Sources/OminiControl]] — DiT 极简控制，仅 0.1% 额外参数。原文：[[Clippings/OminiControl Minimal and Universal Control for Diffusion Transformer.md]]。更新：2026-04-30
 - [[Wiki/Sources/Aes-R1]] — 审美推理 RAPO 框架。原文：[[Clippings/Unlocking the Essence of Beauty Advanced Aesthetic Reasoning with Relative-Absolute Policy Optimization.md]]。更新：2026-04-30
+- [[Wiki/Sources/LLM Agent 综述 2023]] — LLM Agent 首篇全面综述（复旦 NLP），Brain-Perception-Action 三模块框架 + Agent 社会仿真。原文：[[Clippings/The Rise and Potential of Large Language Model Based Agents: A Survey]]。更新：2026-05-07
 - [[Wiki/Sources/LLM Agent 综述 2024]] — LLM Agent 统一框架（Profile-Memory-Planning-Action），中国人民大学综述。原文：[[Clippings/A Survey on Large Language Model based Autonomous Agents]]。更新：2026-04-30
 - [[Wiki/Sources/Agent AI Survey 2024]] — 多模态 Agent AI 综述，跨现实训练与 embodied AI。原文：[[Clippings/Agent AI Surveying the Horizons of Multimodal Interaction]]。更新：2026-04-30
 - [[Wiki/Sources/Agent Banana]] — Agentic Planner-Executor 高保真图像编辑框架，Context Folding + ILD。原文：[[Clippings/Agent Banana High-Fidelity Image Editing with Agentic Thinking and Tooling]]。更新：2026-04-30
@@ -74,6 +79,7 @@ tags:
 - [[Wiki/Sources/ObjEmbed]] — 物体级 MLLM Embedding，语义+IoU 双 embedding。原文：[[Clippings/ObjEmbed Towards Universal Multimodal Object Embeddings]]。更新：2026-04-30
 - [[Wiki/Sources/RzenEmbed]] — 文本+图像+视频+文档四模态 Embedding，hardness-weighted loss。原文：[[Clippings/RzenEmbed Towards Comprehensive Multimodal Retrieval]]。更新：2026-04-30
 - [[Wiki/Sources/SAIL-Embedding]] — 全模态工业级 Embedding，字节跳动抖音线上部署。原文：[[Clippings/SAIL-Embedding Technical Report Omni-modal Embedding Foundation Model]]。更新：2026-04-30
+- [[Wiki/Sources/Qwen3-VL-Embedding and Reranker]] — Qwen3-VL-Embedding：统一多模态 Embedding + Reranker 管线，8B MMEB-V2 77.8（排名第一），Matryoshka 表示学习，32K 上下文，30+ 语言。原文：[[Clippings/Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for Multimodal Retrieval]]。更新：2026-05-07
 - [[Wiki/Sources/OCRBench v2]] — 8 大 OCR 能力 x 23 任务 x 31 场景 benchmark。原文：[[Clippings/OCRBench v2 An Improved Benchmark for Evaluating Large Multimodal Models on Visual Text Localization and Reasoning]]。更新：2026-04-30
 - [[Wiki/Sources/OmniDocBench]] — 9 种文档类型三级评估文档解析 benchmark。原文：[[Clippings/OmniDocBench Benchmarking Diverse PDF Document Parsing with Comprehensive Annotations]]。更新：2026-04-30
 - [[Wiki/Sources/olmOCR]] — 开源 PDF OCR 工具包，$176/百万页，性能超越 GPT-4o。原文：[[Clippings/pipeline Unlocking Trillions of Tokens in PDFs with Vision Language Models]]。更新：2026-04-30
@@ -95,14 +101,22 @@ tags:
 - [[Wiki/Sources/DeepSeek-V3 技术报告]] — 671B MoE/37B 激活，MLA+DeepSeekMoE+FP8，14.8T tokens，\$5.576M 成本。原文：[[Clippings/DeepSeek-V3 Technical Report.md]]。更新：2026-04-30
 - [[Wiki/Sources/DeepSeek-V3.2 开源大模型前沿]] — DSA+lightning indexer，GRPO 稳定策略，thinking-in-tool-use，Speciale IMO 金牌。原文：[[Clippings/DeepSeek-V3.2 Pushing the Frontier of Open Large Language Models.md]]。更新：2026-04-30
 - [[Wiki/Sources/DeepSeek-R1 强化学习推理]] — R1-Zero 纯 RL 涌现 aha moment，R1 四阶段管线，蒸馏 6 模型。原文：[[Clippings/DeepSeek-R1 Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.md]]。更新：2026-04-30
+- [[Wiki/Sources/DeepSeek V4]] — DeepSeek V4：混合 CSA+HCA 注意力架构，1.6T 参数/49B 激活，百万级上下文 FLOPs 仅为 V3.2 的 27%，KV 缓存 10%。原文：[[Clippings/DeepSeek V4]]。更新：2026-05-07
 - [[Wiki/Sources/Kimi k1.5 强化学习规模化]] — 128K 长上下文 RL，online mirror descent，long2short 四种蒸馏方法。原文：[[Clippings/Kimi k1.5 Scaling Reinforcement Learning with LLMs.md]]。更新：2026-04-30
 - [[Wiki/Sources/Kimi K2 开放 Agent 智能]] — 1.04T MoE/32B 激活，MuonClip+QK-Clip，sparsity scaling law，Agent 数据合成。原文：[[Clippings/Kimi K2 Open Agentic Intelligence.md]]。更新：2026-04-30
+- [[Wiki/Sources/AHE Agentic Harness Engineering]] — AHE：可观测性驱动的 coding-agent harness 自动演化闭环。原文：[[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]]。更新：2026-05-07
 - [[Wiki/Sources/Kimi K2.5 视觉 Agent 智能]] — 联合文本-视觉优化，zero-vision SFT，Agent Swarm/PARL，Toggle RL。原文：[[Clippings/Kimi K2.5 Visual Agentic Intelligence.md]]。更新：2026-04-30
 - [[Wiki/Sources/Kimi-VL 技术报告]] — 2.8B 激活 MoE VLM，MoonViT 原生分辨率，128K 上下文，Thinking 变体。原文：[[Clippings/Kimi-VL Technical Report.md]]。更新：2026-04-30
 - [[Wiki/Sources/Qwen3 技术报告]] — Dense+MoE 双架构，统一 /think /no_think 模式，thinking budget，36T tokens。原文：[[Clippings/Qwen3 Technical Report.md]]。更新：2026-04-30
+- [[Wiki/Sources/Qwen2.5 技术报告]] — 18T tokens 预训练，100 万+ SFT 样本，DPO+GRPO 两阶段 RL，0.5B-72B 全尺寸 + MoE Turbo/Plus，72B 匹敌 Llama-3-405B。原文：[[Clippings/Qwen2.5 Technical Report]]。更新：2026-05-07
+- [[Wiki/Sources/Qwen 技术报告]] — Qwen 第一代：1.8B/7B/14B，3T tokens 预训练，SFT+RLHF 对齐，CODE-QWEN/MATH-QWEN 专用模型。原文：[[Clippings/Qwen Technical Report]]。更新：2026-05-07
+- [[Wiki/Sources/Qwen2.5-VL 技术报告]] — 阿里 Qwen2.5-VL：窗口注意力 ViT + 动态 FPS + 绝对时间 MRoPE，4.1T tokens，72B 匹配 GPT-4o。原文：[[Clippings/Qwen2.5-VL Technical Report]]。更新：2026-05-07
+- [[Wiki/Sources/Qwen3-VL 技术报告]] — Qwen3-VL：Interleaved MRoPE + DeepStack 跨层融合 + 文本时间戳，原生 256K 上下文，纯文本不退化，Dense + MoE 全尺寸。原文：[[Clippings/Qwen3-VL Technical Report]]。更新：2026-05-07
+- [[Wiki/Sources/Qwen-Image 技术报告]] — Qwen-Image (2025, 阿里)：MMDiT 20B + Qwen2.5-VL 条件编码，复杂文字渲染（中文 97.3% Level-1）、双编码图像编辑、MSRoPE 位置编码。原文：[[Clippings/Qwen-Image Technical Report]]。更新：2026-05-07
 - [[Wiki/Sources/DeepSeek-V2 技术报告]] — **MLA 首次引入**：236B MoE/21B 激活，KV cache 减少 93.3%，训练成本减 42.5%。原文：[[Clippings/DeepSeek-V2 A Strong, Economical, and Efficient Mixture-of-Experts Language Model.md]]。更新：2026-04-30
 - [[Wiki/Sources/DeepSeek-Coder-V2 代码智能]] — 338 语言代码特化，GPT4-Turbo 级，开源首次对标闭源。原文：[[Clippings/DeepSeek-Coder-V2 Breaking the Barrier of Closed-Source Models in Code Intelligence.md]]。更新：2026-04-30
 - [[Wiki/Sources/MiniMax-M1 测试时计算扩展]] — Lightning Attention + CISPO RL，100 万 token 上下文，长推理仅为 R1 的 25% FLOPs。原文：[[Clippings/MiniMax-M1 Scaling Test-Time Compute Efficiently with Lightning Attention.md]]。更新：2026-04-30
+- [[Wiki/Sources/MiniMax-01 Lightning Attention]] — MiniMax-01：456B MoE + lightning attention，首次大规模线性注意力落地，训练 1M / 推理 4M token 上下文。原文：[[Clippings/MiniMax-01: Scaling Foundation Models with Lightning Attention]]。更新：2026-05-07
 - [[Wiki/Sources/gpt-oss 开源模型]] — OpenAI 首次 Apache 2.0 开源推理模型：120B+20B，可调 reasoning effort。原文：[[Clippings/gpt-oss-120b & gpt-oss-20b Model Card.md]]。更新：2026-04-30
 - [[Wiki/Sources/OneRec Technical Report 2025]] — OneRec 技术报告：端到端生成式推荐，10x FLOPs，scaling laws，RL，MFU 28.8%，OPEX 10.6%。原文：[[Clippings/OneRec Technical Report]]。更新：2026-04-30
 - [[Wiki/Sources/OneRec Unifying Retrieve and Rank 2025]] — OneRec 统一召回排序：session-wise 生成，DPO+self-hard negatives，MoE 扩展。原文：[[Clippings/OneRec Unifying Retrieve and Rank with Generative Recommender and Preference Alignment]]。更新：2026-04-30
@@ -114,10 +128,22 @@ tags:
 - [[Wiki/Sources/InterFormer 2024]] — InterFormer：双向异构交互学习，Interaction Arch + Sequence Arch + Cross Arch。原文：[[Clippings/InterFormer Effective Heterogeneous Interaction Learning for Click-Through Rate Prediction]]。更新：2026-04-30
 - [[Wiki/Sources/AHE Agentic Harness Engineering]] — AHE：可观测性驱动的编码 Agent 线束自动演化，三大支柱闭环，10 轮提升 7.3pp。原文：[[Clippings/Agentic Harness Engineering Observability-Driven Automatic Evolution of Coding-Agent Harnesses]]。更新：2026-05-03
 - [[Wiki/Sources/Self-Evolving Agents 综述]] — 自演化智能体系统性综述：模型中心→环境中心→模型-环境协同演化三大范式，厦门大学 2026。原文：[[Clippings/A Systematic Survey of Self-Evolving Agents.md]]。更新：2026-05-06
+- [[Wiki/Sources/GLM-5 从 Vibe Coding 到 Agentic Engineering]] — GLM-5 (2025, 智谱)：744B MoE + DSA 稀疏注意力，Vibe Coding→Agentic Engineering 范式转变，CC-Bench-V2 真实工程评估。原文：[[Clippings/GLM-5: from Vibe Coding to Agentic Engineering]]。更新：2026-05-07
+- [[Wiki/Sources/Thinking with Visual Primitives]] — DeepSeek：将空间标记（box/point）提升为最小思维单元，解决 Reference Gap，极致 token 效率，计数/空间/拓扑推理达前沿水平。原文：[[Clippings/Thinking with Visual Primitives]]。更新：2026-05-07
+- [[Wiki/Sources/VLM2Vec-V2]] — VLM2Vec-V2 (Salesforce)：统一多模态嵌入框架，扩展至视频和视觉文档，MMEB-V2 78 任务 benchmark，2B 模型总体得分 58.0。原文：[[Clippings/VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents]]。更新：2026-05-07
+- [[Wiki/Sources/LLM 可扩展水印]] — SynthID-Text (Google DeepMind, Nature 2024)：Tournament sampling 生成式水印，Gemini 2000 万响应实测质量无损，首次大规模生产部署。原文：[[Clippings/Scalable watermarking for identifying large language model outputs]]。更新：2026-05-07
 
+- [[Wiki/Sources/Kimi Linear 高效注意力架构]] — Kimi Linear：混合线性注意力架构，KDA 细粒度 channel-wise 门控 + 3:1 KDA/MLA 混合，首次在公平比较下超越全注意力，KV cache 减少 75%，1M 上下文解码 6.3x 加速。原文：[[Clippings/Kimi Linear: An Expressive, Efficient Attention Architecture]]。更新：2026-05-07
+- [[Wiki/Sources/Emu3 原生多模态模型]] — Emu3 (BAAI)：纯 next-token prediction 训练的原生多模态模型，8B 参数统一图像/视频/文本，超越 SDXL 和 LLaVA-1.6。原文：[[Clippings/Emu3: Next-Token Prediction is All You Need]]。更新：2026-05-07
+- [[Wiki/Sources/PaperBanana]] — PaperBanana：多智能体协作自动生成出版级学术插图（方法论图+统计图），参考驱动+审美迁移+迭代自批评。原文：[[Clippings/PaperBanana: Automating Academic Illustration for AI Scientists]]。更新：2026-05-07
+- [[Wiki/Sources/Gen-Searcher]] — Gen-Searcher (2026, CUHK/UCLA/UCB)：首个搜索增强图像生成智能体，SFT + agentic RL 双重奖励，KnowGen 基准，K-Score 指标。原文：[[Clippings/Gen-Searcher: Reinforcing Agentic Search for Image Generation]]。更新：2026-05-07
+- [[Wiki/Sources/Seedance 2.0 视频生成]] — Seedance 2.0 (2026, ByteDance)：统一多模态音视频联合生成，T2V/I2V/R2V 全面领先，Arena.AI 双榜第一。原文：[[Clippings/Seedance 2.0: Advancing Video Generation for World Complexity]]。更新：2026-05-07
+- [[Wiki/Sources/Unify-Agent]] — Unify-Agent：首个端到端统一多模态智能体，Think-Research-Recaption-Generate 四阶段流水线实现世界知识驱动的事实性图像生成。基于 Bagel-14B，FactIP Overall 73.2 超基座 22 分。原文：[[Clippings/Unify-Agent: A Unified Multimodal Agent for World-Grounded Image Synthesis]]。更新：2026-05-07
+- [[Wiki/Sources/生成式推荐综述]] — 生成式推荐综述 (Hou et al. 2025)：数据-模型-任务三元框架，覆盖 LLM-based/LRM/Diffusion 三条路线，200+ 篇论文系统梳理。原文：[[Clippings/A Survey on Generative Recommendation: Data, Model, and Tasks]]。更新：2026-05-07
 ## Concepts
 
 - [[Wiki/Concepts/扩散模型原理]] — DDPM 的前向/反向过程、噪声调度、与 Flow Matching 的关系。更新：2026-04-30
+- [[Wiki/Concepts/归一化流 Normalizing Flows]] — 可逆变换、变量替换公式、Jacobian 行列式、耦合/自回归/连续流架构。更新：2026-05-07
 - [[Wiki/Concepts/Flow Matching]] — Flow Matching 原理、与扩散模型的关系、为什么更快、OT 路径。更新：2026-04-30
 - [[Wiki/Concepts/llm-wiki-pattern]] — LLM Wiki 模式：利用 LLM 增量维护持久化知识库的方法论。更新：2026-04-29
 - [[Wiki/Concepts/多模态指令编辑与生成]] — 多模态指令编辑与生成任务的定义、与传统任务的区别和技术挑战。更新：2026-04-29
@@ -196,7 +222,7 @@ tags:
 - [[Wiki/Topics/扩散模型图像编辑与生成]] — 指令编辑→统一多模态→推理编辑→图层分解编辑的完整演进。来源数：26。更新：2026-04-30
 - [[Wiki/Topics/情感计算与图像生成]] — 情感图像编辑、生成、数据集与偏差审计。来源数：5。更新：2026-04-30
 - [[Wiki/Topics/大语言模型基础]] — LLM 架构、缩放定律与对齐方法全景（2017-2024）。来源数：10。更新：2026-04-30
-- [[Wiki/Topics/LLM Agent 与工具使用]] — Agent 架构综述（Profile-Memory-Planning-Action）+ Agent Banana 图像编辑应用 + AHE harness 自动演化 + Self-Evolving Agents 自演化范式。来源数：5。更新：2026-05-06
+- [[Wiki/Topics/LLM Agent 与工具使用]] — Agent 架构综述（Brain-Perception-Action + Profile-Memory-Planning-Action）+ Agent 社会仿真 + Agent Banana 图像编辑 + AHE harness 自动演化 + Self-Evolving Agents 自演化范式。来源数：6。更新：2026-05-07
 - [[Wiki/Topics/多模态 Embedding 与检索]] — 4 个 MLLM Embedding 模型：效率、物体级、多模态、工业级。来源数：4。更新：2026-04-30
 - [[Wiki/Topics/多模态 Benchmark 与评估]] — OCRBench v2 + OmniDocBench + olmOCR 评估体系。来源数：3。更新：2026-04-30
 - [[Wiki/Topics/Vision Transformer 演进]] — ViT → Swin → MLP-Mixer 的 Vision 基础模型架构演进。来源数：3。更新：2026-04-30
