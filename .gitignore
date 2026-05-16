@@ -34,3 +34,8 @@ content/AIMbench/
 content/AIM-bench/
 content/组会/
 content/模板/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
